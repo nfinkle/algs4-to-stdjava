@@ -10,7 +10,17 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<script src="js/bootstrap.js"></script>
-	<link rel="stylesheet" href="footer.css">
+	<link rel="stylesheet" href="css/index.css">
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var progressBarVal = 8;
+			var html =
+				"<div class='progress-bar' role='progressbar' style='width: " + progressBarVal +
+				"%' aria-valuenow='" + progressBarVal + "' aria-valuemin='0' aria-valuemax='100'></div>";
+			$(".progress").append(html);
+		});
+
+	</script>
 </head>
 
 <body>
@@ -49,7 +59,7 @@
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item navbar-dark"><a class="nav-link" href="about.html">About</a></li>
+				<li class="nav-item navbar-dark"><a class="nav-link" href="about_auth.html">About</a></li>
 				<div class="nav-item"><a class="nav-link" href="home.html">Logout</a></div>
 			</ul>
 
@@ -66,20 +76,45 @@
 	<div class="container text-center">
 		<h2>Input/Output</h2><br>
 		<div class="row">
-			<div class="col-md-4 col-sm-6">
+			<div class="col-md-4">
 				<h4>System.out/err</h4>
 				<h6>(StdOut)</h6>
 				<p>Print text to <code>stdout</code> or <code>stderr</code>.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress">
+						</div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4 col-sm-6">
+			<div class="col-md-4">
 				<h4>Scanner</h4>
 				<h6>(StdIn/In)</h6>
 				<p>Read in text from any input stream.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"> </div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4 col-sm-12">
+			<div class="col-md-4">
 				<h4>PrintWriter</h4>
 				<h6>(Out)</h6>
 				<p>Write to a file using the same syntax as with printing.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div><br><br>
@@ -92,16 +127,40 @@
 				<h4>HashMap</h4>
 				<h6>(HashTable)</h6>
 				<p>A symbol table based on a hashtable.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-4">
 				<h4>HashSet</h4>
 				<h6>(Bag)</h6>
 				<p>A bag based on a hashtable.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-4">
 				<h4>TreeMap</h4>
 				<h6>(Left-Leaning Red-Black Tree Symbol Table)</h6>
 				<p>A symbol table based on a left-leaning red-black tree.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -109,11 +168,27 @@
 				<h4>Queue</h4>
 				<h6>(Queue)</h6>
 				<p>A FIFO queue.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-4">
 				<h4>Stack</h4>
 				<h6>(Stack)</h6>
 				<p>A LIFO stack.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -125,11 +200,29 @@
 				<h4>Random</h4>
 				<h6>(StdRandom)</h6>
 				<p>How to generate random numbers.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-6">
 				<h4>Drawing</h4>
 				<h6>(StdDraw)</h6>
 				<p>How to draw points, lines, and shapes.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress">
+
+						</div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -137,7 +230,6 @@
 	<footer class="footer bg-fav mt-auto py-0 text-center">
 		<span class="text-muter text-light">algs4 to StdJava</span>
 	</footer>
-
 </body>
 
 </html>

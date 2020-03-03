@@ -39,3 +39,14 @@ h5 {
 h6 {
 	color: rgb(57, 57, 57);
 }
+
+.btn {
+	margin: 5px;
+}
+
+
+.progress {
+	position: relative;
+	top: 16px;
+	width: 105%;
+}
