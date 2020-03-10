@@ -8,16 +8,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="author" content="Nathan Finkle">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<script src="js/bootstrap.js"></script>
-	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 	<script type="text/javascript">
 		$(document).ready(function () {
 			var progressBarVal = 8;
-			var html =
-				"<div class='progress-bar' role='progressbar' style='width: " + progressBarVal +
-				"%' aria-valuenow='" + progressBarVal + "' aria-valuemin='0' aria-valuemax='100'></div>";
-			$(".progress").append(html);
+			var ids = ["system-out"];
+			for (var i = 0; i < ids.length; i++) {
+				var html =
+					"<div class='progress-bar' role='progressbar' style='width: " + progressBarVal +
+					"%' aria-valuenow='" + progressBarVal + "' aria-valuemin='0' aria-valuemax='100'></div>";
+				$("#" + ids[i]).append(html);
+			}
+
 		});
 
 	</script>
@@ -34,7 +38,7 @@
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+					<a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Modules
 					</a>
@@ -47,6 +51,7 @@
 						<a class="dropdown-item" href="module.html">HashMap</a>
 						<a class="dropdown-item" href="module.html">HashSet</a>
 						<a class="dropdown-item" href="module.html">TreeMap</a>
+						<a class="dropdown-item" href="module.html">Priority Queue</a>
 						<a class="dropdown-item" href="module.html">Queue</a>
 						<a class="dropdown-item" href="module.html">Stack</a>
 						<h6 class="dropdown-header">Miscellaneous</h6>
@@ -82,7 +87,7 @@
 				<p>Print text to <code>stdout</code> or <code>stderr</code>.</p>
 				<div class="row">
 					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-						<div class="progress">
+						<div class="progress" id="system-out">
 						</div>
 					</div>
 					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
@@ -165,6 +170,19 @@
 		</div>
 		<div class="row">
 			<div class="col-md-4">
+				<h4>Priority Queue</h4>
+				<h6>(MinPQ)</h6>
+				<p>A (non-indexed) minimum priority queue.</p>
+				<div class="row">
+					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
+						<div class="progress"></div>
+					</div>
+					<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3"> <button type="button"
+							class="btn btn-block btn-success">Learn</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
 				<h4>Queue</h4>
 				<h6>(Queue)</h6>
 				<p>A FIFO queue.</p>
@@ -210,9 +228,9 @@
 				</div>
 			</div>
 			<div class="col-md-6">
-				<h4>Drawing</h4>
-				<h6>(StdDraw)</h6>
-				<p>How to draw points, lines, and shapes.</p>
+				<h4>Time</h4>
+				<h6>(StopWatch)</h6>
+				<p>Measure time elapsed.</p>
 				<div class="row">
 					<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
 						<div class="progress">
