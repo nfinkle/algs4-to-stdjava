@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="utf-8">
+	{% block thehead %} {% endblock %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+
+<body>
+	<div id="page_container">
+		<div id="content-wrap">
+			{% include 'auth_navbar.html' %}
+			{% block content %} {% endblock %}
+		</div>
+		<br><br>
+		<footer id="footer" class="footer bg-fav mt-auto py-0 text-center">
+			<span class="text-muter text-light">algs4 to StdJava</span>
+		</footer>
+	</div>
+</body>
+
+</html>

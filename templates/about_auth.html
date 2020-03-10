@@ -1,99 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "auth_base.html" %}
+{% block title %}About algs4 to StdJava{% endblock %}
 
-<head>
-	<title>algs4 to StdJava</title>
-	<meta charset="utf-8">
-	<meta name="description" content="About algs4-to-StdJava">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="author" content="Nathan Finkle">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-	<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-</head>
+{% block thehead %}
+<meta name="description" content="About algs4-to-StdJava">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Nathan Finkle">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+{% endblock %}
 
-<body>
-	<!-- Copied from index.html-->
-	<nav class="navbar navbar-expand-sm navbar-dark bg-fav">
-		<!-- <div class="container-fluid"> -->
-		<a class="navbar-brand" href="#">algs4 to StdJava</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-			aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNavDropdown">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Modules
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<h6 class="dropdown-header">Input/Output</h6>
-						<a class="dropdown-item" href="module.html">Scanner</a>
-						<a class="dropdown-item" href="module.html">System.out</a>
-						<a class="dropdown-item" href="module.html">PrintWriter</a>
-						<h6 class="dropdown-header">Data Structures</h6>
-						<a class="dropdown-item" href="module.html">HashMap</a>
-						<a class="dropdown-item" href="module.html">HashSet</a>
-						<a class="dropdown-item" href="module.html">TreeMap</a>
-						<a class="dropdown-item" href="module.html">Queue</a>
-						<a class="dropdown-item" href="module.html">Stack</a>
-						<h6 class="dropdown-header">Miscellaneous</h6>
-						<a class="dropdown-item" href="module.html">Random</a>
-						<a class="dropdown-item" href="module.html">Draw</a>
-						<!-- <div class="dropdown-divider"></div> -->
-						<!-- <a class="dropdown-item" href="#">Something else here</a> -->
-					</div>
-				</li>
-
-			</ul>
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item navbar-dark"><a class="nav-link" href="about_auth.html">About</a></li>
-				<div class="nav-item"><a class="nav-link" href="home.html">Logout</a></div>
-			</ul>
-
-		</div>
-	</nav>
-
-	<div class="jumbotron">
-		<div class="container text-center">
-			<!-- <div class="container text-center text-dark"> -->
-			<h1>About <code>algs4</code> to StdJava</h1>
-		</div>
+<!-- {% block navbar %} {% endblock %} -->
+{% block content %}
+<div class="jumbotron">
+	<div class="container text-center">
+		<!-- <div class="container text-center text-dark"> -->
+		<h1>About <code>algs4</code> to StdJava</h1>
 	</div>
+</div>
 
-	<dev class="container">
-		<dev class="row">
-			<dev class="col-sm-2"></dev>
-			<dev class="col-sm-8">
-				<h3>Motivation</h3>
-				<ul>
-					<li>Princeton students do not learn how to code in Java using standard libraries, which are used
-						at industry level.
-					</li>
-					<li>Therefore, students have difficulty in interviews and generally programming in Java.</li>
-				</ul>
-				<h3>Goal</h3>
-				<ul>
-					<li>The goal of this project is to teach Princeton Computer Science students the core standard Java
-						libraries that are replaced by <code>algs4</code>, which is the set of Java libraries used in
-						COS 226.</li>
-				</ul>
-				<h3>Why was this project created?</h3>
-				<ul>
-					<li>Main motivation: Impress Prof. Robert Fish.</li>
-					<li>The project leader personally had difficulty transitioning from using <code>algs4</code> to
-						standard Java libraries and wished there was a tool to help assist him in adapting to the
-						standard Java libraries for a Princeton student. So, he set out to make <code>algs4</code> to
-						StdJava.</li>
-				</ul>
-			</dev>
+<dev class="container">
+	<dev class="row">
+		<dev class="col-sm-2"></dev>
+		<dev class="col-sm-8">
+			<h3>Motivation</h3>
+			<ul>
+				<li>Princeton students do not learn how to code in Java using standard libraries, which are used
+					at industry level.
+				</li>
+				<li>Therefore, students have difficulty in interviews and generally programming in Java.</li>
+			</ul>
+			<h3>Goal</h3>
+			<ul>
+				<li>The goal of this project is to teach Princeton Computer Science students the core standard Java
+					libraries that are replaced by <code>algs4</code>, which is the set of Java libraries used in
+					COS 226.</li>
+			</ul>
+			<h3>Why was this project created?</h3>
+			<ul>
+				<li>Main motivation: Impress Prof. Robert Fish.</li>
+				<li>The project leader personally had difficulty transitioning from using <code>algs4</code> to
+					standard Java libraries and wished there was a tool to help assist him in adapting to the
+					standard Java libraries for a Princeton student. So, he set out to make <code>algs4</code> to
+					StdJava.</li>
+			</ul>
 		</dev>
 	</dev>
-	<br><br>
-	<footer class="footer bg-fav mt-auto py-0 text-center" style="position: absolute; bottom: 0;">
-		<span class="text-muter text-light">algs4 to StdJava</span>
-	</footer>
-</body>
+</dev>
+{% endblock %}

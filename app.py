@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, url_for
 import flask_bootstrap
 # from flask_cors import CORS
 
@@ -20,6 +20,7 @@ def health():
 
 @app.route('/')
 @app.route('/home')
+@app.route('/home.html')
 def show_home():
     return render_template('home.html')
 
@@ -27,12 +28,12 @@ def show_home():
 @app.route('/index.html')
 # @app.route()
 def show_index():
-    return render_template('index.html')
+    return render_template('index.html', is_about=False)
 
 
 @app.route('/about_auth.html')
 def show_about_auth():
-    return render_template('about_auth.html')
+    return render_template('about_auth.html', is_about=True)
 
 
 @app.route('/about_unauth.html')
@@ -40,10 +41,10 @@ def show_about_unauth():
     return render_template('about_unauth.html')
 
 
-@app.errorhandler(400)
-def handle_bad_request(e):
-    print(e.description)
-    return render_template('400_error.html', e=e.description), 400
+# @app.errorhandler(400)
+# def handle_bad_request(e):
+#     print(e.description)
+#     return render_template('400_error.html', e=e.description), 400
 
 
 if __name__ == "__main__":
