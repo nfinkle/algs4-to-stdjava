@@ -19,6 +19,7 @@ def health():
 #     return render_template('api.html')
 
 @app.route('/')
+@app.route('/home')
 def show_home():
     return render_template('home.html')
 
@@ -46,5 +47,5 @@ def handle_bad_request(e):
 
 
 if __name__ == "__main__":
-    # app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", debug=True)
     show_index()
