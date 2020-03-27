@@ -1,7 +1,7 @@
 {% block navbar %}
 <nav class="navbar navbar-expand-sm navbar-dark bg-fav">
 	<!-- <div class="container-fluid"> -->
-	<a class="navbar-brand" href="index.html">algs4 to StdJava</a>
+	<a class="navbar-brand" href=" {{ url_for('show_index') }}">algs4 to StdJava</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
 		aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -15,18 +15,18 @@
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<h6 class="dropdown-header">Input/Output</h6>
-					<a class="dropdown-item" href="module.html">Scanner</a>
-					<a class="dropdown-item" href="system-out.html">System.out</a>
-					<a class="dropdown-item" href="module.html">PrintWriter</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">Scanner</a>
+					<a class="dropdown-item" href="{{ url_for('show_system_out') }}">System.out</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">PrintWriter</a>
 					<h6 class="dropdown-header">Data Structures</h6>
-					<a class="dropdown-item" href="module.html">HashMap</a>
-					<a class="dropdown-item" href="module.html">HashSet</a>
-					<a class="dropdown-item" href="module.html">TreeMap</a>
-					<a class="dropdown-item" href="module.html">Queue</a>
-					<a class="dropdown-item" href="module.html">Stack</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">HashMap</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">HashSet</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">TreeMap</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">Queue</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">Stack</a>
 					<h6 class="dropdown-header">Miscellaneous</h6>
-					<a class="dropdown-item" href="module.html">Random</a>
-					<a class="dropdown-item" href="module.html">Draw</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">Random</a>
+					<a class="dropdown-item" href="{{ url_for('show_module') }}">Draw</a>
 					<!-- <div class="dropdown-divider"></div> -->
 					<!-- <a class="dropdown-item" href="#">Something else here</a> -->
 				</div>
@@ -36,8 +36,8 @@
 		<ul class="navbar-nav ml-auto">
 
 			<li class="nav-item navbar-dark {% if is_about %} active {% endif %}"><a class="nav-link"
-					href="about_auth.html">About</a></li>
-			<div class="nav-item"><a class="nav-link" href="home.html">Logout</a></div>
+					href="{{ url_for('show_about_auth') }}">About</a></li>
+			<div class="nav-item"><a class="nav-link" href="{{ url_for('show_home') }}">Logout</a></div>
 		</ul>
 
 	</div>

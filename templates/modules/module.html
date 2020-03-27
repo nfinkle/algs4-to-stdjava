@@ -1,0 +1,39 @@
+{% extends "modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}System.out/System.err{% endblock %}
+
+{% block pageDescription %}Learn System.out/System.err from StdOut in algs4{% endblock %}
+
+<!-- body -->
+{% block title %}System.out/System.err{% endblock %}
+{% block subtitle %}Printing; the equivalent to <code>StdOut</code> in <code>algs4</code>{% endblock %}
+
+{% set className = ["StdOut", "System.out"] %}
+{% block description %}
+<p><code>StdOut</code> (<a href="https://introcs.cs.princeton.edu/java/stdlib/javadoc/StdOut.html">Javadoc
+		API</a>) works almost
+	identically
+	to <code>System.out</code> (<a href="https://docs.oracle.com/javase/7/docs/api/java/io/PrintStream.html">Javadoc
+		API</a>). One can
+	print to <code>stderr</code> the exact same way as printing to <code>stdout</code>, except that you use
+	<code>System.err</code> instead of <code>System.out</code>. </p>
+<p>The only
+	difference between <code>StdOut</code> and <code>System.out</code>/<code>System.err</code> is that
+	<code>StdOut</code>
+	flushes all output
+	immediately, while <code>System.out</code>/<code>System.err</code> buffers the output until a newline
+	character is added.</p>
+{% endblock %}
+
+
+{% block cells %}
+<!-- print -->
+{% for builtInType in ["boolean"] %}
+{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>{{ builtInType }}<code>"|safe}]  ]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+{% endfor %}
+
+
+{% endblock %}

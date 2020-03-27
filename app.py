@@ -37,14 +37,14 @@ def show_index():
     return render_template('index.html', is_about=False, progressBars=progressBars)
 
 
-@app.route('/module.html')
+@app.route('/modules/module.html')
 def show_module():
-    return render_template('module.html', is_about=False)
+    return render_template('modules/module.html', is_about=False)
 
 
-@app.route('/system-out.html')
+@app.route('/modules/system-out.html')
 def show_system_out():
-    return render_template('system-out.html', is_about=False)
+    return render_template('modules/system-out.html', is_about=False)
 
 
 @app.route('/about_auth.html')

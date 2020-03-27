@@ -1,4 +1,4 @@
-{% extends "module_base.html" %}
+{% extends "modules/module_base.html" %}
 
 <!-- head -->
 {% block pageTitle %}System.out/System.err{% endblock %}
@@ -30,20 +30,20 @@
 {% block cells %}
 <!-- flush -->
 {% for item in [  [{"fname": "print", "type": "void", "description": "Flush <code>stdout</code>."|safe, "args": ""}, {"fname": "flush", "type": "void", "description": "Flush <code>stdout</code>."|safe, "args": ""}]  ]  %}
-{% include "method_cell.html" %}
+{% include "modules/method_cell.html" %}
 {% endfor %}
 
 <!-- print -->
 {% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
 {% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>{{ builtInType }}<code>"|safe}]  ]  %}
-{% include "method_cell.html" %}
+{% include "modules/method_cell.html" %}
 {% endfor %}
 {% endfor %}
 
 <!-- println -->
 {% set newline = {"fname": "println", "type": "void", "description": "Print a newline to <code>stdout</code> and flush."|safe, "args": ""} %}
 {% for item in [  [newline, newline]  ]  %}
-{% include "method_cell.html" %}
+{% include "modules/method_cell.html" %}
 
 {% endfor %}
 
@@ -52,14 +52,14 @@
 {% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
 {% set newlineBuiltIn = {"fname": "println", "type": "void", "description": "Print a " + builtInType + " and a newline to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe} %}
 {% for item in [  [newlineBuiltIn, newlineBuiltIn]  ]  %}
-{% include "method_cell.html" %}
+{% include "modules/method_cell.html" %}
 
 {% endfor %}
 {% endfor %}
 
 <!-- printf -->
 {% for item in [  [{"fname": "print", "type": "void", "description": "Print a formatted string to <code>stdout</code>, using the specified format string and arguments, and then flush."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}, {"fname": "flush", "type": "void", "description": "Print a formatted string to <code>stdout</code>, using the specified format string and arguments."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}]  ]  %}
-{% include "method_cell.html" %}
+{% include "modules/method_cell.html" %}
 {% endfor %}
 
 
