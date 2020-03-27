@@ -2,10 +2,11 @@
 <html lang="en">
 
 <head>
-	<title>{% block title %}{% endblock %}</title>
+	<title>{% block pageTitle %}{% endblock %}</title>
 	<meta charset="utf-8">
 	{% block thehead %} {% endblock %}
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="{% block pageDescription %} {% endblock %}">
+	<meta name=" viewport" content="width=device-width, initial-scale=1">
 	<meta name="author" content="Nathan Finkle">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
@@ -19,9 +20,9 @@
 		{% include 'auth_navbar.html' %}
 		<div class="jumbotron">
 			<div class="container text-center">
-				{% block jumbo %}
+				<h1>{% block title %}{% endblock %}</h1>
+				<p>{% block subtitle %}{% endblock %}</p>
 				<!-- <div class="container text-center text-dark"> -->
-				{% endblock %}
 			</div>
 		</div>
 		{% block content %} {% endblock %}

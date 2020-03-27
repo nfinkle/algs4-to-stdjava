@@ -38,10 +38,13 @@ def show_index():
 
 
 @app.route('/module.html')
-@app.route('/print.html')
-def show_print():
+def show_module():
     return render_template('module.html', is_about=False)
-    # return render_template('print.html')
+
+
+@app.route('/system-out.html')
+def show_system_out():
+    return render_template('system-out.html', is_about=False)
 
 
 @app.route('/about_auth.html')

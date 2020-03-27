@@ -1,0 +1,38 @@
+{% extends "auth_base.html" %}
+
+{% block content %}
+<div class="container">
+	<div class="text-center">
+		<h2>Overview</h2><br>
+	</div>
+	<div class="row text-center">
+		<div class="col-lg-1"></div>
+		<div class="col-lg-10">{% block description %}{% endblock %}</div>
+	</div>
+	<div class="text-center">
+		<h2>API Comparison</h2>
+	</div>
+	<!-- {% set className = ["StdOut", "System.err"] %} -->
+	<div class="row">
+		<div class="col-lg-1"></div>
+		<div class="col-lg-10">
+			<div class="row text-center">
+				<div class="col-sm-12 col-md-6">
+					<h4>{{ className[0] }}</h4>
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<h4>{{ className[1] }}</h4>
+				</div>
+			</div>
+			{% block cells %}
+			<!-- {% for builtInType in ["boolean"] %}
+			{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>{{ builtInType }}<code>"|safe}]  ]  %}
+			{% include "method_cell.html" %}
+			{% endfor %}
+			{% endfor %} -->
+
+			{% endblock %}
+		</div>
+	</div>
+</div>
+{% endblock %}

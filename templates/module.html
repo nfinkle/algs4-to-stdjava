@@ -1,15 +1,11 @@
 {% extends "auth_base.html" %}
 
+{% block pageTitle %}System.out/System.err{% endblock %}
+
+{% block pageDescription %}Learn System.out/System.err from StdOut in algs4{% endblock %}
+
 {% block title %}System.out/System.err{% endblock %}
-
-{% block thehead %}
-<meta name="description" content="Learn System.out/System.err from StdOut in algs4">
-{% endblock %}
-
-{% block jumbo %}
-<h1>System.out/System.err</h1>
-<p>Printing; the equivalent to <code>StdOut</code> in <code>algs4</code>.</p>
-{% endblock %}
+{% block subtitle %}Printing; the equivalent to <code>StdOut</code> in <code>algs4</code>{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -37,11 +33,11 @@
 	<div class="text-center">
 		<h2>API Comparison</h2>
 	</div>
+	{% set className = ["StdOut", "System.err"] %}
 	<div class="row">
 		<div class="col-lg-1"></div>
 		<div class="col-lg-10">
 			<div class="row text-center">
-				<!-- <div class="col-md-6 col-lg-5 col-xl-4"> -->
 				<div class="col-sm-12 col-md-6">
 					<h4>StdOut</h4>
 				</div>
@@ -49,146 +45,13 @@
 					<h4>System.out/err</h4>
 				</div>
 			</div>
-			<!-- flush -->
-			<div class="row">
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>StdOut.print()</code>
-							<p style="font-size: 12px">Flush <code>stdout</code>.
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>System.out.flush()</code>
-							<p style="font-size: 12px">Flush <code>stdout</code>. </p>
-						</div>
-					</div>
-				</div>
-			</div>
 
-			{% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
-			<div class="row">
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>StdOut.print(</code>{{ builtInType }}<code>)</code>
-							<p style="font-size: 12px">Print a {{ builtInType }} to <code>stdout</code> and flush.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>System.out.print(</code>{{ builtInType }}<code>)</code>
-							<p style="font-size: 12px">Print a {{ builtInType }} to <code>stdout</code>.</p>
-						</div>
-					</div>
-				</div>
-			</div>
+			{% for builtInType in ["boolean"] %}
+			{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>{{ builtInType }}<code>"|safe}]  ]  %}
+			{% include "method_cell.html" %}
+			{% endfor %}
 			{% endfor %}
 
-			<div class="row">
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>StdOut.println()</code>
-							<p style="font-size: 12px">Print a newline to <code>stdout</code>
-								and flush.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>System.out.println()</code>
-							<p style="font-size: 12px">Print a newline to <code>stdout</code>.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-			{% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
-			<div class="row">
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>StdOut.println(</code>{{ builtInType }}<code>)</code>
-							<p style="font-size: 12px">Print a {{ builtInType }} and a newline to <code>stdout</code>
-								and flush.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>System.out.println(</code>{{ builtInType }}<code>)</code>
-							<p style="font-size: 12px">Print a {{ builtInType }} and a newline to <code>stdout</code>.
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			{% endfor %}
-			<!-- printf -->
-			<div class="row">
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>StdOut.printf(</code>String <code>format,</code> Object... <code>args)</code>
-							<p style="font-size: 12px">Print a formatted string to <code>stdout</code>, using the
-								specified format string and
-								arguments, and then flush.
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md-6">
-					<div class="row">
-						<div class="col-2">
-							<p><code>void</code></p>
-						</div>
-						<div class="col-10">
-							<code>System.out.printf(</code>String <code>format,</code> Object... <code>args)</code>
-							<p style="font-size: 12px">Print a formatted string to <code>stdout</code>, using the
-								specified format string and
-								arguments.
-
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
 
 		</div>
 	</div>
