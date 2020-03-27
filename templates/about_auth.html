@@ -3,26 +3,18 @@
 
 {% block thehead %}
 <meta name="description" content="About algs4-to-StdJava">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="Nathan Finkle">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 {% endblock %}
 
 <!-- {% block navbar %} {% endblock %} -->
-{% block content %}
-<div class="jumbotron">
-	<div class="container text-center">
-		<!-- <div class="container text-center text-dark"> -->
-		<h1>About <code>algs4</code> to StdJava</h1>
-	</div>
-</div>
+{% block jumbo %}
+<h1>About <code>algs4</code> to StdJava</h1>
+{% endblock %}
 
-<dev class="container">
-	<dev class="row">
-		<dev class="col-sm-2"></dev>
-		<dev class="col-sm-8">
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2"></div>
+		<div class="col-sm-8">
 			<h3>Motivation</h3>
 			<ul>
 				<li>Princeton students do not learn how to code in Java using standard libraries, which are used
@@ -44,7 +36,7 @@
 					standard Java libraries for a Princeton student. So, he set out to make <code>algs4</code> to
 					StdJava.</li>
 			</ul>
-		</dev>
-	</dev>
-</dev>
+		</div>
+	</div>
+</div>
 {% endblock %}

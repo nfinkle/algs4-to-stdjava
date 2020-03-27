@@ -22,13 +22,26 @@ def health():
 @app.route('/home')
 @app.route('/home.html')
 def show_home():
-    return render_template('home.html')
+    return render_template('home.html', is_about=False)
 
 
 @app.route('/index.html')
 # @app.route()
 def show_index():
-    return render_template('index.html', is_about=False)
+    progress = {'print': 50, 'scanner': 20, 'else': 15}
+    progressBars = {}
+    for key, val in progress.items():
+        progressBars[key] = "<div class='progress-bar' role='progressbar' style='width: " + \
+            str(val) + "%' aria-valuenow='" + str(val) + \
+            "%' aria-valuemin='0' aria-valuemax='100'> </div>"
+    return render_template('index.html', is_about=False, progressBars=progressBars)
+
+
+@app.route('/module.html')
+@app.route('/print.html')
+def show_print():
+    return render_template('module.html', is_about=False)
+    # return render_template('print.html')
 
 
 @app.route('/about_auth.html')
@@ -38,15 +51,15 @@ def show_about_auth():
 
 @app.route('/about_unauth.html')
 def show_about_unauth():
-    return render_template('about_unauth.html')
+    return render_template('about_unauth.html', is_about=True)
 
 
-# @app.errorhandler(400)
-# def handle_bad_request(e):
-#     print(e.description)
-#     return render_template('400_error.html', e=e.description), 400
+@app.errorhandler(404)
+def handle_bad_request(e):
+    print(e.description)
+    return render_template('404_error.html', e=e.description), 404
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(debug=True, development=True)
     show_index()

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>algs4 to StdJava</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+
+<body>
+	<div class="site-wrapper">
+		<div class="site-wrapper-inner">
+			<div class="cover-container">
+				<header class="masthead clearfix">
+					<div class="inner">
+						<h3 class="masthead-brand">algs4 to StdJava</h3>
+						<nav class="nav nav-masthead">
+							<a class="nav-link {% if not is_about %} active {% endif %}" href="home.html">Home</a>
+							<a class="nav-link {% if is_about %} active {% endif %}" href="about_unauth.html">About</a>
+							<a class="nav-link" href="index.html">Login</a>
+						</nav>
+					</div>
+				</header>
+				{% block content %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+</body>

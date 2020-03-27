@@ -5,20 +5,32 @@
 	<title>{% block title %}{% endblock %}</title>
 	<meta charset="utf-8">
 	{% block thehead %} {% endblock %}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="Nathan Finkle">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 
 <body>
-	<div id="page_container">
-		<div id="content-wrap">
-			{% include 'auth_navbar.html' %}
-			{% block content %} {% endblock %}
+	<!-- <div id="page_container"> -->
+	<div id="content-wrap">
+		{% include 'auth_navbar.html' %}
+		<div class="jumbotron">
+			<div class="container text-center">
+				{% block jumbo %}
+				<!-- <div class="container text-center text-dark"> -->
+				{% endblock %}
+			</div>
 		</div>
-		<br><br>
-		<footer id="footer" class="footer bg-fav mt-auto py-0 text-center">
-			<span class="text-muter text-light">algs4 to StdJava</span>
-		</footer>
+		{% block content %} {% endblock %}
 	</div>
+	<br><br>
+	<footer class="footer bg-fav mt-auto text-center">
+		<span class="text-muter text-light" style="padding: 20px;">algs4 to StdJava</span>
+	</footer>
+	<!-- </div> -->
 </body>
 
 </html>
