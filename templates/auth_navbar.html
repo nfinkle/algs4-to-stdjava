@@ -11,15 +11,14 @@
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle {% if not is_about %} active {% endif %}" href="#"
 					id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Modules
-				</a>
+					Modules</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<h6 class="dropdown-header">Input/Output</h6>
-					<a class="dropdown-item" href="{{ url_for('show_module') }}">Scanner</a>
 					<a class="dropdown-item" href="{{ url_for('show_system_out') }}">System.out</a>
-					<a class="dropdown-item" href="{{ url_for('show_module') }}">PrintWriter</a>
+					<a class="dropdown-item" href="{{ url_for('show_scanner') }}">Scanner</a>
+					<a class="dropdown-item" href="{{ url_for('show_printwriter') }}">PrintWriter</a>
 					<h6 class="dropdown-header">Data Structures</h6>
-					<a class="dropdown-item" href="{{ url_for('show_module') }}">HashMap</a>
+					<a class="dropdown-item" href="{{ url_for('show_hashmap') }}">HashMap</a>
 					<a class="dropdown-item" href="{{ url_for('show_module') }}">HashSet</a>
 					<a class="dropdown-item" href="{{ url_for('show_module') }}">TreeMap</a>
 					<a class="dropdown-item" href="{{ url_for('show_module') }}">Queue</a>

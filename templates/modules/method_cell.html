@@ -2,13 +2,19 @@
 	{% for data in item %}
 	<div class="col-sm-12 col-md-6">
 		<div class="row">
+			{% if data["empty"] %}
+			<div class="col-12 text-center">N/A</div>
+			{% else %}
 			<div class="col-md-3 col-lg-2">
 				<p><code>{{ data["type"] }}</code></p>
 			</div>
 			<div class="col-md-9 col-lg-10">
-				<code>{{ className[loop.index0] }}.{{ data["fname"] }}({{ item[0]["args"] }})</code>
+				<code>{% if not constructors %}
+					{{ className[loop.index0] }}.
+					{%- endif %}{{ data["fname"] }}({{ data["args"] }})</code>
 				<p style="font-size: 12px">{{ data["description"] }}</p>
 			</div>
+			{% endif %}
 		</div>
 	</div>
 	{% endfor %}

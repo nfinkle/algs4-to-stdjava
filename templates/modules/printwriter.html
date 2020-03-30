@@ -1,0 +1,77 @@
+{% extends "modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}PrintWriter{% endblock %}
+
+{% block pageDescription %}Learn PrintWriter from Out in algs4{% endblock %}
+
+<!-- body -->
+{% block title %}PrintWriter{% endblock %}
+{% block subtitle %}Writing to a file; the equivalent to <code>Out</code> in <code>algs4</code>{% endblock %}
+
+{% set className = ["Out", "PrintWriter"] %}
+{% block description %}
+<p><code>PrintWriter</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html">Javadoc
+		API</a>) works almost
+	identically
+	to <code>Out</code> (<a href="https://introcs.cs.princeton.edu/java/stdlib/javadoc/Out.html">Javadoc
+		API</a>). Note that <code>StdOut</code> is a special case of <code>Out</code>, where <code>Out</code> is
+	initialized
+	to the <code>System.out</code> stream.</p>
+<p>The only
+	difference between <code>Out</code> and <code>PrintWriter</code> is that
+	<code>Out</code>
+	flushes all output
+	immediately, while <code>PrintWriter</code> buffers the output until a newline
+	character is added before flushing the output.</p>
+{% endblock %}
+
+{% block constructorCells %}
+{% set fileConstructor = {"args": "</code>File <code>source"|safe, "description": "Initializes an output stream from a file."|safe} %}
+{% set filenameConstructor = {"args": "</code>String <code>filename"|safe, "description": "Initializes an output stream from the specified file name."|safe} %}
+{% for item in [  [{"description": "Initializes an output stream to <code>stdout</code>."|safe, "args": ""}, {"description": "Initializes an out stream to <code>stdout</code>."|safe, "args": "System.out"}],
+[fileConstructor, fileConstructor],
+[filenameConstructor, filenameConstructor]
+] %}
+{% include "modules/constructor_cell.html" %}
+{% endfor %}
+{% endblock %}
+
+
+{% block cells %}
+<!-- flush -->
+{% for item in [  [{"fname": "print", "type": "void", "description": "Flush the output stream.", "args": ""}, {"fname": "flush", "type": "void", "description": "Flush the output stream.", "args": ""}]  ]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+
+<!-- print -->
+{% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
+{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to the output stream and flush.", "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to the output stream.", "args": "</code>"|safe + builtInType + "<code>"|safe}]  ]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+{% endfor %}
+
+<!-- println -->
+{% set newline = {"fname": "println", "type": "void", "description": "Print a newline to the output stream and flush."|safe, "args": ""} %}
+{% for item in [  [newline, newline]  ]  %}
+{% include "modules/method_cell.html" %}
+
+{% endfor %}
+
+
+<!-- println -->
+{% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
+{% set newlineBuiltIn = {"fname": "println", "type": "void", "description": "Print a " + builtInType + " and a newline to the output stream and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe} %}
+{% for item in [  [newlineBuiltIn, newlineBuiltIn]  ]  %}
+{% include "modules/method_cell.html" %}
+
+{% endfor %}
+{% endfor %}
+
+<!-- printf -->
+{% for item in [  [{"fname": "print", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments, and then flush."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}, {"fname": "flush", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}]  ]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+
+
+{% endblock %}

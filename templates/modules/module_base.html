@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
 	<div class="text-center">
-		<h2>Overview</h2><br>
+		<h2>Overview</h2>
 	</div>
 	<div class="row text-center">
 		<div class="col-lg-1"></div>
@@ -12,17 +12,32 @@
 	<div class="text-center">
 		<h2>API Comparison</h2>
 	</div>
-	<!-- {% set className = ["StdOut", "System.err"] %} -->
+
 	<div class="row">
 		<div class="col-lg-1"></div>
 		<div class="col-lg-10">
 			<div class="row text-center">
 				<div class="col-sm-12 col-md-6">
-					<h4>{{ className[0] }}</h4>
+					<h3>{{ className[0] }}</h3>
 				</div>
 				<div class="col-sm-12 col-md-6">
-					<h4>{{ className[1] }}</h4>
+					<h3>{{ className[1] }}</h3>
 				</div>
+			</div>
+			{% if constructors %}
+			<div class="text-center">
+				<h4>Constructors</h4>
+			</div>
+			{% block constructorCells %}
+			{% endblock %}
+			{% endif %}
+
+			<div class="text-center">
+				{% if constructors %}
+				<h4>Instance Methods</h4>
+				{% else %}
+				<h4>Static Methods</h4>
+				{% endif %}
 			</div>
 			{% block cells %}
 

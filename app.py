@@ -26,7 +26,6 @@ def show_home():
 
 
 @app.route('/index.html')
-# @app.route()
 def show_index():
     progress = {'print': 50, 'scanner': 20, 'else': 15}
     progressBars = {}
@@ -39,12 +38,27 @@ def show_index():
 
 @app.route('/modules/module.html')
 def show_module():
-    return render_template('modules/module.html', is_about=False)
+    return render_template('modules/module.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/system-out.html')
 def show_system_out():
-    return render_template('modules/system-out.html', is_about=False)
+    return render_template('modules/system-out.html', is_about=False, constructors=False)
+
+
+@app.route('/modules/scanner.html')
+def show_scanner():
+    return render_template('modules/scanner.html', is_about=False, constructors=True)
+
+
+@app.route('/modules/printwriter.html')
+def show_printwriter():
+    return render_template('modules/printwriter.html', is_about=False, constructors=True)
+
+
+@app.route('/modules/hashmap.html')
+def show_hashmap():
+    return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
 @app.route('/about_auth.html')
