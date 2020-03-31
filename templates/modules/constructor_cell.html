@@ -7,7 +7,7 @@
 				<div class="flex-container text-center">N/A</div>
 				{% else %}
 				<code>
-					{{ className[loop.index0] }}({{ data["args"] }})</code>
+					{{ className[loop.index0] }}{% if generics %}&lt{{ generics[loop.index0] }}&gt{% endif %}({{ data["args"] }})</code>
 				<p style="font-size: 12px">{{ data["description"] }}</p>
 				{% endif %}
 			</div>

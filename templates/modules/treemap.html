@@ -12,6 +12,7 @@
 <code>algs4</code>{% endblock %}
 
 {% set className = ["RedBlackBST", "TreeMap"] %}
+{% set generics = ["Key,Value", "Key,Value"] %}
 {% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
 
 {% block description %}
@@ -30,7 +31,8 @@
 		Queue&ltT&gt&gt</code> must accept arguments of the type <code>Iterable&ltT&gt</code> and <code>Object</code>
 	because
 	<code>Queue&ltT&gt</code>
-	uses arguments.</p>
+	uses arguments. Additionally, <code>TreeMap</code> will accept multiple types of keys, so long as they can be
+	ordered (by the given <code>Comparator</code>).</p>
 {% endblock %}
 
 {% block constructorCells %}
@@ -83,16 +85,15 @@
 	overwriting the old value with the new value if the symbol table already contains the specified key.", "args": "</code>Key <code>key, </code>Value<code> value"|safe},
 	{"fname": "put", "type": "Value", "description": "Associates the specified value with the specified key in the symbol table, overwriting and returning the old value with the new value if the symbol table already contains the specified key, and returning <code>null</code> otherwise."|safe, "args":
 	"</code>Key <code>key, </code>Value<code> value"|safe}],
-	[{"fname": "put", "type": "int", "description": "Returns the number of key-value pairs in this symbol table.", "args":""},
-	{"fname": "put", "type": "int", "description": "Returns the number of key-value mappings in this map.", "args": ""}],
 	[{"fname": "rank", "args":"</code>Key <code>key"|safe, "type":"int", "description":"Returns the number of keys in the
 		symbol table strictly less than <code>key</code>"|safe},
 		{"fname": "headMap", "args":"</code>Key <code>key"|safe, "type":"SortedMap <Key,Value>", "description":"Returns a
 			view of the portion of this map whose keys are strictly less than <code>key</code>"|safe}],
 	[nonexistantMethod, {"fname": "replace", "type":"Value", "description": "Replaces the entry for the specified key if it is currently mapped to some value, or else <code>null</code> if the key did not exist."}],
 	[{"fname":"select", "type":"Key", "args":"</code>int <code>rank"|safe, "description": "Return the key in the symbol table of a given <code>rank</code>."|safe}, nonexistantMethod],
-	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of keys in this symbol table."},
-		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of keys in this mapping."}]
+	[{"fname": "size", "type": "int", "description": "Returns the number of key-value pairs in this symbol table.",
+	"args":""},
+		{"fname": "size", "type": "int", "description": "Returns the number of key-value mappings in this map.", "args": ""}]
 ]  %}
 {% include "modules/method_cell.html" %}
 {% endfor %}

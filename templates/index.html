@@ -1,6 +1,6 @@
 {% extends "auth_base.html" %}
 
-{% block pageTitle %}algs4 to StdJava{% endblock %}
+{% block pageTitle %}index{% endblock %}
 
 {% block pageDescription %}Learn the standard Java libraries from the libraries used in COS226{% endblock %}
 
@@ -82,7 +82,7 @@
 					<div class="progress">{{ progressBars["else"]|safe }}</div>
 				</div>
 				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_module') }}" role="button" class="btn btn-block btn-success">Learn</a>
+					<a href="{{ url_for('show_hashset') }}" role="button" class="btn btn-block btn-success">Learn</a>
 				</div>
 			</div>
 		</div>
@@ -95,14 +95,14 @@
 					<div class="progress">{{ progressBars["else"]|safe }}</div>
 				</div>
 				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_module') }}" role="button" class="btn btn-block btn-success">Learn</a>
+					<a href="{{ url_for('show_treemap') }}" role="button" class="btn btn-block btn-success">Learn</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4">
-			<h4>Priority Queue</h4>
+			<h4>PriorityQueue</h4>
 			<h6>(MinPQ)</h6>
 			<p>A (non-indexed) minimum priority queue.</p>
 			<div class="row">

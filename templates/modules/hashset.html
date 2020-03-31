@@ -1,0 +1,53 @@
+{% extends "modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}HashSet{% endblock %}
+{% block pageDescription %}Learn HashSet from Bag in algs4{% endblock %}
+{% set extendType = true %}
+
+<!-- body -->
+{% block title %}HashSet{% endblock %}
+{% block subtitle %}An efficient set (container of objects); an <em>improvement</em> to <code>Bag</code> in
+<code>algs4</code>{% endblock %}
+
+{% set className = ["Bag", "HashSet"] %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+{% block description %}
+<p><code>HashSet</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html">Javadoc
+		API</a>) has all of the same operations as <code>Bag</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/Bag.html">Javadoc
+		API</a>), but also has the important <code>contains</code> operation.</p>
+{% endblock %}
+{% set generics = ["Item", "Item"] %}
+{% block constructorCells %}
+
+{% for item in [  [{"description": "Initializes an empty symbol table with the default initial capacity (4)."|safe, "args": ""},{"description": "Initializes an empty <code>HashMap</code> with the default initial capacity (16)."|safe, "args": ""}],
+[nonexistantMethod,{"description": "Initializes an empty <code>HashMap</code> with the specified capacity."|safe,
+	"args": "</code>int <code>capacity"|safe}]
+] %}
+{% include "modules/constructor_cell.html" %}
+{% endfor %}
+{% endblock %}
+
+
+{% block cells %}
+<!-- flush -->
+{% for item in [ 
+	[{"fname": "add", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to this
+		bag."}, {"fname": "add", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified
+		item to this bag."}],
+	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the items from this set.",
+	"args":""}],
+	[nonexistantMethod,	{"fname": "contains", "type": "boolean", "description": "Returns <code>true</code> if the specified item is in this set."|safe, "args": "</code>Object <code>key"|safe}],
+	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this bag is empty."|safe, "args": ""}, {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this mapping is empty."|safe, "args": ""}],
+	[{"fname": "iterator", "type":"Iterator<Item>", "args":"", "description":"Returns an iterator over the items in this bag in arbitrary order."},
+		{"fname": "iterator", "type":"Iterator<Item>", "args":"", "description":"Returns an iterator over the items in this set in arbitrary order."}],
+	[nonexistantMethod, {"fname": "remove", "type": "Value", "description": "Removes and returns the mapping for the specified key from this map if present. Returns <code>null</code> if the key was not in the map."|safe, "args": "</code>Object <code>key"|safe}],
+	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of keys in this bag."},
+		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of keys in this set."}]
+]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+
+
+{% endblock %}
