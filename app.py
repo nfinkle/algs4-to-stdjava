@@ -61,6 +61,16 @@ def show_hashmap():
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
+@app.route('/modules/hashset.html')
+def show_hashset():
+    return render_template('modules/hashset.html', is_about=False, constructors=True)
+
+
+@app.route('/modules/treemap.html')
+def show_treemap():
+    return render_template('modules/treemap.html', is_about=False, constructors=True)
+
+
 @app.route('/about_auth.html')
 def show_about_auth():
     return render_template('about_auth.html', is_about=True)

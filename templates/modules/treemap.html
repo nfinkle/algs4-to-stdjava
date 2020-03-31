@@ -1,0 +1,101 @@
+{% extends "modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}TreeMap{% endblock %}
+
+{% block pageDescription %}Learn TreeMap from RedBlackBST in algs4{% endblock %}
+{% set extendType = true %}
+<!-- body -->
+{% block title %}TreeMap{% endblock %}
+{% block subtitle %}A Left-Leaning Red-Black Binary Search Tree dictionary (symbol table); the equivalent to
+<code>RedBlackBST</code> in
+<code>algs4</code>{% endblock %}
+
+{% set className = ["RedBlackBST", "TreeMap"] %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+
+{% block description %}
+<p><code>TreeMap</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html">Javadoc
+		API</a>) works almost
+	identically
+	to <code>RedBlackBST</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/RedBlackBST.html">Javadoc
+		API</a>).</p>
+<p>The main
+	difference between <code>RedBlackBST</code> and <code>TreeMap</code> is that <code>TreeMap</code> can be used with
+	<code>Comparable</code> keys <em>or</em> with an explicit <code>Comparator</code>, while <code>RedBlackBST</code>
+	can only be used with <code>Comparable</code> keys. A <code>Comparator</code> for <code>TreeMap</code> must be of
+	type <code>Comparator&lt? super Key&gt</code>, which means that it must be able to compare two objects
+	of type Key and of any type from which Key inherits. For example a <code>Comparator&lt? super
+		Queue&ltT&gt&gt</code> must accept arguments of the type <code>Iterable&ltT&gt</code> and <code>Object</code>
+	because
+	<code>Queue&ltT&gt</code>
+	uses arguments.</p>
+{% endblock %}
+
+{% block constructorCells %}
+
+{% for item in [  [{"description": "Initializes an empty symbol table."|safe, "args": ""},{"description": "Initializes an empty <code>TreeMap</code> ordered according to the natural (as defined <code>Comparable</code>'s <code>compareTo</code> method) ordering of its keys."|safe, "args": ""}],
+[nonexistantMethod,{"description": "Initializes an empty <code>TreeMap</code> ordered according to the given comparator."|safe, "args": "</code>Comparator <code>&lt? super </code>Key<code>&gt comp"|safe}]
+] %}
+{% include "modules/constructor_cell.html" %}
+{% endfor %}
+{% endblock %}
+
+
+{% block cells %}
+<!-- flush -->
+{% for item in [  
+	[{"fname": "ceiling", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the smallest key in the
+		symbol table greater than or equal to <code>key</code>, or throws a <code>NoSuchElementException</code> if no such key
+		exists."|safe},
+		{"fname": "ceilingKey", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the smallest key in the map greater than or equal to <code>key</code>, or <code>null</code> if no such key exists."|safe}],
+	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the mappings from this map.",
+	"args":""}],
+	[{"fname": "contains", "type": "boolean", "description": "Returns <code>true</code> if this symbol table contains the
+	specified key."|safe, "args": "</code>Key <code>key"|safe},
+	{"fname": "containsKey", "type": "boolean", "description": "Returns <code>true</code> if this map contains a mapping
+	for the
+	specified key."|safe, "args":
+	"</code>Object <code>key"|safe}],
+	[{"fname": "delete", "type": "boolean", "description": "Removes the specified key and its associated value from this
+	symbol table (if the key is in this symbol table; does nothing if it is not in this symbol table).", "args": "</code>Key <code>key"|safe},
+	{"fname": "remove", "type": "Value", "description": "Removes and returns the mapping for the specified key from this map if present. Returns <code>null</code> if the key was not in the map."|safe, "args": "</code>Object <code>key"|safe}],
+	[{"fname": "deleteMax", "type": "boolean", "description": "Removes the largest key.", "args": ""}, nonexistantMethod],
+	[{"fname": "deleteMin", "type": "boolean", "description": "Removes the smallest key.", "args": ""}, nonexistantMethod],
+	[{"fname": "get", "type": "Value", "description": "Returns the value associated with the specified key in this symbol
+	table, or <code>null</code> if this symbol table contains no entry for the key."|safe, "args": "</code>Key <code>key"|safe},
+	{"fname": "get", "type": "Value", "description": "Returns the value to which the specified key is mapped, or <code>null</code> if
+	this map contains no mapping for the key."|safe, "args": "</code>Object <code>key"|safe}],
+	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this symbol table is empty."|safe, "args": ""}, {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this mapping is empty."|safe, "args": ""}],
+	[{"fname": "floor", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the largest key in the symbol table less than <code>key</code>."|safe},
+		{"fname": "floorKey", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the largest key in the mapping less than <code>key</code>."|safe}]
+	[{"fname": "keys", "type": "Iterable<Key>", "description": "Returns an iterable collection of the keys in this symbol table.", "args": ""},
+		{"fname": "keySet", "type": "Set<Key>", "description": "Returns a <code>Set</code> of the keys in this map"|safe, "args": ""}],
+	[{"fname": "keys", "type": "Iterable<Key>", "description": "Returns an iterable collection of the keys in this symbol table in the given range.", "args": "</code>Key <code>lo, </code>Key <code>hi"|safe},
+		{"fname": "subMap", "type":"NavigableMap <Key,Value>", "args":"</code>Key <code>fromKey, </code>boolean <code>fromInclusive, </code>Key <code>toKey, </code>boolean <code>toInclusive"|safe,
+			"description": "Returns a view of the portion of this map whose keys range from <code>fromKey</code> (inclusive if <code>fromInclusive</code> is <code>true</code>) to <code>toKey</code> (inclusive if <code>toInclusive</code> is <code>true</code>)"|safe}],
+	[{"fname": "max", "type": "boolean", "description": "Returns the largest key.", "args": ""}, {"fname": "lastKey", "type":
+	"boolean", "description": "Returns the largest key.", "args": ""}],
+	[{"fname": "min", "type": "boolean", "description": "Returns the smallest key.", "args": ""}, {"fname": "firstKey", "type":
+	"boolean", "description": "Returns the smallest key.", "args": ""}],
+	[{"fname": "put", "type": "void", "description": "Associates the specified value with the specified key in the symbol table,
+	overwriting the old value with the new value if the symbol table already contains the specified key.", "args": "</code>Key <code>key, </code>Value<code> value"|safe},
+	{"fname": "put", "type": "Value", "description": "Associates the specified value with the specified key in the symbol table, overwriting and returning the old value with the new value if the symbol table already contains the specified key, and returning <code>null</code> otherwise."|safe, "args":
+	"</code>Key <code>key, </code>Value<code> value"|safe}],
+	[{"fname": "put", "type": "int", "description": "Returns the number of key-value pairs in this symbol table.", "args":""},
+	{"fname": "put", "type": "int", "description": "Returns the number of key-value mappings in this map.", "args": ""}],
+	[{"fname": "rank", "args":"</code>Key <code>key"|safe, "type":"int", "description":"Returns the number of keys in the
+		symbol table strictly less than <code>key</code>"|safe},
+		{"fname": "headMap", "args":"</code>Key <code>key"|safe, "type":"SortedMap <Key,Value>", "description":"Returns a
+			view of the portion of this map whose keys are strictly less than <code>key</code>"|safe}],
+	[nonexistantMethod, {"fname": "replace", "type":"Value", "description": "Replaces the entry for the specified key if it is currently mapped to some value, or else <code>null</code> if the key did not exist."}],
+	[{"fname":"select", "type":"Key", "args":"</code>int <code>rank"|safe, "description": "Return the key in the symbol table of a given <code>rank</code>."|safe}, nonexistantMethod],
+	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of keys in this symbol table."},
+		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of keys in this mapping."}]
+]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+
+
+{% endblock %}

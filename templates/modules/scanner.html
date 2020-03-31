@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% set className = ["In", "Scanner"] %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
 
 {% block constructorCells %}
 {% set fileConstructor = {"args": "</code>File <code>source"|safe, "description": "Initializes an input stream from a file."|safe} %}
@@ -46,7 +47,6 @@
 {% block cells %}
 <!-- flush -->
 {% set closeMethod = {"fname": "close", "type": "void", "description": "Close this input stream.", "args": ""} %}
-{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
 {% for item in [  
 	[closeMethod, closeMethod],
 	[{"fname":"isEmpty", "type":"boolean", "description": "Return <code>true</code> if input stream is empty (except possibly
