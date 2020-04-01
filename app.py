@@ -71,6 +71,11 @@ def show_treemap():
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
+@app.route('/modules/queue.html')
+def show_queue():
+    return render_template('modules/queue.html', is_about=False, constructors=True)
+
+
 @app.route('/about_auth.html')
 def show_about_auth():
     return render_template('about_auth.html', is_about=True)
