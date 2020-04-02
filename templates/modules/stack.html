@@ -1,0 +1,58 @@
+{% extends "modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}Stack{% endblock %}
+{% block pageDescription %}Learn Stack from Stack in algs4{% endblock %}
+{% set extendType = true %}
+
+<!-- body -->
+{% block title %}Stack{% endblock %}
+{% block subtitle %}A LIFO stack; the equivalent to <code>Stack</code> in
+<code>algs4</code>{% endblock %}
+
+{% set className = ["Stack", "Stack"] %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+{% set generics = ["Item", "Item"] %}
+
+{% block description %}
+<p>The standard library's <code>stack</code> (<a
+		href="https://docs.oracle.com/javase/8/docs/api/java/util/stack.html">Javadoc
+		API</a>) has almost of the same operations as <code>Stack</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/Stack.html">Javadoc
+		API</a>) in <code>algs4</code>, except that it is built on top of a resizing array, instead of a linked list.
+</p>
+{% endblock %}
+
+{% block constructorCells %}
+{% set emptyConstructor = {"description": "Initializes an empty stack.", "args": ""} %}
+{% for item in [  [emptyConstructor, emptyConstructor] ] %}
+{% include "modules/constructor_cell.html" %}
+{% endfor %}
+{% endblock %}
+
+
+{% block cells %}
+{% set pushMethod = {"fname": "push", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to the top of this stack."} %}
+{% set sizeMethod = {"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this stack."} %}
+{% for item in [ 
+	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the items from the stack.", "args":""}],
+	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this stack is empty,
+	<code>false</code> otherwise."|safe, "args": ""}, {"fname": "empty", "type": "boolean", "description": "Returns
+	<code>true</code> if this stack is empty, <code>false</code> otherwise."|safe, "args": ""}],
+	[{"fname": "iterator", "type":"Iterator<Item>", "args":"", "description":"Returns an iterator over the items in this
+		stack in LIFO order."},
+		{"fname": "iterator", "type":"Iterator<Item>", "args":"", "description":"Returns an iterator over the items in this stack <em>FIFO</em> order."|safe}],
+	[{"fname": "peek", "type": "Item", "description": "Returns (but does not remove) the item on this stack that was most recently added, or throws a <code>NoSuchElementException</code> if this stack is empty."|safe, "args": ""},
+		{"fname": "peek", "type": "Item", "args": "",
+		"description": "Returns (but does not remove) the item on this stack that was most recently added, or throws a <code>EmptyStackException</code> if this stack is empty."|safe}],
+	[{"fname": "pop", "type": "boolean", "description": "Removes and returns the item on this stack that was most recently added, or throws a <code>NoSuchElementException</code> if this stack is empty."|safe, "args": ""},
+		{"fname": "pop", "type": "boolean", "args": "",
+		"description": "Removes and returns the item on this stack that was most recently added, or throws a <code>EmptyStackException</code> if this stack is empty."|safe}],
+	[pushMethod, pushMethod],
+	[sizeMethod, sizeMethod]
+]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+
+
+{% endblock %}

@@ -76,6 +76,11 @@ def show_queue():
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
+@app.route('/modules/stack.html')
+def show_stack():
+    return render_template('modules/stack.html', is_about=False, constructors=True)
+
+
 @app.route('/about_auth.html')
 def show_about_auth():
     return render_template('about_auth.html', is_about=True)
