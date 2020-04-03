@@ -1,0 +1,81 @@
+{% extends "modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}PriorityQueue{% endblock %}
+{% block pageDescription %}Learn PriorityQueue from MinPQ in algs4{% endblock %}
+{% set extendType = true %}
+
+<!-- body -->
+{% block title %}PriorityQueue{% endblock %}
+{% block subtitle %}A priority queue; the equivalent to <code>MinPQ</code> in
+<code>algs4</code>{% endblock %}
+
+{% set className = ["MinPQ", "PriorityQueue"] %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+{% set generics = ["Key", "Key"] %}
+
+{% block description %}
+<p><code>PriorityQueue</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/util/PriorityQueue.html">Javadoc
+		API</a>) has all of the same operations as <code>MinPQ</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/MinPQ.html">Javadoc
+		API</a>).</p>
+<p>The main
+	difference between <code>PriorityQueue</code> and <code>MinPQ</code> is that the comparator in the constructors with
+	a
+	comparator for <code>PriorityQueue</code> must be of type <code>Comparator&lt? super Key&gt</code>, while the
+	comparator in the constructors with a comparator for <code>MinPQ</code> are of type
+	<code>Comparator&ltKey&gt</code>.
+	The <code>Comparator&lt? super Key&gt</code> means that the comparator must be able to compare two objects of type
+	Key and of any type from which Key inherits. For example a <code>Comparator&lt? super
+		Queue&ltT&gt&gt</code> must accept arguments of the type <code>Iterable&ltT&gt</code> and <code>Object</code>
+	because <code>Queue&ltT&gt</code> inherits from those interfaces.</p>
+<p><code>algs4</code> also contains the priority queue <code>IndexMinPQ</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/IndexMinPQ.html">Javadoc API</a>) which
+	features the ability to reference an individual key to modify. There is currently no equivalent in the standard Java
+	libraries.</p>
+{% endblock %}
+
+{% block constructorCells %}
+{% set emptyConstructor = {"description": "Initializes an empty priority queue ordered according to the natural (as defined by <code>Comparable</code>'s <code>compareTo</code> method) ordering of its keys."|safe, "args": ""} %}
+{% set capacityConstructor = {"description": "Initializes a priority queue with the specified capacity.", "args": "</code>int <code>capacity"|safe} %}
+{% for item in [ 
+	[emptyConstructor, emptyConstructor],
+	[capacityConstructor, capacityConstructor],
+	[{"description": "Initializes an empty priority queue ordered according to the given comparator."|safe, "args": "</code>Comparator&lt</code>Key&gt <code>comp"|safe},
+		{"description": "Initializes an empty priority queue ordered according to the given comparator."|safe, "args": "</code>Comparator&lt? super Key&gt<code> comp"|safe}],
+	[{"description": "Initializes an empty priority queue ordered according to the given comparator with the specified capacity.", "args":
+	"</code>Comparator&lt</code>Key&gt <code>comp, </code>int <code>capacity"|safe},
+		{"description": "Initializes an empty priority queue ordered according to the given comparator with the specified capacity.", "args": "</code>Comparator&lt? super Key&gt<code> comp, </code>int <code>capacity"|safe}]
+] %}
+{% include "modules/constructor_cell.html" %}
+{% endfor %}
+{% endblock %}
+
+
+{% block cells %}
+{% set isEmptyMethod = {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this priority queue is
+	empty."|safe, "args": ""} %}
+{% for item in [ 
+	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the keys from the priority queue.", "args":""}],
+	[{"fname": "delMin", "type": "boolean", "description": "Removes and returns the key in this priority queue with the lowest priority, or throws a <code>NoSuchElementException</code> if this priority queue is empty."|safe, "args": ""},
+		{"fname": "remove", "type": "boolean", "args": "",
+		"description": "Removes and returns the item in this priority queue with the lowest priority, or throws a
+		<code>NoSuchElementException</code> if this priority queue is empty."|safe}],
+	[{"fname": "insert", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified key to this priority queue."},
+		{"fname": "add", "type": "boolean", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to this priority queue."}],
+	[isEmptyMethod, isEmptyMethod],
+	[{"fname": "iterator", "type":"Iterator<Key>", "args":"", "description":"Returns an iterator over the items in this priority queue in ascending order."},
+		{"fname": "iterator", "type":"Iterator<Key>", "args":"", "description":"Returns an iterator over the items in this priority queue in an arbitrary order."}],
+	[{"fname": "min", "type": "Item", "args": "",
+	"description": "Returns (but does not remove) the smallest key in this priority queue, or throws a <code>NoSuchElementException</code> if this
+	priority queue is empty."|safe},
+		{"fname": "peek", "type": "Item", "args": "",
+		"description": "Returns (but does not remove) the smallest key in this priority queue or <code>null</code> if this priority queue is empty."|safe}],
+	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this priority queue."},
+		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this priority queue."}]
+]  %}
+{% include "modules/method_cell.html" %}
+{% endfor %}
+
+
+{% endblock %}

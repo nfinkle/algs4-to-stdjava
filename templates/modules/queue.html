@@ -33,12 +33,11 @@
 
 
 {% block cells %}
-<!-- flush -->
 {% for item in [ 
 	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the items from the linked list.", "args":""}],
 	[{"fname": "dequeue", "type": "boolean", "description": "Removes and returns the item on this queue that was least recently added, or throws a <code>NoSuchElementException</code> if this queue is empty."|safe, "args": ""},
 		{"fname": "remove", "type": "boolean", "args": "",
-		"description": "Removes and returns the first element of this linked list, throws a <code>NoSuchElementException</code> if this queue is empty."|safe}],
+		"description": "Removes and returns the first element of this linked list, or throws a <code>NoSuchElementException</code> if this queue is empty."|safe}],
 	[{"fname": "enqueue", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to this queue."},
 		{"fname": "add", "type": "boolean", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to this linked list (at the end of the list) in constant time."}],
 	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this queue is empty."|safe, "args": ""}, {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this linked list is empty."|safe, "args": ""}],
