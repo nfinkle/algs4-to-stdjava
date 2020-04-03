@@ -31,13 +31,12 @@
 		Queue&ltT&gt&gt</code> must accept arguments of the type <code>Iterable&ltT&gt</code> and <code>Object</code>
 	because
 	<code>Queue&ltT&gt</code>
-	uses arguments. Additionally, <code>TreeMap</code> will accept multiple types of keys, so long as they can be
-	ordered (by the given <code>Comparator</code>).</p>
+	inherits from those interfaces.</p>
 {% endblock %}
 
 {% block constructorCells %}
 
-{% for item in [  [{"description": "Initializes an empty symbol table."|safe, "args": ""},{"description": "Initializes an empty <code>TreeMap</code> ordered according to the natural (as defined <code>Comparable</code>'s <code>compareTo</code> method) ordering of its keys."|safe, "args": ""}],
+{% for item in [  [{"description": "Initializes an empty symbol table."|safe, "args": ""},{"description": "Initializes an empty <code>TreeMap</code> ordered according to the natural (as defined by <code>Comparable</code>'s <code>compareTo</code> method) ordering of its keys."|safe, "args": ""}],
 [nonexistantMethod,{"description": "Initializes an empty <code>TreeMap</code> ordered according to the given comparator."|safe, "args": "</code>Comparator <code>&lt? super </code>Key<code>&gt comp"|safe}]
 ] %}
 {% include "modules/constructor_cell.html" %}
@@ -46,7 +45,6 @@
 
 
 {% block cells %}
-<!-- flush -->
 {% for item in [  
 	[{"fname": "ceiling", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the smallest key in the
 		symbol table greater than or equal to <code>key</code>, or throws a <code>NoSuchElementException</code> if no such key

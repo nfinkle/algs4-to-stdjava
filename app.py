@@ -71,6 +71,10 @@ def show_treemap():
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
+@app.route('/modules/priorityqueue.html')
+def show_priorityqueue():
+    return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
+
 @app.route('/modules/queue.html')
 def show_queue():
     return render_template('modules/queue.html', is_about=False, constructors=True)
