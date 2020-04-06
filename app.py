@@ -1,5 +1,4 @@
-import jpype.imports
-from py4j.java_gateway import JavaGateway
+# import jpype.imports
 from flask import Flask, request, render_template, url_for
 # import flask_bootstrap
 # from flask_cors import CORS
