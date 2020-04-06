@@ -1,16 +1,21 @@
+import jpype.imports
+from py4j.java_gateway import JavaGateway
 from flask import Flask, request, render_template, url_for
-import flask_bootstrap
+# import flask_bootstrap
 # from flask_cors import CORS
+import os
 
 app = Flask(__name__)
-flask_bootstrap.Bootstrap(app)
+# flask_bootstrap.Bootstrap(app)
 # CORS(app)
 # app.register_blueprint(import_backup_api)
 
 
 @app.route('/health', methods=['GET'])
 def health():
-    return "I\'m online"
+    os.system('javac tester.java')
+    os.system('java tester')
+    return "I'm online"
 
 
 # @app.route('/api.html')
@@ -75,6 +80,7 @@ def show_treemap():
 def show_priorityqueue():
     return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
 
+
 @app.route('/modules/queue.html')
 def show_queue():
     return render_template('modules/queue.html', is_about=False, constructors=True)
@@ -83,6 +89,38 @@ def show_queue():
 @app.route('/modules/stack.html')
 def show_stack():
     return render_template('modules/stack.html', is_about=False, constructors=True)
+
+
+"""
+@app.route('/run_code')
+def run_code():
+
+    # def run_code(the_code):
+    # from java.lang import System
+    # // Prepare source somehow.
+    source = "package test; public class Test { static { System.out.println(\"hello\"); } public Test() { System.out.println(\"world\"); } }"
+    import jpype
+    import jpype.imports
+    jpype.startJVM()
+    from java.io import File
+    # // Save source in .java file.
+    File root = new File("/java")
+    # // On Windows running on C: \, this is C: \java.
+    File sourceFile = new File(root, "test/Test.java")
+    sourceFile.getParentFile().mkdirs()
+    Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8))
+    # // Compile source file.
+    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler()
+    compiler.run(null, null, null, sourceFile.getPath())
+    # // Load and instantiate compiled class.
+    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] {root.toURI().toURL()})
+    Class <?> cls = Class.forName("test.Test", true, classLoader)
+    # // Should print "hello".
+    Object instance = cls.newInstance()
+    # // Should print "world".
+    System.out.println(instance)
+    # // Should print "test.Test@hashcode".
+"""
 
 
 @app.route('/about_auth.html')
