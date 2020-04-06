@@ -14,7 +14,9 @@ app = Flask(__name__)
 @app.route('/health', methods=['GET'])
 def health():
     os.system('javac tester.java')
-    os.system('java tester')
+    os.system('java tester > answer.txt')
+    with open("answer.txt") as fd:
+        return fd.contents
     return "I'm online"
 
 
