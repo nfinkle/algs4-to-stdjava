@@ -16,7 +16,7 @@ def health():
     os.system('javac tester.java')
     os.system('java tester > answer.txt')
     with open("answer.txt") as fd:
-        return fd.contents
+        return fd.read()
     return "I'm online"
 
 
