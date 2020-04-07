@@ -169,6 +169,8 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     cleanup()
     out_contents = out_contents.replace(dir_path+"/", "")
     err_contents = err_contents.replace(dir_path+"/", "")
+    print("Returning out:", out_contents)
+    print("Returning err:", err_contents)
     return out_contents, err_contents
 
 
