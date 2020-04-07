@@ -160,7 +160,7 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     compile()
     with open(stderrPath) as err:
         err_contents = err.read()
-    if not err_contents or err_contents.contains("Picked up JAVA_TOOL_OPTIONS"):
+    if not err_contents or "Picked up JAVA_TOOL_OPTIONS" in err_contents:
         print("executing")
         execute()
         with open(stderrPath) as err, open(stdoutPath) as out:
