@@ -1,5 +1,5 @@
-from flask import Flask, request, render_template, url_for
-import flask_bootstrap
+from flask import Flask, request, render_template, url_for, jsonify
+# import flask_bootstrap
 import worker
 import rq
 # from flask_cors import CORS
@@ -13,8 +13,6 @@ app = Flask(__name__)
 
 @app.route('/health', methods=['GET'])
 def health():
-    os.system('javac tester.java')
-    os.system('java tester')
     return "I'm online"
 
 
@@ -97,19 +95,32 @@ def show_about_auth():
 
 
 q = rq.Queue(connection=worker.conn)
+@app.route('/run_code_with_code')
+def run_code_get_code():
+    text = request.args["code"]
+    return run_code(text=text)
+
+
 @app.route('/run_code')
-# def run_code(text, is_algs4 = False):
-def run_code():
-    text = 'public class test { public static void main(String[] args) { System.err.println("Hi") System.out.println("Bye") } }'
-    class_name = "test"
-    is_algs4 = False
-    # code_file = tempfile.NamedTemporaryFile(delete=False).name
-    # with open(code_file, "w") as code:
-    #     code.write(text)
-    output, error = q.enqueue(run_code_in_command_line,
-                              args=(text, class_name, is_algs4))
-    # os.system("rm -f " + code_file)
-    return output
+def run_code(text=None):
+    if text is None:
+        text = 'import edu.princeton.cs.algs4.StdOut; public class new_test { public static void main(String[] args) { StdOut.println("hey!");} }'
+    # text = 'import edu.princeton.cs.algs4.StdOut; public class new_test { public static void main(String[] args) { System.err.println("Hi"); System.out.println("Bye"); StdOut.println("hey!");} }'
+    output, error = run_code_full(text, True)
+    return jsonify("Standard Output:\n" + output, "Standard Error:\n" + error)
+
+
+def run_code_full(text, is_algs4):
+    class_name = text[text.find("class ")+6:text.find("{")-1]
+    if not (class_name and text.find("class") >= 0 and text.find("{") >= 0):
+        return "", "A Java program must have a class and a class name"
+
+    myargs = (text, class_name, is_algs4)
+    job = q.enqueue(run_code_in_command_line, args=myargs)
+    while job.result is None:
+        continue
+    output, error = job.result
+    return output, error
 
 
 def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
@@ -120,40 +131,44 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     stdoutPath = dir_path + "/out.txt"
     stderrPath = dir_path + "/err.txt"
     classPath = dir_path + "/" + class_name
-    with open(classPath, "w") as code:
+    with open(classPath + ".java", "w") as code:
         code.write(code_text)
 
-    compile_command = "javac"
-    execute_command = "java"
-    if is_algs4:
-        compile_command = "javac-algs4"
-        execute_command = "java"
+    def cleanup():
+        os.system("rm -r " + dir_path)
 
-    pipingAddition = " 1> " + stdoutPath + " 2> " + stderrPath
-    compile_command = compile_command + " " + class_name + ".java" + pipingAddition
-    execute_command = execute_command + " " + class_name + pipingAddition
-    cleanup_command = "rm -r " + dir_path
+    def compile():
+        compile_command = "javac"
+        if is_algs4:
+            compile_command += " -cp .:./static/algs4/algs4.jar"
+        os.system(compile_command + " " + classPath +
+                  ".java" " 2> " + stderrPath)
+
+    def execute():
+        execute_command = "java"
+        java_CLASSPATH = dir_path
+        if is_algs4:
+            # print(url_for('static'))
+            java_CLASSPATH += ":./static/algs4/algs4.jar"
+            print(java_CLASSPATH)
+        pipingAddition = " 1> " + stdoutPath + " 2> " + stderrPath
+        os.system(execute_command + " -cp " + java_CLASSPATH + " " +
+                  class_name + pipingAddition)
 
     out_contents = ""
     err_contents = ""
-    # compiling
-    print("Running command:", compile_command)
-    os.system(compile_command)
+    compile()
     with open(stderrPath) as err:
         err_contents = err.read()
-    if err_contents:
-        print("Running command:", cleanup_command)
-        os.system(cleanup_command)
-        return "", err_contents
-
-    # executing
-    print("Running command:", execute_command)
-    os.system(execute_command)
-    with open(stderrPath) as err, open(stdoutPath) as out:
-        out_contents = out.read()
-        err_contents = err.read()
-    print("Running command:", cleanup_command)
-    os.system(cleanup_command)
+    if not err_contents:
+        print("executing")
+        execute()
+        with open(stderrPath) as err, open(stdoutPath) as out:
+            out_contents = out.read()
+            err_contents = err.read()
+    cleanup()
+    out_contents = out_contents.replace(dir_path+"/", "")
+    err_contents = err_contents.replace(dir_path+"/", "")
     return out_contents, err_contents
 
 
