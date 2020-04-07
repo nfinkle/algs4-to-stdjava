@@ -160,7 +160,9 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     compile()
     with open(stderrPath) as err:
         err_contents = err.read()
-    if not err_contents or "Picked up JAVA_TOOL_OPTIONS" in err_contents:
+    err_contents.replace(
+        "Picked up JAVA_TOOL_OPTIONS: -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "")
+    if not err_contents:
         print("executing")
         execute()
         with open(stderrPath) as err, open(stdoutPath) as out:
@@ -169,6 +171,8 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     cleanup()
     out_contents = out_contents.replace(dir_path+"/", "")
     err_contents = err_contents.replace(dir_path+"/", "")
+    err_contents.replace(
+        "Picked up JAVA_TOOL_OPTIONS: -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8", "")
     print("Returning out:", out_contents)
     print("Returning err:", err_contents)
     return out_contents, err_contents
