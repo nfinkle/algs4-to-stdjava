@@ -2,8 +2,4 @@ gunicorn
 flask
 flask_bootstrap
 rq
-<<<<<<< HEAD
 redis
-=======
-redis
->>>>>>> 51bd0cb06650d83eb01e6c56eb49621b2fb11044
