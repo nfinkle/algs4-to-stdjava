@@ -1,6 +1,6 @@
 # import jpype.imports
 from flask import Flask, request, render_template, url_for
-# import flask_bootstrap
+import flask_bootstrap
 import worker
 import rq
 # from flask_cors import CORS
@@ -167,7 +167,7 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     pipingAddition = " 1> " + stdoutPath + " 2> " + stderrPath
     compile_command = compile_command + " " + class_name + ".java" + pipingAddition
     execute_command = execute_command + " " + class_name + pipingAddition
-    cleanup_command = "rf -r " + dir_path
+    cleanup_command = "rm -r " + dir_path
 
     out_contents = ""
     err_contents = ""
