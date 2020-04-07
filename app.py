@@ -142,7 +142,7 @@ def run_code():
     # with open(code_file, "w") as code:
     #     code.write(text)
     output, error = q.enqueue(run_code_in_command_line,
-                              text, class_name, is_algs4)
+                              args=(text, class_name, is_algs4))
     # os.system("rm -f " + code_file)
     return output
 
