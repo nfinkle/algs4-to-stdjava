@@ -1,3 +1,5 @@
 gunicorn
 flask
 flask_bootstrap
+rq
+redis
