@@ -1,18 +1,24 @@
+# import jpype.imports
 from flask import Flask, request, render_template, url_for
-import flask_bootstrap
+# import flask_bootstrap
 import worker
 import rq
 # from flask_cors import CORS
+import os
 
 app = Flask(__name__)
-flask_bootstrap.Bootstrap(app)
+# flask_bootstrap.Bootstrap(app)
 # CORS(app)
 # app.register_blueprint(import_backup_api)
 
 
 @app.route('/health', methods=['GET'])
 def health():
-    return "I\'m online"
+    os.system('javac tester.java')
+    os.system('java tester > answer.txt')
+    with open("answer.txt") as fd:
+        return fd.read()
+    return "I'm online"
 
 
 # @app.route('/api.html')
@@ -86,6 +92,38 @@ def show_queue():
 @app.route('/modules/stack.html')
 def show_stack():
     return render_template('modules/stack.html', is_about=False, constructors=True)
+
+
+"""
+@app.route('/run_code')
+def run_code():
+
+    # def run_code(the_code):
+    # from java.lang import System
+    # // Prepare source somehow.
+    source = "package test; public class Test { static { System.out.println(\"hello\"); } public Test() { System.out.println(\"world\"); } }"
+    import jpype
+    import jpype.imports
+    jpype.startJVM()
+    from java.io import File
+    # // Save source in .java file.
+    File root = new File("/java")
+    # // On Windows running on C: \, this is C: \java.
+    File sourceFile = new File(root, "test/Test.java")
+    sourceFile.getParentFile().mkdirs()
+    Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8))
+    # // Compile source file.
+    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler()
+    compiler.run(null, null, null, sourceFile.getPath())
+    # // Load and instantiate compiled class.
+    URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] {root.toURI().toURL()})
+    Class <?> cls = Class.forName("test.Test", true, classLoader)
+    # // Should print "hello".
+    Object instance = cls.newInstance()
+    # // Should print "world".
+    System.out.println(instance)
+    # // Should print "test.Test@hashcode".
+"""
 
 
 @app.route('/about_auth.html')
