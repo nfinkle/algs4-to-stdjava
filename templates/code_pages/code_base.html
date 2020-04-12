@@ -1,0 +1,28 @@
+{% extends "auth_base.html" %}
+{% block thehead %}
+<script src="{{ url_for('static', filename='js/prism.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}" />
+{% endblock %}
+
+{% block title %}Code Base{% endblock %}
+
+{% block content %}
+<pre class="  line-numbers "><code class="language-java match-braces">import java.util.LinkedList;
+
+public class tester {
+    public static void main(String[] args) {
+        LinkedList&ltInteger&gt h = new LinkedList&ltInteger();
+		h.add(0);
+		h.add(1);
+		h.add(2);
+		h.add(3);
+		h.add(4);
+		h.add(5);
+		h.add(6);
+		h.add(7);
+		for (Integer i : h) {
+		    System.out.println(i);
+		}
+	}
+}</code></pre>
+{% endblock %}

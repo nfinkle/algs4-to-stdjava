@@ -178,6 +178,11 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
     return out_contents, err_contents
 
 
+@app.route('/code_base.html')
+def show_code_base():
+    return render_template('code_pages/code_base.html', is_about=False)
+
+
 @app.route('/about_unauth.html')
 def show_about_unauth():
     return render_template('about_unauth.html', is_about=True)
