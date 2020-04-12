@@ -14,22 +14,71 @@
 	</div>
 
 	<div class="row">
-		<div class="col-lg-1"></div>
-		<div class="col-lg-10">
-			<div class="row text-center">
-				<div class="col-sm-12 col-md-6">
-					<h3>{{ className[0] }} (<code>algs4</code>)</h3>
+		<!-- medium or larger breakpoint -->
+		<div class="col d-none d-sm-none d-md-block">
+			<div class="row">
+				<div class="col-lg-1"></div>
+				<div class="col-lg-10">
+					<div class="row text-center">
+						<div class="col-6">
+							<h3>{{ className[0] }} (<code>algs4</code>)</h3>
+						</div>
+						<div class="col-6">
+							<h3>{{ className[1] }} (Standard Java Library)</h3>
+						</div>
+					</div>
+					{% if constructors %}
+					<div class="text-center">
+						<h4>Constructors</h4>
+					</div>
+					{% for cell in constructorCells %}
+					<div class="row">
+						{% for data in cell %}
+						{% with i = loop.index0 %}
+						{% include "modules/constructor_cell.html" %}
+						{% endwith %}
+						{% endfor %}
+					</div>
+					{% endfor %}
+					{% endif %}
+
+					<div class="text-center">
+						{% if constructors %}
+						<h4>Instance Methods</h4>
+						{% else %}
+						<h4>Static Methods</h4>
+						{% endif %}
+					</div>
+					{% for cell in cells %}
+					<div class="row">
+						{% for data in cell %}
+						{% with theClass = className[loop.index0] %}
+						{% include "modules/method_cell.html" %}
+						{% endwith %}
+						{% endfor %}
+					</div>
+					{% endfor %}
 				</div>
-				<div class="col-sm-12 col-md-6">
-					<h3>{{ className[1] }} (Standard Java Library)</h3>
-				</div>
+			</div>
+		</div>
+		<div class="col d-block d-sm-block d-md-none">
+			{% set small = true %}
+			{% for i in [0, 1] %}
+			<div class="text-center">
+				{% if i == 0 %}<h3>{{ className[i] }} (<code>algs4</code>)</h3>
+				{% else %}<h3>{{ className[1] }} (Standard Java Library)</h3>
+				{% endif %}
 			</div>
 			{% if constructors %}
 			<div class="text-center">
 				<h4>Constructors</h4>
 			</div>
-			{% block constructorCells %}
-			{% endblock %}
+			{% for cell in constructorCells %}
+			<div class="row">
+				{% set data = cell[i] %}
+				{% include "modules/constructor_cell.html" %}
+			</div>
+			{% endfor %}
 			{% endif %}
 
 			<div class="text-center">
@@ -39,15 +88,16 @@
 				<h4>Static Methods</h4>
 				{% endif %}
 			</div>
-			{% block cells %}
-
-			<!-- {% for builtInType in ["boolean"] %}
-			{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>{{ builtInType }}<code>"|safe}]  ]  %}
-			{% include "modules/method_cell.html" %}
+			{% for cell in cells %}
+			<div class="row">
+				{% set data = cell[i] %}
+				{% with theClass = className[i] %}
+				{% include "modules/method_cell.html" %}
+				{% endwith %}
+			</div>
 			{% endfor %}
-			{% endfor %} -->
-
-			{% endblock %}
+			<br>
+			{% endfor %}
 		</div>
 	</div>
 </div>

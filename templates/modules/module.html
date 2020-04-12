@@ -26,14 +26,15 @@
 	character is added.</p>
 {% endblock %}
 
+{% set constructorCells = [  [{"description": "Initializes an empty symbol table with the default initial capacity (4)."|safe, "args": ""},{"description": "Initializes an empty <code>HashMap</code> with the default initial capacity (16)."|safe, "args": ""}],
+[{"description": "Initializes an empty symbol table with the specified capacity."|safe, "args": "</code>int
+<code>capacity"|safe},{"description": "Initializes an empty <code>HashMap</code> with the specified capacity."|safe,
+	"args": "</code>int <code>capacity"|safe}]
+] %}
 
-{% block cells %}
-<!-- print -->
-{% for builtInType in ["boolean"] %}
-{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>{{ builtInType }}<code>"|safe}]  ]  %}
-{% include "modules/method_cell.html" %}
+
+{% set cells = [[{"fname": "print", "type": "void", "description": "Print", "args": ""}, {"fname": "print", "type": "void", "description": "Print", "args": ""}] ] %}
+{% for builtInType in ["boolean", "int"] %}
+{% set temp = [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code> and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to <code>stdout</code>."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe}]  %}
+{% set cells = cells.append(temp) %}
 {% endfor %}
-{% endfor %}
-
-
-{% endblock %}

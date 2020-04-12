@@ -24,16 +24,11 @@
 	interface. The two classes' runtimes are the same.</p>
 {% endblock %}
 
-{% block constructorCells %}
-{% for item in [  [{"description": "Initializes an empty queue.", "args": ""},{"description": "Initializes an empty linked list.", "args": ""}]
+{% set constructorCells = [  [{"description": "Initializes an empty queue.", "args": ""},{"description": "Initializes an empty linked list.", "args": ""}]
 ] %}
-{% include "modules/constructor_cell.html" %}
-{% endfor %}
-{% endblock %}
 
 
-{% block cells %}
-{% for item in [ 
+{% set cells = [ 
 	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the items from the linked list.", "args":""}],
 	[{"fname": "dequeue", "type": "boolean", "description": "Removes and returns the item on this queue that was least recently added, or throws a <code>NoSuchElementException</code> if this queue is empty."|safe, "args": ""},
 		{"fname": "remove", "type": "boolean", "args": "",
@@ -50,8 +45,3 @@
 	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this queue."},
 		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this linked list."}]
 ]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
-
-
-{% endblock %}

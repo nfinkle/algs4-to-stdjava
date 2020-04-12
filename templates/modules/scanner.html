@@ -31,52 +31,45 @@
 {% set className = ["In", "Scanner"] %}
 {% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
 
-{% block constructorCells %}
 {% set fileConstructor = {"args": "</code>File <code>source"|safe, "description": "Initializes an input stream from a file."|safe} %}
-{% for item in [  [{"description": "Initializes an input stream from <code>stdin</code>."|safe, "args": ""}, {"description": "Initializes an input stream from <code>stdin</code>."|safe, "args": "System.in"}],
+{% set constructorCells =  [  [{"description": "Initializes an input stream from <code>stdin</code>."|safe, "args": ""}, {"description": "Initializes an input stream from <code>stdin</code>."|safe, "args": "System.in"}],
 [fileConstructor, fileConstructor],
 [{"args": "</code>String <code>filename"|safe, "description": "Initializes an input stream from a filename."}, {"args":
 	"</code>String <code>source"|safe, "description": "Initializes an input stream from the String source."}]
 ] %}
-{% include "modules/constructor_cell.html" %}
-{% endfor %}
-
-{% endblock %}
 
 
-{% block cells %}
 {% set closeMethod = {"fname": "close", "type": "void", "description": "Close this input stream.", "args": ""} %}
-{% for item in [  
+{% set cells = [  
 	[closeMethod, closeMethod],
 	[{"fname":"isEmpty", "type":"boolean", "description": "Return <code>true</code> if input stream is empty (except possibly
 	whitespace)."|safe, "args":""}, {"fname": "hasNext", "type":"boolean", "description":"Return <code>false</code> if input stream is empty."|safe}]
 ]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
 
 <!-- hasNext methods -->
 {% for builtInType in ["boolean", "double", "float", "int", "line", "long", "short"] %}
-{% for item in [  
+{% set hasNext =  
 	[nonexistantMethod, {"fname":"hasNext"+ builtInType[0]|upper + builtInType[1:], "args":"", "type":"boolean",
 	"description": "Returns <code>true</code> if the
 	next token can be interpreted as a "|safe + builtInType + " value using the <code>next"|safe +
-	builtInType[0]|upper + builtInType[1:] + "()</code> method."|safe}]
-]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
+	builtInType[0]|upper + builtInType[1:] + "()</code> method."|safe}] 
+%}
+{% set cells = cells.append(hasNext) %}
 {% endfor %}
 
 <!-- next/read Methods -->
+{% for i in [0] %}
 {% set item = [{"fname": "readAll", "args":"", "description":"Reads and returns the remainder of this input stream, as a string.", "type":"String"}, nonexistantMethod] %}
-{% include "modules/method_cell.html" %}
+{% set cells = cells.append(item) %}
+{% endfor %}
 
 {% for builtInType in ["boolean", "char", "double", "float", "int", "line", "long", "short"] %}
 {% set typeDescription = "Reads the next token, parses it as a " + builtInType + ", and returns the " + builtInType + "." %}
 {% set upped = builtInType[0]|upper + builtInType[1:] %}
-{% for item in [  
+{% set item =  
 	[{"fname":"read" + upped, "type": builtInType, "args": "", "description":typeDescription},
 	{"fname":"hasNext" + upped, "args":"", "type":builtInType, "description": typeDescription}]
-] %}
+%}
 {% if builtInType == "boolean" %}
 {% set item = [{"fname":"read" + upped, "type": builtInType, "args": "", "description":"Reads the next token from this input stream, parses it as a boolean (interpreting either 'true' or '1' as <code>true</code>, and either 'false' or '0' as <code>false</code>), and returns the boolean.
 "|safe}, {"fname":"next" + upped, "type": builtInType, "args": "", "description":"Reads the next token from this input stream, parses it as a boolean (interpreting 'true' or 'True' as
@@ -87,9 +80,5 @@
 {% set lineThing = {"fname":"read" + upped, "type": "String", "args": "", "description":"Reads and returns the next line in this input stream."} %}
 {% set item = [lineThing, lineThing] %}
 {% endif %}
-{% include "modules/method_cell.html" %}
+{% set cells = cells.append(item) %}
 {% endfor %}
-{% endfor %}
-
-
-{% endblock %}

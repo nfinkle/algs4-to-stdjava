@@ -35,10 +35,9 @@
 	libraries.</p>
 {% endblock %}
 
-{% block constructorCells %}
 {% set emptyConstructor = {"description": "Initializes an empty priority queue ordered according to the natural (as defined by <code>Comparable</code>'s <code>compareTo</code> method) ordering of its keys."|safe, "args": ""} %}
 {% set capacityConstructor = {"description": "Initializes a priority queue with the specified capacity.", "args": "</code>int <code>capacity"|safe} %}
-{% for item in [ 
+{% set constructorCells = [ 
 	[emptyConstructor, emptyConstructor],
 	[capacityConstructor, capacityConstructor],
 	[{"description": "Initializes an empty priority queue ordered according to the given comparator."|safe, "args": "</code>Comparator&lt</code>Key&gt <code>comp"|safe},
@@ -47,15 +46,11 @@
 	"</code>Comparator&lt</code>Key&gt <code>comp, </code>int <code>capacity"|safe},
 		{"description": "Initializes an empty priority queue ordered according to the given comparator with the specified capacity.", "args": "</code>Comparator&lt? super Key&gt<code> comp, </code>int <code>capacity"|safe}]
 ] %}
-{% include "modules/constructor_cell.html" %}
-{% endfor %}
-{% endblock %}
 
 
-{% block cells %}
 {% set isEmptyMethod = {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this priority queue is
 	empty."|safe, "args": ""} %}
-{% for item in [ 
+{% set cells = [ 
 	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the keys from the priority queue.", "args":""}],
 	[{"fname": "delMin", "type": "boolean", "description": "Removes and returns the key in this priority queue with the lowest priority, or throws a <code>NoSuchElementException</code> if this priority queue is empty."|safe, "args": ""},
 		{"fname": "remove", "type": "boolean", "args": "",
@@ -74,8 +69,3 @@
 	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this priority queue."},
 		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this priority queue."}]
 ]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
-
-
-{% endblock %}

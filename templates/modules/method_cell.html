@@ -1,29 +1,27 @@
 {% if extendType %}
-{% set colWidth1 = "col-sm-5 col-md-3 col-lg-2" %}
-{% set colWidth2 = "col-sm-7 col-md-9 col-lg-10" %}
+{% set colWidth1 = "col-5 col-md-3 col-lg-2" %}
+{% set colWidth2 = "col-7 col-md-9 col-lg-10" %}
 {% else %}
-{% set colWidth1 = "col-md-3 col-lg-1" %}
-{% set colWidth2 = "col-md-9 col-lg-11" %}
+{% set colWidth1 = "col-4 col-md-3 col-lg-1" %}
+{% set colWidth2 = "col-8 col-md-9 col-lg-11" %}
 {% endif %}
 
-<div class="row">
-	{% for data in item %}
-	<div class="col-sm-12 col-md-6">
-		<div class="row">
-			{% if data["empty"] %}
-			<div class="col-12 text-center">N/A</div>
-			{% else %}
-			<div class={{colWidth1}}>
-				<p><code>{{ data["type"] }}</code></p>
-			</div>
-			<div class={{colWidth2}}>
-				<code>{% if not constructors %}
-					{{ className[loop.index0] }}.
-					{%- endif %}{{ data["fname"] }}({{ data["args"] }})</code>
-				<p style="font-size: 12px">{{ data["description"] }}</p>
-			</div>
-			{% endif %}
+<div class="col-xs-12 col-md-6">
+	<div class="row">
+		{% if data["empty"] %}
+		{% if not small %}
+		<div class="col-12 text-center">N/A</div>
+		{% endif %}
+		{% else %}
+		<div class={{colWidth1}}>
+			<p><code>{{ data["type"] }}</code></p>
 		</div>
+		<div class={{colWidth2}}>
+			<code>{% if not constructors %}
+				{{ theClass }}.
+				{%- endif %}{{ data["fname"] }}({{ data["args"] }})</code>
+			<p style="font-size: 12px">{{ data["description"] }}</p>
+		</div>
+		{% endif %}
 	</div>
-	{% endfor %}
 </div>

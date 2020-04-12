@@ -23,18 +23,14 @@
 </p>
 {% endblock %}
 
-{% block constructorCells %}
 {% set emptyConstructor = {"description": "Initializes an empty stack.", "args": ""} %}
-{% for item in [  [emptyConstructor, emptyConstructor] ] %}
-{% include "modules/constructor_cell.html" %}
-{% endfor %}
-{% endblock %}
+{% set constructorCells =  [  [emptyConstructor, emptyConstructor] ] %}
 
 
-{% block cells %}
+
 {% set pushMethod = {"fname": "push", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to the top of this stack."} %}
 {% set sizeMethod = {"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this stack."} %}
-{% for item in [ 
+{% set cells  =  [ 
 	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the items from the stack.", "args":""}],
 	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this stack is empty,
 	<code>false</code> otherwise."|safe, "args": ""}, {"fname": "empty", "type": "boolean", "description": "Returns
@@ -51,8 +47,3 @@
 	[pushMethod, pushMethod],
 	[sizeMethod, sizeMethod]
 ]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
-
-
-{% endblock %}

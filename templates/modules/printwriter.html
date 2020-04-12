@@ -26,52 +26,38 @@
 	character is added before flushing the output.</p>
 {% endblock %}
 
-{% block constructorCells %}
 {% set fileConstructor = {"args": "</code>File <code>source"|safe, "description": "Initializes an output stream from a file."|safe} %}
 {% set filenameConstructor = {"args": "</code>String <code>filename"|safe, "description": "Initializes an output stream from the specified file name."|safe} %}
-{% for item in [  [{"description": "Initializes an output stream to <code>stdout</code>."|safe, "args": ""}, {"description": "Initializes an out stream to <code>stdout</code>."|safe, "args": "System.out"}],
+{% set constructorCells = [  [{"description": "Initializes an output stream to <code>stdout</code>."|safe, "args": ""}, {"description": "Initializes an out stream to <code>stdout</code>."|safe, "args": "System.out"}],
 [fileConstructor, fileConstructor],
 [filenameConstructor, filenameConstructor]
 ] %}
-{% include "modules/constructor_cell.html" %}
-{% endfor %}
-{% endblock %}
 
 
-{% block cells %}
-<!-- flush -->
-{% for item in [  [{"fname": "print", "type": "void", "description": "Flush the output stream.", "args": ""}, {"fname": "flush", "type": "void", "description": "Flush the output stream.", "args": ""}]  ]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
+{% set cells =  [  [{"fname": "print", "type": "void", "description": "Flush the output stream.", "args": ""}, {"fname": "flush", "type": "void", "description": "Flush the output stream.", "args": ""}]  ]  %}
 
 <!-- print -->
 {% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
-{% for item in [  [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to the output stream and flush.", "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to the output stream.", "args": "</code>"|safe + builtInType + "<code>"|safe}]  ]  %}
-{% include "modules/method_cell.html" %}
-{% endfor %}
+{% set print = [{"fname": "print", "type": "void", "description": "Print a " + builtInType + " to the output stream and flush.", "args": "</code>"|safe + builtInType + "<code>"|safe}, {"fname": "print", "type": "void", "description": "Print a " + builtInType + " to the output stream.", "args": "</code>"|safe + builtInType + "<code>"|safe}] %}
+{% set cells = cells.append(print)  %}
 {% endfor %}
 
 <!-- println -->
+{% for i in [0] %}
 {% set newline = {"fname": "println", "type": "void", "description": "Print a newline to the output stream and flush."|safe, "args": ""} %}
-{% for item in [  [newline, newline]  ]  %}
-{% include "modules/method_cell.html" %}
-
+{% set println = [ newline, newline ] %}
+{% set cells = cells.append(println)  %}
 {% endfor %}
-
 
 <!-- println -->
 {% for builtInType in ["boolean", "char", "double", "float", "int", "long", "String"] %}
 {% set newlineBuiltIn = {"fname": "println", "type": "void", "description": "Print a " + builtInType + " and a newline to the output stream and flush."|safe, "args": "</code>"|safe + builtInType + "<code>"|safe} %}
-{% for item in [  [newlineBuiltIn, newlineBuiltIn]  ]  %}
-{% include "modules/method_cell.html" %}
-
-{% endfor %}
+{% set println_type = [newlineBuiltIn, newlineBuiltIn] %}
+{% set cells = cells.append(println_type)  %}
 {% endfor %}
 
 <!-- printf -->
-{% for item in [  [{"fname": "print", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments, and then flush."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}, {"fname": "flush", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}]  ]  %}
-{% include "modules/method_cell.html" %}
+{% for i in [0] %}
+{% set printf = [{"fname": "print", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments, and then flush."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}, {"fname": "flush", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}] %}
+{% set cells = cells.append(printf)  %}
 {% endfor %}
-
-
-{% endblock %}
