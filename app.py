@@ -180,7 +180,18 @@ def run_code_in_command_line(code_text, class_name, is_algs4) -> (str, str):
 
 @app.route('/code_base.html')
 def show_code_base():
-    return render_template('code_pages/code_base.html', is_about=False)
+    code_text = """import java.util.LinkedList;
+
+public class tester {
+    public static void main(String[] args) {
+        LinkedList<Integer> h = new LinkedList<Integer>();
+		h.add(0);
+		for (Integer i : h) {
+		    System.out.println(i);
+		}
+	}
+}"""
+    return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text)
 
 
 @app.route('/about_unauth.html')

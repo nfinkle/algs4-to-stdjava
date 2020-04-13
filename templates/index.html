@@ -10,136 +10,55 @@
 {% block content %}
 <div class="container text-center">
 	<h2>Input/Output</h2><br>
-	<div class="row">
-		<div class="col-md-4">
-			<h4>System.out/err</h4>
-			<h6>(StdOut)</h6>
-			<p>Print text to <code>stdout</code> or <code>stderr</code>.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">
-						{{ progressBars["print"]|safe }}
-					</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_system_out') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<h4>Scanner</h4>
-			<h6>(StdIn/In)</h6>
-			<p>Read in text from any input stream.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress"> {{ progressBars["scanner"]|safe }} </div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_scanner') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<h4>PrintWriter</h4>
-			<h6>(Out)</h6>
-			<p>Write to a file using the same syntax as with printing.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_printwriter') }}" role="button"
-						class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
+	{% set io_cells = [
+			{"title": "System.out/err", "subtitle": "StdOut", "description": "Print text to <code>stdout</code> or <code>stderr</code>."|safe, "pbar_name":"print", "show_fname": "show_system_out"},
+			{"title": "Scanner", "subtitle": "StdIn/In", "description": "Read in text from any input stream.", "pbar_name":"scanner", "show_fname": "show_scanner"},
+			{"title": "PrintWriter", "subtitle": "Out", "description": "Write to a file using the same syntax as with printing.",
+			"pbar_name":"else", "show_fname": "show_printwriter"}
+	] %}
+	<div class="d-block d-sm-none">
+		{% for cell in io_cells %}
+		{% include "index_cell_xs.html" %}
+		{% endfor %}
+	</div>
+	<div class="d-none d-sm-block">
+		<div class="row">
+			{% for cell in io_cells %}
+			{% include "index_cell.html" %}
+			{% endfor %}
 		</div>
 	</div>
-</div><br><br>
+	<br><br>
 
-
-<div class="container text-center">
 	<h2>Data Structures</h2><br>
-	<div class="row">
-		<div class="col-md-4">
-			<h4>HashMap</h4>
-			<h6>(Separate-Chaining Hash Symbol Table)</h6>
-			<p>A symbol table based on a hashtable.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_hashmap') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<h4>HashSet</h4>
-			<h6>(Bag)</h6>
-			<p>A bag based on a hashtable.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_hashset') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<h4>TreeMap</h4>
-			<h6>(Left-Leaning Red-Black Tree Symbol Table)</h6>
-			<p>A symbol table based on a left-leaning red-black tree.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_treemap') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
+	{% set ds_rows = [	
+			[ {"title": "HashMap", "subtitle": "Separate-Chaining Hash Symbol Table", "description": "A symbol table based on a
+			hashtable.", "pbar_name":"else", "show_fname": "show_hashmap"},
+			{"title": "HashSet", "subtitle": "Bag", "description": "A bag based on a hashtable.", "pbar_name":"else", "show_fname": "show_scanner"},
+			{"title": "TreeMap", "subtitle": "Left-Leaning Red-Black Tree Symbol Table", "description": "A symbol table based on
+			a left-leaning red-black tree.",
+			"pbar_name":"else", "show_fname": "show_treemap"} ],
+			[ {"title": "PriorityQueue", "subtitle": "MinPQ", "description": "A (non-indexed) minimum priority queue.",
+			"pbar_name":"else", "show_fname": "show_priorityqueue"},
+			{"title": "Queue", "subtitle": "Queue", "description": "A FIFO queue built on the <code>LinkedList</code> class."|safe,
+			"pbar_name":"else", "show_fname": "show_queue"},
+			{"title": "Stack", "subtitle": "Stack", "description": "A LIFO stack.", "pbar_name":"else", "show_fname": "show_stack"} ],
+	] %}
+	<div class="d-block d-sm-none">
+		{% for row in ds_rows %}
+		{% for cell in row %}
+		{% include "index_cell_xs.html" %}
+		{% endfor %}
+		{% endfor %}
+
 	</div>
-	<div class="row">
-		<div class="col-md-4">
-			<h4>PriorityQueue</h4>
-			<h6>(MinPQ)</h6>
-			<p>A (non-indexed) minimum priority queue.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_priorityqueue') }}" role="button"
-						class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<h4>Queue</h4>
-			<h6>(Queue)</h6>
-			<p>A FIFO queue built on the <code>LinkedList</code> class.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_queue') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<h4>Stack</h4>
-			<h6>(Stack)</h6>
-			<p>A LIFO stack.</p>
-			<div class="row">
-				<div class="col-xs-7 col-sm-9 col-md-7 col-lg-8 col-xl-9">
-					<div class="progress">{{ progressBars["else"]|safe }}</div>
-				</div>
-				<div class="col-xs-5 col-sm-3 col-md-5 col-lg-4 col-xl-3">
-					<a href="{{ url_for('show_stack') }}" role="button" class="btn btn-block btn-success">Learn</a>
-				</div>
-			</div>
+	<div class="d-none d-sm-block">
+		<div class="row">
+			{% for row in ds_rows %}
+			{% for cell in row %}
+			{% include "index_cell.html" %}
+			{% endfor %}
+			{% endfor %}
 		</div>
 	</div>
 </div>
