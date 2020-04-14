@@ -17,21 +17,22 @@
 	<div class="d-block d-md-none">
 		<h3 class="text-center"><code>algs4</code></h3>
 		<div style="padding: 5px;"></div>
-		<pre class="line-numbers" style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces">{{ algs4_content }}</code>
-					</pre>
+		<pre class="line-numbers"
+			style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces">{{ algs4_content }}</code></pre>
 		<br>
 		<h3 class="text-center">Standard Java Library</h3>
 		<div style="padding: 5px;"></div>
-		<div id="stdjava_code">
-			<form id="code_form" spellcheck="false">
+		<div id="stdjava_code_sm">
+			<form id="code_form_sm" spellcheck="false">
 				<p>
-					<textarea
-						style="font-size: 11px;">The equivalent code using only Standard Java Libraries.</textarea>
+					<!-- The equivalent code using only Standard Java Libraries. -->
+					<textarea id="form_textarea_sm" style="font-size: 11px;" rows='16'>{{ sample_stdjava }}</textarea>
+					<button type="button" class="btn btn-primary" onclick="compile_sm()">Compile</button>
 				</p>
 			</form>
-			<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
 		</div>
 	</div>
+	<!-- normal size -->
 	<div class="row d-md-block d-none">
 		<div class="row text-center">
 			<div class="col-6">
@@ -49,13 +50,19 @@
 			<div class="col-6" id="stdjava_code">
 				<form id="code_form" spellcheck="false">
 					<p>
-						<textarea
-							style="font-size: 11px;">The equivalent code using only Standard Java Libraries.</textarea>
+						<!-- The equivalent code using only Standard Java Libraries. -->
+						<textarea id="form_textarea" style="font-size: 11px;" rows='16'>{{ sample_stdjava }}</textarea>
+						<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
 					</p>
 				</form>
-				<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col" id="algs4_output">
+
+		</div>
+	</div>
 </div>
+<script src="{{ url_for('static', filename='js/allow_tab.js') }}"></script>
 {% endblock %}
