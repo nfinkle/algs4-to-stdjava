@@ -116,7 +116,7 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
-def _execute_with_dir(dir_path: str, is_algs4: bool, command_args: str) -> (str, str):
+def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_args: str) -> (str, str):
     import os
     stdoutPath = dir_path + "/out.txt"
     stderrPath = dir_path + "/err.txt"
@@ -155,12 +155,15 @@ def run_code_example():
 
 @app.route('/get_diff')
 def get_diff():
-    algs4 = request.args["algs4"]
-    stdjava = request.args["stdjava"]
-    print(algs4, stdjava)
-    myargs = (algs4, stdjava)
-    result = _send_job_to_queue(_get_diff_command_line, myargs)
-    return jsonify(result)
+    algs4_out = request.args["algs4_out"]
+    stdjava_out = request.args["stdjava_out"]
+    algs4_err = request.args.get("algs4_err", "")
+    stdjava_err = request.args.get("stdjava_err", "")
+    myargs = (algs4_out, stdjava_out)
+    out_diff = _send_job_to_queue(_get_diff_command_line, myargs)
+    myargs = (algs4_err, stdjava_err)
+    err_diff = _send_job_to_queue(_get_diff_command_line, myargs)
+    return jsonify(out_diff, err_diff)
 
 
 def _get_diff_command_line(algs4: str, stdjava: str) -> str:
@@ -282,7 +285,7 @@ public class tester {
 	public static void main(String[] args) {
 		LinkedList<Integer> h = new LinkedList<Integer>();
 		h.add(0);
-		h.add(1);
+		h.add(Integer.parseInt(args[0]));
 		h.add(2);
 		h.add(3);
 		h.add(4);
@@ -292,6 +295,7 @@ public class tester {
 		for (Integer i : h) {
 			System.out.println(i);
 		}
+        System.err.println("I can have error too!");
 	}
 }"""
     return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, sample_stdjava=sample_stdjava)

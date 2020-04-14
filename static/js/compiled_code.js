@@ -121,14 +121,15 @@ function execute_from_code(code, is_algs4, command_args) {
 function execute_algs4() {
 	$('button').prop("disabled", true)
 	var code = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	var args = document.getElementById("algs4_args").innerHTML;
+	var args = document.getElementById("command_args").innerHTML;
 	execute_from_code(code, true, args);
 }
 
 function execute() {
 	$('button').prop("disabled", true)
 	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	execute_from_code(code, false, "");
+	var args = document.getElementById("command_args").innerHTML;
+	execute_from_code(code, false, args);
 }
 
 function send_exec_request(code, is_algs4, command_args, ret_fn) {
@@ -151,14 +152,24 @@ function show_diff(algs4_result, stdjava_result) {
 		url: "/get_diff",
 		async: true,
 		data: {
-			"algs4": algs4_result[0],
-			"stdjava": stdjava_result[0]
+			"algs4_out": algs4_result[0],
+			"stdjava_out": stdjava_result[0],
+			"algs4_err": algs4_result[1],
+			"stdjava_err": stdjava_result[1]
 		},
 		success: function (result) {
 			// alert(result)
-			const pre_html = "<h4>Outputs</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-diff\">";
-			const post_html = "</code></pre>";
-			html = pre_html + result + post_html;
+			html = ""
+			if (result[0]) {
+				const pre_out_html = "<h4>Outputs</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-diff\">";
+				const post_out_html = "</code></pre>";
+				html += pre_out_html + result[0] + post_out_html;
+			}
+			if (result[1]) {
+				const pre_err_html = "<h4>Errors</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-diff\">";
+				const post_err_html = "</code></pre>";
+				html += pre_err_html + result[1] + post_err_html;
+			}
 			document.getElementById("algs4_output").innerHTML = html;
 			Prism.highlightAll();
 			$('button').prop("disabled", false)
@@ -171,11 +182,12 @@ function compare_outputs() {
 	$('button').prop("disabled", true)
 	var stdjava = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 	var algs4 = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+	var args = document.getElementById("command_args").innerHTML;
 	ret_fn = function (algs4_result) {
-		send_exec_request(stdjava, false, "", function (snd) {
+		send_exec_request(stdjava, false, args, function (snd) {
 			show_diff(algs4_result, snd)
 		})
 	}
-	send_exec_request(algs4, true, "", ret_fn)
+	send_exec_request(algs4, true, args, ret_fn)
 
 }
