@@ -116,15 +116,17 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
-def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool) -> (str, str):
+def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_args: str) -> (str, str):
     import os
     stdoutPath = dir_path + "/out.txt"
     stderrPath = dir_path + "/err.txt"
     java_CLASSPATH = dir_path
+    args_string = ""
     if is_algs4:
         java_CLASSPATH += ":./static/algs4/algs4.jar"
     pipingAddition = " 1> " + stdoutPath + " 2> " + stderrPath
-    os.system("java -cp " + java_CLASSPATH + " " + class_name + pipingAddition)
+    os.system("java -cp " + java_CLASSPATH + " " +
+              class_name + " " + command_args + pipingAddition)
     err = open(stderrPath)
     out = open(stdoutPath)
     out_contents = _remove_dir_path(out.read(), dir_path)
@@ -137,9 +139,8 @@ q = rq.Queue(connection=worker.conn)
 def run_code():
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", False)
-    print("is_algs4 =", is_algs4, "\ntext:\n" + text)
-    result = _execute_code(text, is_algs4)
-    print(result)
+    command_args = request.args.get("args", "")
+    result = _execute_code(text, is_algs4, command_args)
     if result is None:
         return jsonify("", "Timeout error. Code took too long to run.")
     return jsonify(result)
@@ -195,12 +196,12 @@ def _get_class_name(text: str) -> str:
     return text[text.find("class ")+6:text.find("{")-1]
 
 
-def _execute_code(text: str, is_algs4: bool) -> (str, str):
+def _execute_code(text: str, is_algs4: bool, args: str) -> (str, str):
     class_name = _get_class_name(text)
     if not (class_name and _is_valid_Java_program(text)):
         return "", "A Java program must have a class and a class name."
 
-    myargs = (text, class_name, is_algs4)
+    myargs = (text, class_name, is_algs4, args)
     return _send_job_to_queue(_run_code_in_command_line, myargs)
 
 
@@ -231,19 +232,22 @@ def _compile_code_in_command_line(code_text, class_name, is_algs4) -> str:
 
 
 def _send_job_to_queue(fn, myargs):
-    job = q.enqueue(fn, args=myargs)
+    job = q.enqueue(fn, args=myargs, result_ttl=20)
+    print(myargs)
     start = time.time()
-    while job.result is None and time.time() - start < 10:
+    while job.result is None and time.time() - start < 7:
         continue
     return job.result
 
 
-def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool) -> (str, str):
+def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool, command_args: str) -> (str, str):
     """ Do not name class_name with .java """
     import os
     import tempfile
     dir_path = tempfile.mkdtemp()
     classPath = dir_path + "/" + class_name
+    print(code_text)
+    print(command_args)
     with open(classPath + ".java", "w") as code:
         code.write(code_text)
 
@@ -252,7 +256,7 @@ def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool) -
     if not err_contents:
         print("Compiled successfully.")
         out_contents, err_contents = _execute_with_dir(
-            class_name, dir_path, is_algs4)
+            class_name, dir_path, is_algs4, command_args)
     print("Returning out:", out_contents)
     print("Returning err:", err_contents)
     os.system("rm -r " + dir_path)
@@ -266,27 +270,28 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class tester {
     public static void main(String[] args) {
-        Queue<String> message = new Queue<String>();
-		message.enqueue("I");
-		message.enqueue("love");
-		message.enqueue("you");
-		message.enqueue("Sara!");
-		for (String word : message) {
-		    StdOut.print(word + " ");
+        Queue<Integer> h = new Queue<Integer>();
+		h.enqueue(0);
+        h.enqueue(Integer.parseInt(args[0]));
+		for (Integer i : h) {
+		    StdOut.println(i);
 		}
 	}
 }"""
     sample_stdjava = """import java.util.LinkedList;
 public class tester {
 	public static void main(String[] args) {
-		LinkedList<String> h = new LinkedList<String>();
-		h.add("I");
-		h.add("love");
-		h.add("you");
-		h.add("too,");
-		h.add("Nathan!");
-		for (String i : h) {
-			System.out.print(i + " ");
+		LinkedList<Integer> h = new LinkedList<Integer>();
+		h.add(0);
+		h.add(1);
+		h.add(2);
+		h.add(3);
+		h.add(4);
+		h.add(5);
+		h.add(6);
+		h.add(7);
+		for (Integer i : h) {
+			System.out.println(i);
 		}
 	}
 }"""

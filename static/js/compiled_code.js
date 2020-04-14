@@ -12,7 +12,6 @@ function compile() {
 function display_compile_error(compile_err) {
 	var err_html = "";
 	if (compile_err) {
-		console.log(compile_err);
 		const pre_err_html = "<h4>  Compile Error</h4><pre class=\"line-numbers\" style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-javastacktrace match-braces\">";
 		const post_err_html = "</code></pre>";
 		err_html = pre_err_html + compile_err + post_err_html;
@@ -31,7 +30,6 @@ function compile_with_code(code) {
 			"is_algs4": false,
 		},
 		success: function (result) {
-			// console.log("hi")
 			add_execute_button = display_compile_error(result)
 			replaceFormWithPre(code, add_execute_button);
 			Prism.highlightAll();
@@ -99,11 +97,9 @@ function edit() {
 	$('button').prop("disabled", false)
 }
 
-function execute_from_code(code, is_algs4) {
-	console.log(code)
+function execute_from_code(code, is_algs4, command_args) {
 	ret_fn = function (result) {
 		$('button').prop("disabled", false);
-		console.log(result);
 		html = ""
 		if (result[0]) {
 			const pre_output_html = "<h4>Output</h4><pre  style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-markdown match-braces\">";
@@ -119,28 +115,30 @@ function execute_from_code(code, is_algs4) {
 		document.getElementById("algs4_output").innerHTML = html;
 		Prism.highlightAll();
 	}
-	send_exec_request(code, is_algs4, ret_fn)
+	send_exec_request(code, is_algs4, command_args, ret_fn)
 }
 
 function execute_algs4() {
 	$('button').prop("disabled", true)
 	var code = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	execute_from_code(code, true);
+	var args = document.getElementById("algs4_args").innerHTML;
+	execute_from_code(code, true, args);
 }
 
 function execute() {
 	$('button').prop("disabled", true)
 	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	execute_from_code(code, false);
+	execute_from_code(code, false, "");
 }
 
-function send_exec_request(code, is_algs4, ret_fn) {
+function send_exec_request(code, is_algs4, command_args, ret_fn) {
 	$.ajax({
 		url: "/run_code",
 		async: true,
 		data: {
 			"code": code,
-			"is_algs4": is_algs4
+			"is_algs4": is_algs4,
+			"args": command_args
 		},
 		success: function (result) {
 			ret_fn(result)
@@ -174,10 +172,10 @@ function compare_outputs() {
 	var stdjava = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 	var algs4 = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 	ret_fn = function (algs4_result) {
-		send_exec_request(stdjava, false, function (snd) {
+		send_exec_request(stdjava, false, "", function (snd) {
 			show_diff(algs4_result, snd)
 		})
 	}
-	send_exec_request(algs4, true, ret_fn)
+	send_exec_request(algs4, true, "", ret_fn)
 
 }
