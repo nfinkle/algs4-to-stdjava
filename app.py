@@ -285,20 +285,23 @@ public class tester {
 	public static void main(String[] args) {
 		LinkedList<Integer> h = new LinkedList<Integer>();
 		h.add(0);
-		h.add(Integer.parseInt(args[0]));
+		h.add(Integer.parseInt(args[0]));/*
 		h.add(2);
 		h.add(3);
 		h.add(4);
 		h.add(5);
 		h.add(6);
-		h.add(7);
+		h.add(7);*/
 		for (Integer i : h) {
 			System.out.println(i);
 		}
-        System.err.println("I can have error too!");
+        //System.err.println("I can have error outputs too!");
 	}
 }"""
-    return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, sample_stdjava=sample_stdjava)
+    default_command_args = "19"
+    tests = [{"arg": "18", "out": ["0\n18\n", "I can have error outputs too!"]}, {
+        "arg": "2", "out": ["0\n2\n", "I can have error outputs too!"]}]
+    return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, sample_stdjava=sample_stdjava, default_command_args=default_command_args, tests=tests)
 
 
 @app.route('/about_unauth.html')

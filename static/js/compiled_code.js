@@ -44,7 +44,9 @@ function replaceFormWithPre(code, add_execute_button) {
 	if (add_execute_button) {
 		new_html += "<button type = \"button\" class=\"btn btn-primary\" id=\"execute_btn\" onclick=execute()>Execute</button>";
 	}
+	tests = $('#tests-data').data().other
 	new_html += '<button type="button" class="btn btn-primary" onclick="compare_outputs()">Compare</button>'
+	new_html += '<button type="button" class="btn btn-primary" onclick="run_tests(' + tests + ')">Run Tests</button>'
 	document.getElementById("stdjava_code").innerHTML = new_html;
 	document.getElementById("stdjava_code_sm").innerHTML = new_html;
 }
@@ -147,6 +149,46 @@ function send_exec_request(code, is_algs4, command_args, ret_fn) {
 	})
 }
 
+function run_next_test(ith_test, result, code, test_list) {
+	// alert("finished test " + ith_test)
+	cur_html = document.getElementById("algs4_output").innerHTML.replace(/&gt;/g, ">").replace(/&lt;/g, "<")
+	cur_html = cur_html.split("Running")[0]; // replace Running and pre closes
+	cur_html += "Test " + ith_test + ": "
+	const desired_output = test_list[ith_test]["out"]
+	if (result[0].valueOf() === desired_output[0].valueOf() && result[1].valueOf() === desired_output[1].valueOf()) {
+		cur_html += "Success!\n"
+	} else if (result[0].valueOf() === desired_output[0].valueOf()) {
+		cur_html += "Correct output, but not error.\n"
+	} else if (result[1].valueOf() === desired_output[1].valueOf()) {
+		cur_html += "Correct error, but not output.\n"
+	} else {
+		cur_html += "Failed.\n"
+	}
+	if (ith_test < test_list.length - 1) {
+		cur_html += "Running Test " + (ith_test + 1) + "\n";
+		send_exec_request(code, false, test_list[ith_test + 1]["arg"], function (result) {
+			run_next_test(ith_test + 1, result, code, test_list)
+		})
+	} else {
+		$('button').prop("disabled", false);
+	}
+	cur_html += "</code></pre>"
+	document.getElementById("algs4_output").innerHTML = cur_html
+	Prism.highlightAll();
+}
+
+function run_tests(test_list) {
+	$('button').prop("disabled", true);
+	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+	document.getElementById("algs4_output").innerHTML = "<h4>Tests</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java\">Running Test 0\n</code></pre>";
+	Prism.highlightAll();
+	send_exec_request(code, false, test_list[0]["arg"], function (result) {
+		run_next_test(0, result, code, test_list);
+	})
+}
+
+
+
 function show_diff(algs4_result, stdjava_result) {
 	$.ajax({
 		url: "/get_diff",
@@ -175,7 +217,6 @@ function show_diff(algs4_result, stdjava_result) {
 			$('button').prop("disabled", false)
 		}
 	})
-
 }
 
 function compare_outputs() {

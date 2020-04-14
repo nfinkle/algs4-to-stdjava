@@ -3,6 +3,8 @@
 <script src="{{ url_for('static', filename='js/prism.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}" />
 <script src="{{ url_for('static', filename='js/compiled_code.js') }}"></script>
+<meta id="tests-data" data-name="tests-data" data-other="{{tests}}">
+
 {% endblock %}
 
 {% block title %}Code Base{% endblock %}
@@ -50,7 +52,8 @@
 				<form spellcheck="false">
 					<p>Command line arguments:
 						<!-- The equivalent code using only Standard Java Libraries. -->
-						<textarea id="command_args" style="font-size: 11px;" rows='1'>18</textarea>
+						<textarea id="command_args" style="font-size: 11px;"
+							rows='1'>{{ default_command_args }}</textarea>
 						<button type="button" class="btn btn-primary" onclick="execute_algs4()">Execute</button>
 					</p>
 				</form>
