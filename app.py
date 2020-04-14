@@ -116,7 +116,7 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
-def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_args: str) -> (str, str):
+def _execute_with_dir(dir_path: str, is_algs4: bool, command_args: str) -> (str, str):
     import os
     stdoutPath = dir_path + "/out.txt"
     stderrPath = dir_path + "/err.txt"
@@ -149,7 +149,7 @@ def run_code():
 @app.route('/run_code_example')
 def run_code_example():
     text = 'import edu.princeton.cs.algs4.StdOut; import edu.princeton.cs.algs4.Out; public class new_test { public static void main(String[] args) { StdOut.println("hey!"); Out stderr = new Out(System.err); stderr.println("I am in stderr"); } }'
-    return jsonify(_execute_code(text, True))
+    return jsonify(_execute_code(text, True, ""))
     # return jsonify("Standard Output:\n" + output, "Standard Error:\n" + error)
 
 
@@ -196,12 +196,8 @@ def _get_class_name(text: str) -> str:
     return text[text.find("class ")+6:text.find("{")-1]
 
 
-def _execute_code(text: str, is_algs4: bool, args: str) -> (str, str):
-    class_name = _get_class_name(text)
-    if not (class_name and _is_valid_Java_program(text)):
-        return "", "A Java program must have a class and a class name."
-
-    myargs = (text, class_name, is_algs4, args)
+def _execute_code(text: str, is_algs4: bool, command_args: str) -> (str, str):
+    myargs = (text, is_algs4, command_args)
     return _send_job_to_queue(_run_code_in_command_line, myargs)
 
 
@@ -240,10 +236,13 @@ def _send_job_to_queue(fn, myargs):
     return job.result
 
 
-def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool, command_args: str) -> (str, str):
-    """ Do not name class_name with .java """
+def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str) -> (str, str):
     import os
     import tempfile
+    class_name = _get_class_name(code_text)
+    if not (class_name and _is_valid_Java_program(code_text)):
+        return "", "A Java program must have a class and a class name."
+
     dir_path = tempfile.mkdtemp()
     classPath = dir_path + "/" + class_name
     print(code_text)
