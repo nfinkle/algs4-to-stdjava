@@ -152,6 +152,37 @@ def run_code_example():
     # return jsonify("Standard Output:\n" + output, "Standard Error:\n" + error)
 
 
+@app.route('/get_diff')
+def get_diff():
+    algs4 = request.args["algs4"]
+    stdjava = request.args["stdjava"]
+    print(algs4, stdjava)
+    myargs = (algs4, stdjava)
+    result = _send_job_to_queue(_get_diff_command_line, myargs)
+    return jsonify(result)
+
+
+def _get_diff_command_line(algs4: str, stdjava: str) -> str:
+    import os
+    import tempfile
+    print(algs4)
+    print(stdjava)
+    dir_path = tempfile.mkdtemp()
+    algs4_path = dir_path + "/algs4.txt"
+    stdjava_path = dir_path + "/stdjava.txt"
+    out_path = dir_path + "/out.txt"
+    with open(algs4_path, "w") as a4, open(stdjava_path, "w") as stdj:
+        a4.write(algs4)
+        stdj.write(stdjava)
+    os.system("diff -y " + algs4_path + " " + stdjava_path + " > " + out_path)
+    with open(out_path) as out:
+        out_contents = out.read()
+        print(out_contents)
+    os.system("rm -r " + dir_path)
+    print(out_contents)
+    return out_contents
+
+
 @app.route('/compile_code')
 def compile_code():
     text = request.args["code"]
@@ -230,31 +261,32 @@ def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool) -
 
 @app.route('/code_base.html')
 def show_code_base():
-    code_text = """import java.util.LinkedList;
+    code_text = """import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.StdOut;
 
 public class tester {
     public static void main(String[] args) {
-        LinkedList<Integer> h = new LinkedList<Integer>();
-		h.add(0);
-		for (Integer i : h) {
-		    System.out.println(i);
+        Queue<String> message = new Queue<String>();
+		message.enqueue("I");
+		message.enqueue("love");
+		message.enqueue("you");
+		message.enqueue("Sara!");
+		for (String word : message) {
+		    StdOut.print(word + " ");
 		}
 	}
 }"""
     sample_stdjava = """import java.util.LinkedList;
 public class tester {
 	public static void main(String[] args) {
-		LinkedList<Integer> h = new LinkedList<Integer>();
-		h.add(0);
-		h.add(1);
-		h.add(2);
-		h.add(3);
-		h.add(4);
-		h.add(5);
-		h.add(6);
-		h.add(7);
-		for (Integer i : h) {
-			System.out.println(i);
+		LinkedList<String> h = new LinkedList<String>();
+		h.add("I");
+		h.add("love");
+		h.add("you");
+		h.add("too,");
+		h.add("Nathan!");
+		for (String i : h) {
+			System.out.print(i + " ");
 		}
 	}
 }"""

@@ -18,8 +18,9 @@
 		<h3 class="text-center"><code>algs4</code></h3>
 		<div style="padding: 5px;"></div>
 		<pre class="line-numbers"
-			style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces">{{ algs4_content }}</code></pre>
-		<br>
+			style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
+		<button type="button" class="btn btn-primary" id="algs4_btn" onclick="execute_algs4()">Execute</button>
+		<br><br><br>
 		<h3 class="text-center">Standard Java Library</h3>
 		<div style="padding: 5px;"></div>
 		<div id="stdjava_code_sm">
@@ -45,7 +46,8 @@
 		<div class="row">
 			<div class="col-6">
 				<pre class="line-numbers"
-					style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces">{{ algs4_content }}</code></pre>
+					style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
+				<button type="button" class="btn btn-primary" onclick="execute_algs4()">Execute</button>
 			</div>
 			<div class="col-6" id="stdjava_code">
 				<form id="code_form" spellcheck="false">
@@ -58,6 +60,7 @@
 			</div>
 		</div>
 	</div>
+	<br class="d-block d-md-none">
 	<div class="row">
 		<div class="col" id="algs4_output">
 
@@ -65,4 +68,5 @@
 	</div>
 </div>
 <script src="{{ url_for('static', filename='js/allow_tab.js') }}"></script>
+<script src="{{ url_for('static', filename='js/compiled_code.js') }}"></script>
 {% endblock %}

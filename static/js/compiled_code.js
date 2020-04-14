@@ -1,11 +1,9 @@
 function compile_sm() {
-	$('button').prop("disabled", true)
 	var code = document.getElementById("code_form_sm").elements[0].value;
 	compile_with_code(code);
 }
 
 function compile() {
-	$('button').prop("disabled", true)
 	var code = document.getElementById("code_form").elements[0].value;
 	compile_with_code(code);
 }
@@ -24,18 +22,20 @@ function display_compile_error(compile_err) {
 }
 
 function compile_with_code(code) {
+	$('button').prop("disabled", true)
 	$.ajax({
 		url: "/compile_code",
 		async: true,
 		data: {
 			"code": code,
-			"is_algs4": true
+			"is_algs4": false,
 		},
 		success: function (result) {
 			// console.log("hi")
 			add_execute_button = display_compile_error(result)
 			replaceFormWithPre(code, add_execute_button);
 			Prism.highlightAll();
+			$('button').prop("disabled", false)
 		}
 	})
 }
@@ -44,8 +44,9 @@ function compile_with_code(code) {
 function replaceFormWithPre(code, add_execute_button) {
 	var new_html = "<pre class=\"line-numbers\" style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java match-braces\">" + code.replace(/</g, "&lt").replace(/>/g, "&gt") + "</code></pre>" + "<button type=\"button\" class=\"btn btn-primary\" id=\"edit_btn\" onclick=\"edit()\">Edit</button>";
 	if (add_execute_button) {
-		new_html += "<button type = \"button\" class=\"btn btn-primary\" id=\"execute_btn\" onclick=\"execute()\">Execute</button>";
+		new_html += "<button type = \"button\" class=\"btn btn-primary\" id=\"execute_btn\" onclick=execute()>Execute</button>";
 	}
+	new_html += '<button type="button" class="btn btn-primary" onclick="compare_outputs()">Compare</button>'
 	document.getElementById("stdjava_code").innerHTML = new_html;
 	document.getElementById("stdjava_code_sm").innerHTML = new_html;
 }
@@ -58,8 +59,8 @@ function getString(arr, start, n) {
 	return newString;
 }
 
-function extract_code_from_pre() {
-	var cur_inner = document.getElementById("stdjava_code").innerHTML;
+function extract_code_from_pre(id) {
+	var cur_inner = document.getElementById(id).innerHTML;
 	var tmp = cur_inner /*.replace(/\s\s/g, "")*/ .replace(/<button.*/, "");
 	var code = "";
 	for (var i = 0; i < tmp.length; i++) {
@@ -86,7 +87,7 @@ function extract_code_from_pre() {
 
 function edit() {
 	$('button').prop("disabled", true)
-	var code = extract_code_from_pre();
+	var code = extract_code_from_pre("stdjava_code");
 	var lines = (code.match(/\n/g) || []).length
 	var new_html_start = "<form id=\"code_form_version\" spellcheck=\"false\"><p><textarea id=\"form_textarea_version\" style=\"font-size: 11px\"; rows=\"";
 	var middle = lines + "\";>" + code
@@ -95,40 +96,88 @@ function edit() {
 	var new_html_sm = new_html_start.replace(/_version/g, "_sm") + middle + new_html_end.replace(/_version/g, "_sm")
 	document.getElementById("stdjava_code").innerHTML = new_html_default;
 	document.getElementById("stdjava_code_sm").innerHTML = new_html_sm;
+	$('button').prop("disabled", false)
 }
 
+function execute_from_code(code, is_algs4) {
+	console.log(code)
+	ret_fn = function (result) {
+		$('button').prop("disabled", false);
+		console.log(result);
+		html = ""
+		if (result[0]) {
+			const pre_output_html = "<h4>Output</h4><pre  style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-markdown match-braces\">";
+			const post_output_html = "</code></pre>";
+			html += pre_output_html + result[0] + post_output_html;
+		}
+		if (result[1]) {
+			const pre_err_html = "<h4>Error</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-javastacktrace match-braces\">";
+			const post_err_html = "</code></pre>";
+			html += pre_err_html + result[1] + post_err_html;
+		}
+
+		document.getElementById("algs4_output").innerHTML = html;
+		Prism.highlightAll();
+	}
+	send_exec_request(code, is_algs4, ret_fn)
+}
+
+function execute_algs4() {
+	$('button').prop("disabled", true)
+	var code = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+	execute_from_code(code, true);
+}
 
 function execute() {
 	$('button').prop("disabled", true)
-	$('#execute_btn').prop("disabled", true)
-	$('#edit_btn').prop("disabled", true)
-	console.log("Beginning execution")
-	var code = extract_code_from_pre().replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	console.log(code);
+	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+	execute_from_code(code, false);
+}
+
+function send_exec_request(code, is_algs4, ret_fn) {
 	$.ajax({
 		url: "/run_code",
 		async: true,
 		data: {
 			"code": code,
-			"is_algs4": true
+			"is_algs4": is_algs4
 		},
 		success: function (result) {
-			$('button').prop("disabled", false)
-			console.log(result);
-			html = ""
-			if (result[0]) {
-				const pre_output_html = "<h4>Output</h4><pre  style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-markdown match-braces\">";
-				const post_output_html = "</code></pre>";
-				html += pre_output_html + result[0] + post_output_html;
-			}
-			if (result[1]) {
-				const pre_err_html = "<h4>Error</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-javastacktrace match-braces\">";
-				const post_err_html = "</code></pre>";
-				html += pre_err_html + result[1] + post_err_html;
-			}
-
-			document.getElementById("algs4_output").innerHTML = html;
-			Prism.highlightAll();
+			ret_fn(result)
 		}
 	})
+}
+
+function show_diff(algs4_result, stdjava_result) {
+	$.ajax({
+		url: "/get_diff",
+		async: true,
+		data: {
+			"algs4": algs4_result[0],
+			"stdjava": stdjava_result[0]
+		},
+		success: function (result) {
+			// alert(result)
+			const pre_html = "<h4>Outputs</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-diff\">";
+			const post_html = "</code></pre>";
+			html = pre_html + result + post_html;
+			document.getElementById("algs4_output").innerHTML = html;
+			Prism.highlightAll();
+			$('button').prop("disabled", false)
+		}
+	})
+
+}
+
+function compare_outputs() {
+	$('button').prop("disabled", true)
+	var stdjava = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+	var algs4 = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+	ret_fn = function (algs4_result) {
+		send_exec_request(stdjava, false, function (snd) {
+			show_diff(algs4_result, snd)
+		})
+	}
+	send_exec_request(algs4, true, ret_fn)
+
 }
