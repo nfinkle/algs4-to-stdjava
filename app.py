@@ -116,7 +116,7 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
-def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool) -> (str, str):
+def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, arg: str) -> (str, str):
     import os
     stdoutPath = dir_path + "/out.txt"
     stderrPath = dir_path + "/err.txt"
@@ -124,7 +124,8 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool) -> (str, s
     if is_algs4:
         java_CLASSPATH += ":./static/algs4/algs4.jar"
     pipingAddition = " 1> " + stdoutPath + " 2> " + stderrPath
-    os.system("java -cp " + java_CLASSPATH + " " + class_name + pipingAddition)
+    os.system("java -cp " + java_CLASSPATH +
+              " " + class_name + " " + arg + pipingAddition)
     err = open(stderrPath)
     out = open(stdoutPath)
     out_contents = _remove_dir_path(out.read(), dir_path)
@@ -137,8 +138,10 @@ q = rq.Queue(connection=worker.conn)
 def run_code():
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", False)
-    print("is_algs4 =", is_algs4, "\ntext:\n" + text)
-    result = _execute_code(text, is_algs4)
+    command_args = request.args.get("args", "")
+    print("is_algs4 =", is_algs4, "\ntext:\n" +
+          text, "\narguments:\n" + command_args)
+    result = _execute_code(text, is_algs4, "18")
     print(result)
     if result is None:
         return jsonify("", "Timeout error. Code took too long to run.")
@@ -148,7 +151,7 @@ def run_code():
 @app.route('/run_code_example')
 def run_code_example():
     text = 'import edu.princeton.cs.algs4.StdOut; import edu.princeton.cs.algs4.Out; public class new_test { public static void main(String[] args) { StdOut.println("hey!"); Out stderr = new Out(System.err); stderr.println("I am in stderr"); } }'
-    return jsonify(_execute_code(text, True))
+    return jsonify(_execute_code(text, True, ""))
     # return jsonify("Standard Output:\n" + output, "Standard Error:\n" + error)
 
 
@@ -195,12 +198,8 @@ def _get_class_name(text: str) -> str:
     return text[text.find("class ")+6:text.find("{")-1]
 
 
-def _execute_code(text: str, is_algs4: bool) -> (str, str):
-    class_name = _get_class_name(text)
-    if not (class_name and _is_valid_Java_program(text)):
-        return "", "A Java program must have a class and a class name."
-
-    myargs = (text, class_name, is_algs4)
+def _execute_code(text: str, is_algs4: bool, command_args: str) -> (str, str):
+    myargs = (text, is_algs4, command_args)
     return _send_job_to_queue(_run_code_in_command_line, myargs)
 
 
@@ -238,10 +237,13 @@ def _send_job_to_queue(fn, myargs):
     return job.result
 
 
-def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool) -> (str, str):
-    """ Do not name class_name with .java """
+def _run_code_in_command_line(code_text: str, is_algs4: bool, arg: str) -> (str, str):
     import os
     import tempfile
+    class_name = _get_class_name(code_text)
+    if not (class_name and _is_valid_Java_program(code_text)):
+        return "", "A Java program must have a class and a class name."
+
     dir_path = tempfile.mkdtemp()
     classPath = dir_path + "/" + class_name
     with open(classPath + ".java", "w") as code:
@@ -252,7 +254,7 @@ def _run_code_in_command_line(code_text: str, class_name: str, is_algs4: bool) -
     if not err_contents:
         print("Compiled successfully.")
         out_contents, err_contents = _execute_with_dir(
-            class_name, dir_path, is_algs4)
+            class_name, dir_path, is_algs4, arg)
     print("Returning out:", out_contents)
     print("Returning err:", err_contents)
     os.system("rm -r " + dir_path)
@@ -267,7 +269,7 @@ import edu.princeton.cs.algs4.StdOut;
 public class tester {
     public static void main(String[] args) {
         Queue<String> message = new Queue<String>();
-		message.enqueue("I");
+		message.enqueue(args[0]);
 		message.enqueue("love");
 		message.enqueue("you");
 		message.enqueue("Sara!");
