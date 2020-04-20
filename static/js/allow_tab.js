@@ -3,7 +3,7 @@ allow_tab = function (e) {
 	if (keyCode === 9) {
 		e.preventDefault();
 
-		const TAB_SIZE = 4;
+		const TAB_SIZE = 3;
 
 		// The one-liner that does the magic
 		document.execCommand('insertText', false, ' '.repeat(TAB_SIZE));

@@ -43,8 +43,10 @@ h6 {
 }
 
 .footer {
-	/* padding: 20px; */
-	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
 }
 
 textarea {

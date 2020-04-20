@@ -1,0 +1,19 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "HashMap" %}
+{% set api_url = url_for('show_hashmap') %}
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
+
+public class tester {
+   public static void main(String[] args) {
+      Queue<Integer> h = new Queue<Integer>();
+      h.enqueue(0);
+      h.enqueue(StdIn.readInt());
+      h.enqueue(Integer.parseInt(args[0]));
+      for (Integer i : h) {
+         StdOut.println(i);
+      }
+   }
+}" %}

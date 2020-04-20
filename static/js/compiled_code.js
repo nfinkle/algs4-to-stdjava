@@ -22,9 +22,11 @@ function display_compile_error(compile_err) {
 
 function compile_with_code(code) {
 	$('button').prop("disabled", true)
+	document.getElementById("algs4_output").innerHTML = "";
 	$.ajax({
 		url: "/compile_code",
 		async: true,
+		cache: false,
 		data: {
 			"code": code,
 			"is_algs4": false,
@@ -43,10 +45,10 @@ function replaceFormWithPre(code, add_execute_button) {
 	var new_html = "<pre class=\"line-numbers\" style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java match-braces\">" + code.replace(/</g, "&lt").replace(/>/g, "&gt") + "</code></pre>" + "<button type=\"button\" class=\"btn btn-primary\" id=\"edit_btn\" onclick=\"edit()\">Edit</button>";
 	if (add_execute_button) {
 		new_html += "<button type = \"button\" class=\"btn btn-primary\" id=\"execute_btn\" onclick=execute()>Execute</button>";
+		tests = $('#tests-data').data().other
+		new_html += '<button type="button" class="btn btn-primary" onclick="compare_outputs()">Compare</button>'
+		new_html += '<button type="button" class="btn btn-primary" onclick="run_tests(' + tests + ')">Run Tests</button>'
 	}
-	tests = $('#tests-data').data().other
-	new_html += '<button type="button" class="btn btn-primary" onclick="compare_outputs()">Compare</button>'
-	new_html += '<button type="button" class="btn btn-primary" onclick="run_tests(' + tests + ')">Run Tests</button>'
 	document.getElementById("stdjava_code").innerHTML = new_html;
 	document.getElementById("stdjava_code_sm").innerHTML = new_html;
 }
@@ -99,7 +101,7 @@ function edit() {
 	$('button').prop("disabled", false)
 }
 
-function execute_from_code(code, is_algs4, command_args) {
+function execute_from_code(code, is_algs4, command_args, stdin) {
 	ret_fn = function (result) {
 		$('button').prop("disabled", false);
 		html = ""
@@ -117,31 +119,37 @@ function execute_from_code(code, is_algs4, command_args) {
 		document.getElementById("algs4_output").innerHTML = html;
 		Prism.highlightAll();
 	}
-	send_exec_request(code, is_algs4, command_args, ret_fn)
+	send_exec_request(code, is_algs4, command_args, stdin, ret_fn)
 }
 
 function execute_algs4() {
 	$('button').prop("disabled", true)
+	document.getElementById("algs4_output").innerHTML = "";
 	var code = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	var args = document.getElementById("command_args").innerHTML;
-	execute_from_code(code, true, args);
+	var args = document.getElementById("command_args").value;
+	var stdin = document.getElementById("stdin").value;
+	execute_from_code(code, true, args, stdin);
 }
 
 function execute() {
 	$('button').prop("disabled", true)
+	document.getElementById("algs4_output").innerHTML = "";
 	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	var args = document.getElementById("command_args").innerHTML;
-	execute_from_code(code, false, args);
+	var args = document.getElementById("command_args").value;
+	var stdin = document.getElementById("stdin").value;
+	execute_from_code(code, false, args, stdin);
 }
 
-function send_exec_request(code, is_algs4, command_args, ret_fn) {
+function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 	$.ajax({
 		url: "/run_code",
 		async: true,
+		cache: false,
 		data: {
 			"code": code,
 			"is_algs4": is_algs4,
-			"args": command_args
+			"args": command_args,
+			"stdin": stdin
 		},
 		success: function (result) {
 			ret_fn(result)
@@ -159,14 +167,14 @@ function run_next_test(ith_test, result, code, test_list) {
 		cur_html += "Success!\n"
 	} else if (result[0].valueOf() === desired_output[0].valueOf()) {
 		cur_html += "Correct output, but not error.\n"
-	} else if (result[1].valueOf() === desired_output[1].valueOf()) {
+	} else if (result[1].valueOf() === desired_output[1].valueOf() && (result[1] || desired_output[1])) {
 		cur_html += "Correct error, but not output.\n"
 	} else {
 		cur_html += "Failed.\n"
 	}
 	if (ith_test < test_list.length - 1) {
 		cur_html += "Running Test " + (ith_test + 1) + "\n";
-		send_exec_request(code, false, test_list[ith_test + 1]["arg"], function (result) {
+		send_exec_request(code, false, test_list[ith_test + 1]["arg"], test_list[ith_test + 1]["stdin"], function (result) {
 			run_next_test(ith_test + 1, result, code, test_list)
 		})
 	} else {
@@ -182,7 +190,7 @@ function run_tests(test_list) {
 	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 	document.getElementById("algs4_output").innerHTML = "<h4>Tests</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java\">Running Test 0\n</code></pre>";
 	Prism.highlightAll();
-	send_exec_request(code, false, test_list[0]["arg"], function (result) {
+	send_exec_request(code, false, test_list[0]["arg"], test_list[0]["stdin"], function (result) {
 		run_next_test(0, result, code, test_list);
 	})
 }
@@ -193,6 +201,7 @@ function show_diff(algs4_result, stdjava_result) {
 	$.ajax({
 		url: "/get_diff",
 		async: true,
+		cache: false,
 		data: {
 			"algs4_out": algs4_result[0],
 			"stdjava_out": stdjava_result[0],
@@ -221,14 +230,16 @@ function show_diff(algs4_result, stdjava_result) {
 
 function compare_outputs() {
 	$('button').prop("disabled", true)
+	document.getElementById("algs4_output").innerHTML = "";
 	var stdjava = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 	var algs4 = extract_code_from_pre("algs4_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
-	var args = document.getElementById("command_args").innerHTML;
+	var args = document.getElementById("command_args").value;
+	var stdin = document.getElementById("stdin").value;
 	ret_fn = function (algs4_result) {
-		send_exec_request(stdjava, false, args, function (snd) {
+		send_exec_request(stdjava, false, args, stdin, function (snd) {
 			show_diff(algs4_result, snd)
 		})
 	}
-	send_exec_request(algs4, true, args, ret_fn)
+	send_exec_request(algs4, true, args, stdin, ret_fn)
 
 }
