@@ -142,6 +142,7 @@ def run_code():
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     command_args = request.args.get("args", "")
     stdin = request.args.get("stdin", "")
+    print(stdin)
     result = _execute_code(text, is_algs4, command_args, stdin)
     if result is None:
         return jsonify("", "Timeout error. Code took too long to run.")
@@ -294,6 +295,14 @@ public class tester {
    }
 }"""
 
+empty_class = """// standard java imports here
+public class tester {
+   public static void main(String[] args) {
+      
+      
+   }
+}"""
+
 
 @app.route('/code_base.html')
 def show_code_base():
@@ -317,6 +326,24 @@ public class tester {
     tests = [{"arg": "18", "out": ["0\n18\n", ""]}, {
         "arg": "2", "out": ["0\n2\n", ""]}]
     return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, test_stdjava=sample_stdjava, default_command_args=default_command_args, default_stdin=9, tests=tests)
+
+
+@app.route('/modules/stack/test.html')
+def show_stack_test():
+    default_command_args = 0
+    default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
+    tests = [{"arg": "18", "out": ["0\n10\n18\n", ""], "stdin": "10"}, {
+        "arg": "2", "out": ["0\n2\n", "", ""], "stdin": ""}]
+    return render_template("code_pages/stack.html", is_about=False,  test_stdjava=empty_class, default_command_args=default_command_args, default_stdin=default_stdin, tests=tests)
+
+
+@app.route('/modules/queue/test.html')
+def show_queue_test():
+    default_command_args = 2
+    default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
+    tests = [{"arg": "18", "out": ["0\n10\n18\n", ""], "stdin": "10"}, {
+        "arg": "2", "out": ["0\n2\n", "", ""], "stdin": ""}]
+    return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class, default_command_args=default_command_args, default_stdin=default_stdin, tests=tests)
 
 
 @app.route('/modules/hashmap/test.html')

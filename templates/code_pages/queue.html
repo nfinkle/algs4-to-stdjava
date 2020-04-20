@@ -1,0 +1,38 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "Queue" %}
+{% set api_url = url_for('show_queue') %}
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
+
+public class tester {
+   public static void main(String[] args) {
+      int pivot = Integer.parseInt(args[0]);
+      if (pivot < 0) {
+         throw new IllegalArgumentException(\"Pivot must be a non-negative integer.\");
+      }
+      Queue<Integer> queue = new Queue<Integer>();
+      Queue<Integer> pivotQueue = new Queue<Integer>();
+      StdOut.print(\"Pivot values:\");
+      for (int since_pivot = pivot; !StdIn.isEmpty(); since_pivot--) {
+         int t = StdIn.readInt();
+         pivotQueue.enqueue(t);
+         queue.enqueue(t);
+         if (since_pivot == 0) {
+            int d = pivotQueue.dequeue();
+            StdOut.printf(\" %d\", d);
+            pivotQueue.enqueue(d);
+            since_pivot = pivot;
+         }
+      }
+      StdOut.printf(\"\\nFull Standard Input (%d items):\", queue.size());
+      for (Integer i : queue) {
+         StdOut.printf(\" \" + i);
+      }
+      while (!queue.isEmpty()) {
+         queue.dequeue();
+      }
+      StdOut.printf(\"\\nEnding size: %d items\", queue.size());
+   }
+}" %}

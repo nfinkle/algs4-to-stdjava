@@ -1,0 +1,36 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "Stack" %}
+{% set api_url = url_for('show_stack') %}
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.Stack;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
+
+public class tester {
+   public static void main(String[] args) {
+      int pivot = Integer.parseInt(args[0]);
+      if (pivot < 0) {
+         throw new IllegalArgumentException(\"Pivot must be a non-negative integer.\");
+      }
+      Stack<Integer> stack = new Stack<Integer>();
+      StdOut.print(\"Pivot values:\");
+      for (int since_pivot = pivot; !StdIn.isEmpty(); since_pivot--) {
+         stack.push(StdIn.readInt());
+         if (since_pivot == 0) {
+            StdOut.printf(\" %d\", stack.peek());
+            pivot++;
+            since_pivot = pivot;
+         }
+      }
+      StdOut.println();
+      StdOut.printf(\"Standard Input in Reverse Order (%d items):\", stack.size());
+      for (Integer i : stack) {
+         StdOut.printf(\" \" + i);
+      }
+      while (!stack.isEmpty()) {
+         stack.pop();
+      }
+      StdOut.println();
+      StdOut.printf(\"Ending size: %d items\", stack.size());
+   }
+}" %}
