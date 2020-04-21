@@ -16,45 +16,53 @@ libraries into a program that uses only Standard Java Libraries.
 {% endblock %}
 {% block content %}
 
-<div class="container">
-	<div class="text-center">Find the API Comparisons for <code>{{ class_name}}</code> <a href="{{ api_url }}">here</a>.
-	</div>
-	<br>
+<div class="container-fluid">
 	<div class="row">
-		<div class="col-12 col-lg-6">
-			<h3 class="text-center"><code>algs4</code></h3>
-			<pre class="line-numbers"
-				style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
-			<button type="button" class="btn btn-primary" onclick="execute_algs4()">Execute</button>
-		</div>
-		<div class="col-xs-12 col-sm-12 col-md-12 d-lg-none"><br></div>
-		<div class="col-12 col-lg-6" id="stdjava_code">
-			<h3 class="text-center">Standard Java Library</h3>
-			<form id="code_form" spellcheck="false">
-				<p>
-					<!-- The equivalent code using only Standard Java Libraries. -->
-					<textarea id="form_textarea" style="font-size: 11px;" rows='16'>{{ test_stdjava }}</textarea>
-					<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
-				</p>
-			</form>
-		</div>
-	</div>
-	<br>
-	<form spellcheck="false">
-		<div class="row">
-			<div class="col-6">Command line arguments:
-				<!-- The equivalent code using only Standard Java Libraries. -->
-				<textarea id="command_args" style="font-size: 11px; height:50px">{{ default_command_args }}</textarea>
+		<div class="d-xl-block d-none col-1"></div>
+		<div class="col-xl-10 col-12">
+			<div class="text-center">Find the API Comparisons for <code>{{ class_name}}</code> <a
+					href="{{ api_url }}">here</a>.
 			</div>
-			<div class="col-6">
-				Standard Input:
-				<textarea id="stdin" style="font-size: 11px; height:50px;">{{ default_stdin }}</textarea></div>
-		</div>
-	</form>
-	<br><br>
-	<div class="row">
-		<div class="col" id="algs4_output">
+			<br>
+			<div class="row">
+				<div class="col-12 col-lg-6">
+					<h3 class="text-center"><code>algs4</code></h3>
+					<pre class="line-numbers"
+						style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
+					<button type="button" class="btn btn-primary" onclick="execute_algs4()">Execute</button>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 d-lg-none"><br></div>
+				<div class="col-12 col-lg-6" id="stdjava_code">
+					<h3 class="text-center">Standard Java Library</h3>
+					<form id="code_form" spellcheck="false">
+						<p>
+							<!-- The equivalent code using only Standard Java Libraries. -->
+							<textarea id="form_textarea" style="font-size: 11px;"
+								rows='16'>{{ test_stdjava }}</textarea>
+							<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
+						</p>
+					</form>
+				</div>
+			</div>
+			<br>
+			<form spellcheck="false">
+				<div class="row">
+					<div class="col-6">Command line arguments:
+						<!-- The equivalent code using only Standard Java Libraries. -->
+						<textarea id="command_args"
+							style="font-size: 11px; height:50px">{{ default_command_args }}</textarea>
+					</div>
+					<div class="col-6">
+						Standard Input:
+						<textarea id="stdin" style="font-size: 11px; height:50px;">{{ default_stdin }}</textarea></div>
+				</div>
+			</form>
+			<br><br>
+			<div class="row">
+				<div class="col" id="algs4_output">
 
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -99,7 +99,7 @@ function edit() {
 	$('button').prop("disabled", true)
 	var code = extract_code_from_pre("stdjava_code");
 	var lines = (code.match(/\n/g) || []).length
-	var new_html_start = "<form id=\"code_form\" spellcheck=\"false\"><p><textarea id=\"form_textarea\" style=\"font-size: 11px\"; rows=\"";
+	var new_html_start = "<h3 class=\"text-center\">Standard Java Library</h3><form id=\"code_form\" spellcheck=\"false\"><p><textarea id=\"form_textarea\" style=\"font-size: 11px\"; rows=\"";
 	var middle = lines + "\";>" + code
 	var new_html_end = "</textarea>" + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"compile()\">Compile</button></p></form>";
 	var new_html = new_html_start + middle + new_html_end;

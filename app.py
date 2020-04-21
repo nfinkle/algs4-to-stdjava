@@ -298,8 +298,7 @@ public class tester {
 empty_class = """// standard java imports here
 public class tester {
    public static void main(String[] args) {
-      
-      
+      throw new UnsupportedOperationException(\"Unimplemented method.\");
    }
 }"""
 
@@ -345,6 +344,11 @@ def show_queue_test():
 @app.route('/modules/hashmap/test.html')
 def show_hashmap_test():
     return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
+
+
+@app.route('/modules/scanner/test.html')
+def show_scanner_test():
+    return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/about_unauth.html')
