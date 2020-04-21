@@ -2,22 +2,60 @@
 {% set class_name = "HashMap" %}
 {% set api_url = url_for('show_hashmap') %}
 {% set algs4_content = 
-"import edu.princeton.cs.algs4.Queue;
+"import edu.princeton.cs.algs4.SeparateChainingHashST;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdIn;
+import java.util.Arrays;
 
 public class tester {
+   // Return a string array of sorted (key,value) tuples
+   private static String[] createOrder(SeparateChainingHashST<String, Integer> st) {
+      int size = 0;
+      for (String k : st.keys()) {
+         size++;
+      } 
+      String[] tuples = new String[size];
+      int i = 0;
+      for (String k : st.keys()) {
+         tuples[i++] = \"(\" + k + \",\" + st.get(k) + \")\";
+      }
+      Arrays.sort(tuples);
+      return tuples;
+   }
+
    public static void main(String[] args) {
-      Queue<Integer> h = new Queue<Integer>();
-      h.enqueue(0);
-      h.enqueue(StdIn.readInt());
-      h.enqueue(Integer.parseInt(args[0]));
-      for (Integer i : h) {
-         StdOut.println(i);
+      if (args.length == 0) {
+         throw new IllegalArgumentException(\"You must give command line arguments.\");
+      }
+      SeparateChainingHashST<String, Integer> st = new SeparateChainingHashST<String, Integer>();
+      
+      int count = 0;
+      while (!StdIn.isEmpty()) {
+         st.put(StdIn.readString(), count++);
+      }
+      
+      StdOut.println(\"Deleting the following (keys,values) (specified by the command line) from the hashtable:\");
+      for (int i = 0; i < args.length; i++) {
+         if (st.contains(args[i])) {
+            StdOut.printf(\" (%s,%d)\", args[i], st.get(args[i]));
+            st.delete(args[i]);
+         }
+      }
+      if (st.isEmpty()) return;
+      StdOut.println();
+      StdOut.printf(\"The remaining %d (keys,values):\\n\", st.size());
+      String[] sorted = createOrder(st);
+      for (int j = 0; j < sorted.length; j++) {
+         StdOut.printf(\" %s\", sorted[j]);
       }
    }
 }" %}
-{% set tests = 
-    
-    
-%}
+{% set tests = [
+   {"arg": "1 1 2 3 5 8 13 21 28", "out": ["Deleting the following (keys,values) (specified by the command line) from the hashtable:\n (1,0) (2,1) (3,2) (5,4) (8,7) (13,12) (21,20)\nThe remaining 14 (keys,values):\n (10,9) (11,10) (12,11) (14,13) (15,14) (16,15) (17,16) (18,17) (19,18) (20,19) (4,3) (6,5) (7,6) (9,8)", ""], "stdin": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"},
+   {"arg": "", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must give command line arguments.\n\tat tester.main(tester.java:8)\n'], "stdin": "94 8 7 7 18"},
+   {"arg": "64 1 98 48912893 4 213 753 984 3", "stdin": "432 4 2 3 423 43 23 1 23 -876 562 764527 -98 0 9 0", "out":
+        ["Deleting the following (keys,values) (specified by the command line) from the hashtable:\n (1,7) (4,1) (3,3)\nThe remaining 11 (keys,values):\n (-876,9) (-98,12) (0,15) (2,2) (23,8) (423,4) (43,5) (432,0) (562,10) (764527,11) (9,14)", ""]}
+]%}
+
+{% set default_command_args = "1 1 2 3 5 8 13 21 28" %}
+{% set default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" %}

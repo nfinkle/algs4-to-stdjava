@@ -344,23 +344,7 @@ def show_queue_test():
 
 @app.route('/modules/hashmap/test.html')
 def show_hashmap_test():
-    #     code_text = """import edu.princeton.cs.algs4.Queue;
-    # import edu.princeton.cs.algs4.StdOut;
-
-    # public class tester {
-    #     public static void main(String[] args) {
-    #         Queue<Integer> h = new Queue<Integer>();
-    # 		h.enqueue(0);
-    #         h.enqueue(Integer.parseInt(args[0]));
-    # 		for (Integer i : h) {
-    # 		    StdOut.println(i);
-    # 		}
-    # 	}
-    # }"""
-    default_command_args = 19
-    tests = [{"arg": "18", "out": ["0\n10\n18\n", ""], "stdin": "10"}, {
-        "arg": "2", "out": ["0\n2\n", "", ""], "stdin": ""}]
-    return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=sample_stdjava, default_command_args=default_command_args, default_stdin=9, tests=tests)
+    return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/about_unauth.html')
