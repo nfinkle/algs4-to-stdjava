@@ -9,7 +9,30 @@
 
 {% block content %}
 <div class="container text-center">
-
+	<h1>Description</h1>
+	<p>Below are a list of modules that correspond to classes in the standard Java libraries. Each one has a (roughly)
+		equivalent
+		that is used in <code>algs4</code>, the Java libraries used in Princeton's COS 226.</p>
+	<p>In each module, there are:
+		<div class="d-flex">
+			<ul class="ordered-list mx-auto justify-content-center">
+				<li class="list-item">a
+					short description of the differences between the standard Java class and the equivalent
+					<code>algs4</code>
+					class,</li>
+				<li class="list-item">an abridged API comparison, detailing most of the common and significant methods
+					in
+					each class, and</li>
+				<li class="list-item">a
+					progamming practice problem in which one is asked to translate a program written using the
+					<code>algs4</code>
+					libraries into a program using only standard Java libraries.</li>
+			</ul>
+		</div>
+		The progress bars on this page keep track of your
+		progress in completing the modules. Please complete the <code>System.out</code> and <code>Scanner</code> modules
+		before the rest of the modules, as the rest of the modules require knowledge of those classes.</p>
+	<br>
 	<h1>Modules</h1>
 	<h2>Input/Output</h2><br>
 	{% set io_cells = [

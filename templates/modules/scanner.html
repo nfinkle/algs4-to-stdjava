@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% set className = ["In", "Scanner"] %}
+{% set test_url = url_for('show_scanner_test') %}
 {% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
 
 {% set fileConstructor = {"args": "</code>File <code>source"|safe, "description": "Initializes an input stream from a file."|safe} %}
