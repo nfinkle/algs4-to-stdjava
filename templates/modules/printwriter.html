@@ -15,7 +15,7 @@
 <p><code>PrintWriter</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html">Javadoc
 		API</a>) works almost
 	identically
-	to <code>Out</code> (<a href="https://introcs.cs.princeton.edu/java/stdlib/javadoc/Out.html">Javadoc
+	to <code>Out</code> (<a href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/Out.html">Javadoc
 		API</a>). Note that <code>StdOut</code> is a special case of <code>Out</code>, where <code>Out</code> is
 	initialized
 	to the <code>System.out</code> stream.</p>
@@ -59,6 +59,6 @@
 
 <!-- printf -->
 {% for i in [0] %}
-{% set printf = [{"fname": "print", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments, and then flush."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}, {"fname": "flush", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}] %}
+{% set printf = [{"fname": "printf", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments, and then flush."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}, {"fname": "printf", "type": "void", "description": "Print a formatted string to the output stream, using the specified format string and arguments."|safe, "args": "</code>String <code>format,</code> Object... <code>args"|safe}] %}
 {% set cells = cells.append(printf)  %}
 {% endfor %}
