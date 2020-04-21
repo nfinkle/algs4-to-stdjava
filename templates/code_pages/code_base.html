@@ -17,59 +17,29 @@ libraries into a program that uses only Standard Java Libraries.
 {% block content %}
 
 <div class="container">
-	<div class="row text-center">
-		<div class="col-lg-1"></div>
-		<div class="col-lg-10">Find the API Comparisons for <code>{{ class_name}}</code> <a
-				href="{{ api_url }}">here</a>.</div>
+	<div class="text-center">Find the API Comparisons for <code>{{ class_name}}</code> <a href="{{ api_url }}">here</a>.
 	</div>
 	<br>
-	<div class="d-block d-lg-none">
-		<h3 class="text-center"><code>algs4</code></h3>
-		<div style="padding: 5px;"></div>
-		<pre class="line-numbers"
-			style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
-		<button type="button" class="btn btn-primary" id="algs4_btn" onclick="execute_algs4()">Execute</button>
-		<br><br>
-		<h3 class="text-center">Standard Java Library</h3>
-		<div style="padding: 5px;"></div>
-		<div id="stdjava_code_sm">
-			<form spellcheck="false">
+	<div class="row">
+		<div class="col-12 col-lg-6">
+			<h3 class="text-center"><code>algs4</code></h3>
+			<pre class="line-numbers"
+				style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
+			<button type="button" class="btn btn-primary" onclick="execute_algs4()">Execute</button>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12 d-lg-none"><br></div>
+		<div class="col-12 col-lg-6" id="stdjava_code">
+			<h3 class="text-center">Standard Java Library</h3>
+			<form id="code_form" spellcheck="false">
 				<p>
 					<!-- The equivalent code using only Standard Java Libraries. -->
-					<textarea id="form_textarea_sm" style="font-size: 11px;" rows='16'>{{ test_stdjava }}</textarea>
-					<button type="button" class="btn btn-primary" onclick="compile_sm()">Compile</button>
+					<textarea id="form_textarea" style="font-size: 11px;" rows='16'>{{ test_stdjava }}</textarea>
+					<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
 				</p>
 			</form>
 		</div>
 	</div>
-	<!-- normal size -->
-	<div class="row d-lg-block d-none">
-		<div class="row text-center">
-			<div class="col-6">
-				<h3><code>algs4</code></h3>
-			</div>
-			<div class="col-6">
-				<h3>Standard Java Library</h3>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-6">
-				<pre class="line-numbers"
-					style="white-space:pre-wrap; font-size:11px;"><code class="language-java match-braces" id="algs4_code">{{ algs4_content }}</code></pre>
-				<button type="button" class="btn btn-primary" onclick="execute_algs4()">Execute</button>
-			</div>
-			<div class="col-6" id="stdjava_code">
-				<form id="code_form" spellcheck="false">
-					<p>
-						<!-- The equivalent code using only Standard Java Libraries. -->
-						<textarea id="form_textarea" style="font-size: 11px;" rows='16'>{{ test_stdjava }}</textarea>
-						<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
-					</p>
-				</form>
-			</div>
-		</div>
-	</div>
-	<br class="d-block d-lg-none">
+	<br>
 	<form spellcheck="false">
 		<div class="row">
 			<div class="col-6">Command line arguments:

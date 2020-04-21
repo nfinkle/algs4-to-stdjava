@@ -1,8 +1,3 @@
-function compile_sm() {
-	var code = document.getElementById("code_form_sm").elements[0].value;
-	compile_with_code(code);
-}
-
 function compile() {
 	var code = document.getElementById("code_form").elements[0].value;
 	compile_with_code(code);
@@ -54,7 +49,7 @@ function cleanupTests(raw) {
 }
 
 function replaceFormWithPre(code, add_execute_button) {
-	var new_html = "<pre class=\"line-numbers\" style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java match-braces\">" + code.replace(/</g, "&lt").replace(/>/g, "&gt") + "</code></pre>" + "<button type=\"button\" class=\"btn btn-primary\" id=\"edit_btn\" onclick=\"edit()\">Edit</button>";
+	var new_html = "<h3 class=\"text-center\">Standard Java Library</h3><pre class=\"line-numbers\" style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java match-braces\">" + code.replace(/</g, "&lt").replace(/>/g, "&gt") + "</code></pre>" + "<button type=\"button\" class=\"btn btn-primary\" id=\"edit_btn\" onclick=\"edit()\">Edit</button>";
 	if (add_execute_button) {
 		new_html += "<button type = \"button\" class=\"btn btn-primary\" id=\"execute_btn\" onclick=execute()>Execute</button>";
 		tests = $('#tests-data').data().other
@@ -62,7 +57,6 @@ function replaceFormWithPre(code, add_execute_button) {
 		new_html += '<button type="button" class="btn btn-primary" onclick="run_tests(' + tests + ')">Run Tests</button>'
 	}
 	document.getElementById("stdjava_code").innerHTML = new_html;
-	document.getElementById("stdjava_code_sm").innerHTML = new_html;
 }
 
 function getString(arr, start, n) {
@@ -75,12 +69,14 @@ function getString(arr, start, n) {
 
 function extract_code_from_pre(id) {
 	var cur_inner = document.getElementById(id).innerHTML;
-	var tmp = cur_inner /*.replace(/\s\s/g, "")*/ .replace(/<button.*/g, "");
+	var tmp = cur_inner /*.replace(/\s\s/g, "")*/ .replace(/<button.*/g, "").replace(/Standard Java Library/, "");
 	var code = "";
 	for (var i = 0; i < tmp.length; i++) {
-		var five = getString(tmp, i, 5);
+		var three = getString(tmp, i, 3);
+		var four = three + tmp[i + 3];
+		var five = four + tmp[i + 4];
 		var six = five + tmp[i + 5];
-		if (five == "<span" || six == "</span" || getString(tmp, i, 4) == "<pre" || five == "<code" || five == "</pre" || six == "</code") {
+		if (five == "<span" || six == "</span" || four == "<pre" || five == "<code" || five == "</pre" || six == "</code" || three == "<h3" || four == "</h3") {
 			for (; i < tmp.length && tmp[i] != ">"; i++)
 			;
 			i++;
@@ -103,13 +99,11 @@ function edit() {
 	$('button').prop("disabled", true)
 	var code = extract_code_from_pre("stdjava_code");
 	var lines = (code.match(/\n/g) || []).length
-	var new_html_start = "<form id=\"code_form_version\" spellcheck=\"false\"><p><textarea id=\"form_textarea_version\" style=\"font-size: 11px\"; rows=\"";
+	var new_html_start = "<form id=\"code_form\" spellcheck=\"false\"><p><textarea id=\"form_textarea\" style=\"font-size: 11px\"; rows=\"";
 	var middle = lines + "\";>" + code
-	var new_html_end = "</textarea>" + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"compile_version()\">Compile</button></p></form>";
-	var new_html_default = new_html_start.replace(/_version/g, "") + middle + new_html_end.replace(/_version/g, "");
-	var new_html_sm = new_html_start.replace(/_version/g, "_sm") + middle + new_html_end.replace(/_version/g, "_sm")
-	document.getElementById("stdjava_code").innerHTML = new_html_default;
-	document.getElementById("stdjava_code_sm").innerHTML = new_html_sm;
+	var new_html_end = "</textarea>" + "<button type=\"button\" class=\"btn btn-primary\" onclick=\"compile()\">Compile</button></p></form>";
+	var new_html = new_html_start + middle + new_html_end;
+	document.getElementById("stdjava_code").innerHTML = new_html;
 	$('button').prop("disabled", false)
 }
 
@@ -260,21 +254,3 @@ function compare_outputs() {
 	send_exec_request(algs4, true, args, stdin, ret_fn)
 
 }
-
-function copy_small_form() {
-	document.getElementById('form_textarea').value = document.getElementById('form_textarea_sm').value
-}
-
-function copy_form() {
-	console.log(document.getElementById('form_textarea').value)
-	console.log(document.getElementById('form_textarea_sm').value)
-
-	document.getElementById('form_textarea_sm').value = document.getElementById('form_textarea').value
-}
-
-document.getElementById('form_textarea_sm').addEventListener("keypress", function () {
-	copy_small_form()
-})
-document.getElementById('form_textarea').addEventListener("keypress", function () {
-	copy_form()
-})
