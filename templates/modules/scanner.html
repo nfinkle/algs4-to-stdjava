@@ -68,7 +68,7 @@
 {% set upped = builtInType[0]|upper + builtInType[1:] %}
 {% set item =  
 	[{"fname":"read" + upped, "type": builtInType, "args": "", "description":typeDescription},
-	{"fname":"hasNext" + upped, "args":"", "type":builtInType, "description": typeDescription}]
+	{"fname":"next" + upped, "args":"", "type":builtInType, "description": typeDescription}]
 %}
 {% if builtInType == "boolean" %}
 {% set item = [{"fname":"read" + upped, "type": builtInType, "args": "", "description":"Reads the next token from this input stream, parses it as a boolean (interpreting either 'true' or '1' as <code>true</code>, and either 'false' or '0' as <code>false</code>), and returns the boolean.

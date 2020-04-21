@@ -330,11 +330,7 @@ public class tester {
 
 @app.route('/modules/stack/test.html')
 def show_stack_test():
-    default_command_args = 0
-    default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
-    tests = [{"arg": "18", "out": ["0\n10\n18\n", ""], "stdin": "10"}, {
-        "arg": "2", "out": ["0\n2\n", "", ""], "stdin": ""}]
-    return render_template("code_pages/stack.html", is_about=False,  test_stdjava=empty_class, default_command_args=default_command_args, default_stdin=default_stdin, tests=tests)
+    return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class)
 
 
 @app.route('/modules/queue/test.html')
@@ -343,7 +339,7 @@ def show_queue_test():
     default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
     tests = [{"arg": "18", "out": ["0\n10\n18\n", ""], "stdin": "10"}, {
         "arg": "2", "out": ["0\n2\n", "", ""], "stdin": ""}]
-    return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class, default_command_args=default_command_args, default_stdin=default_stdin, tests=tests)
+    return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/hashmap/test.html')

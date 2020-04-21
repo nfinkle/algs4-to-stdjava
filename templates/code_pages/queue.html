@@ -1,5 +1,5 @@
 {% extends "code_pages/code_base.html" %}
-{% set class_name = "Queue" %}
+{% set class_name = "LinkedList" %}
 {% set api_url = url_for('show_queue') %}
 {% set algs4_content = 
 "import edu.princeton.cs.algs4.Queue;
@@ -23,7 +23,7 @@ public class tester {
             int d = pivotQueue.dequeue();
             StdOut.printf(\" %d\", d);
             pivotQueue.enqueue(d);
-            since_pivot = pivot;
+            since_pivot = pivot + 1;
          }
       }
       StdOut.printf(\"\\nFull Standard Input (%d items):\", queue.size());
@@ -36,3 +36,12 @@ public class tester {
       StdOut.printf(\"\\nEnding size: %d items\", queue.size());
    }
 }" %}
+
+{% set tests = [
+   {"arg": "0", "out": ["Pivot values: 1 1 2 1 3 2 4 1 5 3 6 2 7 4 8 1 9 5 10 3 11\nFull Standard Input (21 items): 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21\nEnding size: 0 items", ""], "stdin": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"},
+   {"arg": "-2", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: Pivot must be a non-negative integer.\n\tat tester.main(tester.java:8)\n'], "stdin": "94 8 7 7 18"},
+   {"arg": "1", "stdin": "64 1 98 48912893 4 213 753 984 3", "out": ["Pivot values: 64 1 64 98\nFull Standard Input (9 items): 64 1 98 48912893 4 213 753 984 3\nEnding size: 0 items", ""]},
+   {"arg": "3", "stdin": "432 4 2 3 423 43 23 1 23 -876 562 764527 -98 0 9 0", "out": ["Pivot values: 432 4 2 3\nFull Standard Input (16 items): 432 4 2 3 423 43 23 1 23 -876 562 764527 -98 0 9 0\nEnding size: 0 items", ""]}
+] %}
+{% set default_command_args = 0 %}
+{% set default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" %}

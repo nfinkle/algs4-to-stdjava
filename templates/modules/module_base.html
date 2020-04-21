@@ -7,8 +7,14 @@
 	</div>
 	<div class="row text-center">
 		<div class="col-lg-1"></div>
-		<div class="col-lg-10">{% block description %}{% endblock %}</div>
+		<div class="col-lg-10">
+			{% block description %}{% endblock %}
+			<a href="{{ test_url }}">
+				<button type="button" class="btn btn-primary">Practice
+					Programming with {{className[1]}}</button></a>
+		</div>
 	</div>
+	<br>
 	<div class="text-center">
 		<h2>API Comparison</h2>
 	</div>

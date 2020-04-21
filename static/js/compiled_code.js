@@ -40,6 +40,18 @@ function compile_with_code(code) {
 	})
 }
 
+function cleanupTests(raw) {
+	// raw = eval($('#tests-data').data().other);
+	for (i = 0; i < raw.length; i++) {
+		raw[i]['arg'] = raw[i]['arg'].replace(/&quot/g, '\"');
+		raw[i]['stdin'] = raw[i]['stdin'].replace(/&quot/g, '\"');
+		raw[i]['out'][0] = raw[i]['out'][0].replace(/&quot/g, '\"');
+		raw[i]['out'][1] = raw[i]['out'][1].replace(/&quot/g, '\"');
+	}
+	// console.log(typeof (raw));
+	// return JSON.stringify(raw);
+	return raw;
+}
 
 function replaceFormWithPre(code, add_execute_button) {
 	var new_html = "<pre class=\"line-numbers\" style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java match-braces\">" + code.replace(/</g, "&lt").replace(/>/g, "&gt") + "</code></pre>" + "<button type=\"button\" class=\"btn btn-primary\" id=\"edit_btn\" onclick=\"edit()\">Edit</button>";
@@ -63,7 +75,7 @@ function getString(arr, start, n) {
 
 function extract_code_from_pre(id) {
 	var cur_inner = document.getElementById(id).innerHTML;
-	var tmp = cur_inner /*.replace(/\s\s/g, "")*/ .replace(/<button.*/, "");
+	var tmp = cur_inner /*.replace(/\s\s/g, "")*/ .replace(/<button.*/g, "");
 	var code = "";
 	for (var i = 0; i < tmp.length; i++) {
 		var five = getString(tmp, i, 5);
@@ -167,9 +179,13 @@ function run_next_test(ith_test, result, code, test_list) {
 		cur_html += "Success!\n"
 	} else if (result[0].valueOf() === desired_output[0].valueOf()) {
 		cur_html += "Correct output, but not error.\n"
+		console.log("Received:\n" + result[1]);
+		console.log("Desired:\n" + desired_output[1]);
 	} else if (result[1].valueOf() === desired_output[1].valueOf() && (result[1] || desired_output[1])) {
 		cur_html += "Correct error, but not output.\n"
 	} else {
+		console.log("Received:\n" + result[0]);
+		console.log("Desired:\n" + desired_output[0]);
 		cur_html += "Failed.\n"
 	}
 	if (ith_test < test_list.length - 1) {
@@ -186,6 +202,7 @@ function run_next_test(ith_test, result, code, test_list) {
 }
 
 function run_tests(test_list) {
+	test_list = cleanupTests(test_list);
 	$('button').prop("disabled", true);
 	var code = extract_code_from_pre("stdjava_code").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 	document.getElementById("algs4_output").innerHTML = "<h4>Tests</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java\">Running Test 0\n</code></pre>";
@@ -243,3 +260,21 @@ function compare_outputs() {
 	send_exec_request(algs4, true, args, stdin, ret_fn)
 
 }
+
+function copy_small_form() {
+	document.getElementById('form_textarea').value = document.getElementById('form_textarea_sm').value
+}
+
+function copy_form() {
+	console.log(document.getElementById('form_textarea').value)
+	console.log(document.getElementById('form_textarea_sm').value)
+
+	document.getElementById('form_textarea_sm').value = document.getElementById('form_textarea').value
+}
+
+document.getElementById('form_textarea_sm').addEventListener("keypress", function () {
+	copy_small_form()
+})
+document.getElementById('form_textarea').addEventListener("keypress", function () {
+	copy_form()
+})
