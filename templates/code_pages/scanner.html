@@ -1,0 +1,166 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "Scanner" %}
+{% set api_url = url_for('show_scanner') %}
+
+{% set content = "This class requires knowledge of <code>System.out</code>, which can be learned <a href=\""|safe + url_for('show_system_out') + "\">here</a>."|safe %}
+
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
+
+public class tester {
+   /* You must have a function called validateArgs that throws an error when
+    * any of the first four required arguments is missing or negative.
+    */
+   private static void validateArgs(String[] args) {
+      if (args.length < 4) {
+         throw new IllegalArgumentException(\"You must give 4 command line arguments corresponding to the number of strings, then ints, then booleans, and then doubles that are to be read from standard input.\");
+      }
+      for (int i = 0; i < 4; i++) {
+         if (Integer.parseInt(args[i]) < 0) {
+            throw new IllegalArgumentException(\"Each argument must be positive.\");
+         }
+      }
+   }
+
+   public static void main(String[] args) {
+      validateArgs(args);
+      int strings = Integer.parseInt(args[0]);
+      int ints = Integer.parseInt(args[1]);
+      int booleans = Integer.parseInt(args[2]);
+      int doubles = Integer.parseInt(args[3]);
+      boolean init_strs = false;
+      boolean init_ints = false;
+      boolean init_bools = false;
+      boolean init_dbls = false;
+
+
+      if (strings > 0) init_strs = true;
+      String strings_concat = \"\";
+      while (!StdIn.isEmpty() && strings > 0) {
+         strings--;
+         strings_concat += StdIn.readString();
+      }
+
+      if (ints > 0) init_ints = true;
+      int int_sum = 0;
+      while (!StdIn.isEmpty() && ints > 0) {
+         ints--;
+         int_sum += StdIn.readInt();
+      }
+
+      if (booleans > 0) init_bools = true;
+      int true_sum = 0;
+      while (!StdIn.isEmpty() && booleans > 0) {
+         booleans--;
+         boolean b = StdIn.readBoolean();
+         if (b) true_sum++;
+      }
+
+      if (doubles > 0) init_dbls = true;
+      double double_sum = 0;
+      while (!StdIn.isEmpty() && doubles > 0) {
+         doubles--;
+         double_sum += StdIn.readDouble();
+      }
+
+      if (strings > 0 || ints > 0 || booleans > 0 || doubles > 0) {
+         System.err.println(\"Error: Did not read specified number of objects from Standard Input.\");
+         return;
+      }
+      if (init_strs)
+         StdOut.printf(\"String concatenation: %s\\n\", strings_concat);
+      if (init_ints)
+         StdOut.printf(\"Int Sum: %d\\n\", int_sum);
+      if (init_bools)
+         StdOut.printf(\"True Boolean Count: %d\\n\", true_sum);
+      if (init_dbls)
+         StdOut.printf(\"Double Sum: %f\\n\", double_sum);
+   }
+}" %}
+
+{% set tests = [
+   {"arg": "1 2 3 4", "out": ["String concatenation: Yay\nInt Sum: 73350\nTrue Boolean Count: 1\nDouble Sum: 55435.807160\n", ""], "stdin": "Yay -14275 87625 false false true -2.43434 3.1415 3.0 55432.1"},
+   {"arg": "1 2 3", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must give 4 command line arguments corresponding to the number of strings, then ints, then booleans, and then doubles that are to be read from standard input.\n\tat tester.validateArgs(tester.java:_)\n\tat tester.main(tester.java:_)\n'], "stdin": "94 8 true true true"},
+   {"arg": "-2 2 3 4", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: Each argument must be positive.\n\tat tester.validateArgs(tester.java:_)\n\tat tester.main(tester.java:_)\n'], "stdin": "94 8 true true true 18.1 23.4 5.4 3453.0343"},
+   {"arg": "0 0 0 -1", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: Each argument must be positive.\n\tat tester.validateArgs(tester.java:_)\n\tat tester.main(tester.java:_)\n'], "stdin": "94 8 true true true 18.1 23.4 5.4 3453.0343"},
+   {"arg": "-0 -0 -0 -0", "stdin": "", "out": ["", ""]},
+   {"arg": "0 2 3 5", "out": ["Int Sum: 73351\nTrue Boolean Count: 2\nDouble Sum: 55438.807160\n", ""], "stdin": "-14275 87626 true false true -2.43434 3.1415 3.0 55432.1 3.0"},
+   {"arg": "0 0 3 5", "out": ["True Boolean Count: 2\nDouble Sum: 55439.807160\n", ""], "stdin": "true false true -2.43434 3.1415 3.0 55432.1 4.0"},
+   {"arg": "0 0 0 2", "out": ["Double Sum: 0.707160\n", ""], "stdin": "-2.43434 3.1415"},
+   {"arg": "0 3 0 2", "out": ["Int Sum: 0\nDouble Sum: 0.707160\n", ""], "stdin": "3 -3 0 -2.43434 3.1415"},
+] %}
+{% set default_command_args = "1 2 3 4" %}
+{% set default_stdin = "Yay -14275 87625 false false true -2.43434 3.1415 3.0 55432.1" %}
+
+{% set answer = "
+import java.util.Scanner;
+
+public class tester {
+   private static void validateArgs(String[] args) {
+      if (args.length < 4) {
+         throw new IllegalArgumentException(\"You must give 4 command line arguments corresponding to the number of strings, then ints, then booleans, and then doubles that are to be read from standard input.\");
+      }
+      for (int i = 0; i < 4; i++) {
+         if (Integer.parseInt(args[i]) < 0) {
+            throw new IllegalArgumentException(\"Each argument must be positive.\");
+         }
+      }
+   }
+
+   public static void main(String[] args) {
+      validateArgs(args);
+      int strings = Integer.parseInt(args[0]);
+      int ints = Integer.parseInt(args[1]);
+      int booleans = Integer.parseInt(args[2]);
+      int doubles = Integer.parseInt(args[3]);
+      Scanner stdin = new Scanner(System.in);
+
+      boolean init_strs = false;
+      boolean init_ints = false;
+      boolean init_bools = false;
+      boolean init_dbls = false;
+
+      if (strings > 0) init_strs = true;
+      String strings_concat = \"\";
+      while (strings > 0 && stdin.hasNext()) {
+         strings--;
+         strings_concat += stdin.next();
+      }
+
+      if (ints > 0) init_ints = true;
+      int int_sum = 0;
+      while (stdin.hasNextInt() && ints > 0) {
+         ints--;
+         int_sum += stdin.nextInt();
+      }
+
+      if (booleans > 0) init_bools = true;
+      int true_sum = 0;
+      while (stdin.hasNextBoolean() && booleans > 0) {
+         booleans--;
+         boolean b = stdin.nextBoolean();
+         if (b) true_sum++;
+      }
+
+      if (doubles > 0) init_dbls = true;
+      double double_sum = 0;
+      while (stdin.hasNextDouble() && doubles > 0) {
+         doubles--;
+         double_sum += stdin.nextDouble();
+      }
+
+      if (strings > 0 || ints > 0 || booleans > 0 || doubles > 0) {
+         System.err.println(\"Error: Did not next specified number of objects from Standard Input.\");
+         return;
+      }
+      if (init_strs)
+         System.out.printf(\"String concatenation: %s\\n\", strings_concat);
+      if (init_ints)
+         System.out.printf(\"Int Sum: %d\\n\", int_sum);
+      if (init_bools)
+         System.out.printf(\"True Boolean Count: %d\\n\", true_sum);
+      if (init_dbls)
+         System.out.printf(\"Double Sum: %f\\n\", double_sum);
+   }
+}"%}

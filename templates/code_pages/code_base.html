@@ -21,7 +21,7 @@ libraries into a program that uses only Standard Java Libraries.
 		<div class="d-xl-block d-none col-1"></div>
 		<div class="col-xl-10 col-12">
 			<div class="text-center">Find the API Comparisons for <code>{{ class_name}}</code> <a
-					href="{{ api_url }}">here</a>.
+					href="{{ api_url }}">here</a>. {{content}}
 			</div>
 			<br>
 			<div class="row">
@@ -37,8 +37,7 @@ libraries into a program that uses only Standard Java Libraries.
 					<form id="code_form" spellcheck="false">
 						<p>
 							<!-- The equivalent code using only Standard Java Libraries. -->
-							<textarea id="form_textarea" style="font-size: 11px;"
-								rows='16'>{{ test_stdjava }}</textarea>
+							<textarea id="form_textarea" style="font-size: 11px;" rows='16'>{{ answer }}</textarea>
 							<button type="button" class="btn btn-primary" onclick="compile()">Compile</button>
 						</p>
 					</form>

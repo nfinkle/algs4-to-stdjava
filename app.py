@@ -1,15 +1,11 @@
 from flask import Flask, request, render_template, url_for, jsonify
-# import flask_bootstrap
 import worker
 import rq
 import time
-# from flask_cors import CORS
+import re
 from flask_restx import inputs
 
 app = Flask(__name__)
-# flask_bootstrap.Bootstrap(app)
-# CORS(app)
-# app.register_blueprint(import_backup_api)
 
 
 @app.route('/health', methods=['GET'])
@@ -156,12 +152,17 @@ def run_code_example():
     # return jsonify("Standard Output:\n" + output, "Standard Error:\n" + error)
 
 
+def stripErrLineNum(err):
+    split = re.split(".java:[0-9]+", err)
+    return '.java:_'.join(split)
+
+
 @app.route('/get_diff')
 def get_diff():
     algs4_out = request.args["algs4_out"]
     stdjava_out = request.args["stdjava_out"]
-    algs4_err = request.args.get("algs4_err", "")
-    stdjava_err = request.args.get("stdjava_err", "")
+    algs4_err = stripErrLineNum(request.args.get("algs4_err", ""))
+    stdjava_err = stripErrLineNum(request.args.get("stdjava_err", ""))
     myargs = (algs4_out, stdjava_out)
     out_diff = _send_job_to_queue(_get_diff_command_line, myargs)
     myargs = (algs4_err, stdjava_err)
@@ -344,6 +345,11 @@ def show_queue_test():
 @app.route('/modules/hashmap/test.html')
 def show_hashmap_test():
     return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
+
+
+@app.route('/modules/system-out/test.html')
+def show_system_out_test():
+    return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/scanner/test.html')

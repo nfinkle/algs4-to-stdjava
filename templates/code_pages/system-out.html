@@ -1,0 +1,41 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "System.out/err" %}
+{% set api_url = url_for('show_system_out') %}
+
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.StdOut;
+
+public class tester {
+   public static void main(String[] args) {
+      if (args.length == 0) {
+         throw new IllegalArgumentException(\"You must provide command line arguments.\");
+      }
+      for (int i = 0; i < args.length; i++) {
+         StdOut.printf(\"%s \", args[i]);
+      }
+      StdOut.println();
+   }
+}" %}
+
+{% set tests = [
+   {"arg": "1 2 3 4", "out": ["1 2 3 4 \n", ""], "stdin": ""},
+   {"arg": "", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must provide command line arguments.\n\tat tester.main(tester.java:_)\n'], "stdin": ""},
+   {"arg": "-0 -0 -0 -0", "stdin": "", "out": ["-0 -0 -0 -0 \n", ""]},
+   {"arg": "87463 ndasfj 38u9uhinj98 3h4bj5n naoidhauijnk 89iu3jkn uiafhjkhdfiuay7iujn 3h ibhjka7yb j3nb4yug hiajkbjhdfkanbfhasjkfnbjdhasfjkb", "stdin": "", "out": ["87463 ndasfj 38u9uhinj98 3h4bj5n naoidhauijnk 89iu3jkn uiafhjkhdfiuay7iujn 3h ibhjka7yb j3nb4yug hiajkbjhdfkanbfhasjkfnbjdhasfjkb \n", ""]},
+   {"arg": "jfhdakfhkdaf87 4374 8 84.843hjkfh 98743.482 384uhfjka", "stdin": "", "out": ["jfhdakfhkdaf87 4374 8 84.843hjkfh 98743.482 384uhfjka \n", ""]},
+] %}
+{% set default_command_args = "1 2 3 4" %}
+{% set default_stdin = "" %}
+
+{% set answer = "
+public class tester {
+   public static void main(String[] args) {
+      if (args.length == 0) {
+         throw new IllegalArgumentException(\"You must provide command line arguments.\");
+      }
+      for (int i = 0; i < args.length; i++) {
+         System.out.printf(\"%s \", args[i]);
+      }
+      System.out.println();
+   }
+}"%}

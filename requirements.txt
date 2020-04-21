@@ -1,6 +1,5 @@
 gunicorn
 flask
-flask_bootstrap
 flask_restx
 rq
 redis
