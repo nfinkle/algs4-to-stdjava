@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, url_for, jsonify
 import worker
 import rq
 import time
+import os
 import re
 from flask_restx import inputs
 
@@ -113,6 +114,17 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
+def initSecurity(dir_path: str) -> (str, str):
+    policy_name = "security_policy_that_I_hope_works.policy"
+    if os.path.isfile(policy_name):
+        raise ValueError("file exists already")
+    policy = "grant codeBase \"" + dir_path + \
+        "/-\" {\n\tpermission java.io.FilePermission \"*\", \"read, write\";"
+    with open(policy_name, "w") as f:
+        f.write(policy)
+    return policy_name, "-Djava.security.manager -Djava.security.policy=" + policy_name
+
+
 def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_args: str, stdinPath: str) -> (str, str):
     import os
     stdoutPath = dir_path + "/out.txt"
@@ -122,10 +134,12 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_ar
     if is_algs4:
         java_CLASSPATH += ":./static/algs4/algs4.jar"
     pipingAddition = " < " + stdinPath + " 1> " + stdoutPath + " 2> " + stderrPath
-    os.system("java -cp " + java_CLASSPATH + " " +
+    securityPolicyName, securityOption = initSecurity(dir_path)
+    os.system("java  " + securityOption + " -cp " + java_CLASSPATH + " " +
               class_name + " " + command_args + pipingAddition)
     err = open(stderrPath)
     out = open(stdoutPath)
+    os.system("rm " + securityPolicyName)
     out_contents = _remove_dir_path(out.read(), dir_path)
     err_contents = _cleanup_stderr(err.read(), dir_path)
     return out_contents, err_contents
