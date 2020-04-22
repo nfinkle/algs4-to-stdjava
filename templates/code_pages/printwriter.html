@@ -1,0 +1,122 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "PrintWriter" %}
+{% set api_url = url_for('show_printwriter') %}
+
+{% set algs4_content = 
+"import java.util.Scanner;
+import java.io.File;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.Out;
+import java.util.Arrays;
+
+public class tester {
+   // Prints the file with the name filename to StdOut; does not use algs4
+   private static void printFileToStdOut(String filename) {
+      Scanner in;
+      try {
+         in = new Scanner(new File(filename));
+      }
+      catch (Exception e) {
+         return;
+      }
+      if (!in.hasNext()) return;
+      while (in.hasNextLine()) {
+         String line = in.nextLine();
+         System.out.println(line);
+      }
+      in.close();
+   }
+
+   public static void main(String[] args) {
+      int N = args.length;
+      if (args.length % 2 == 1) {
+         throw new IllegalArgumentException(\"You must provide an even number of command line arguments.\");
+      }
+      String[] filenames = new String[N/2];
+      int[] wordsPerFiles = new int[N/2];
+      for (int i = 0; i < N/2; i++) {
+         filenames[i] = args[2*i];
+         wordsPerFiles[i] = Integer.parseInt(args[2*i+1]);
+      }
+      for (int i = 0; i < N/2; i++) {
+         Out toFile = new Out(filenames[i]);
+         for (int j = 0; j < wordsPerFiles[i]; j++) {
+            toFile.printf(\"%s \", StdIn.readString());
+         }
+         toFile.println();
+         toFile.close();
+      }
+      Arrays.sort(filenames);
+      for (int i = 0; i < N/2; i++) {
+         printFileToStdOut(filenames[i]);
+      }
+   }
+}" %}
+
+{% set tests = [
+   {"arg": "first 1 second 3 eleventh 3 misc. 1", "out": ["e f g \na \nh \nb c d \n", ""], "stdin": "a b c d e f g h"},
+   {"arg": "", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must provide command line arguments.\n\tat tester.main(tester.java:_)\n'], "stdin": ""},
+   {"arg": "-0 -0 -0 -0", "stdin": "", "out": ["-0 -0 -0 -0 \n", ""]},
+   {"arg": "87463 ndasfj 38u9uhinj98 3h4bj5n naoidhauijnk 89iu3jkn uiafhjkhdfiuay7iujn 3h ibhjka7yb j3nb4yug hiajkbjhdfkanbfhasjkfnbjdhasfjkb", "stdin": "", "out": ["87463 ndasfj 38u9uhinj98 3h4bj5n naoidhauijnk 89iu3jkn uiafhjkhdfiuay7iujn 3h ibhjka7yb j3nb4yug hiajkbjhdfkanbfhasjkfnbjdhasfjkb \n", ""]},
+   {"arg": "jfhdakfhkdaf87 4374 8 84.843hjkfh 98743.482 384uhfjka", "stdin": "", "out": ["jfhdakfhkdaf87 4374 8 84.843hjkfh 98743.482 384uhfjka \n", ""]},
+] %}
+{% set default_command_args = "first 1 second 3 eleventh 3 misc. 1" %}
+{% set default_stdin = "a b c d e f g h" %}
+
+{% set answer = "
+import java.util.Arrays;
+import java.util.Scanner;
+import java.io.File;
+import java.io.PrintWriter;
+
+public class tester {
+   // Prints the file with the name filename to StdOut; does not use algs4
+   private static void printFileToStdOut(String filename) {
+      Scanner in;
+      try {
+         in = new Scanner(new File(filename));
+      }
+      catch (Exception e) {
+         return;
+      }
+      if (!in.hasNext()) return;
+      while (in.hasNextLine()) {
+         String line = in.nextLine();
+         System.out.println(line);
+      }
+      in.close();
+   }
+
+   public static void main(String[] args) {
+      int N = args.length;
+      if (args.length % 2 == 1) {
+         throw new IllegalArgumentException(\"You must provide an even number of command line arguments.\");
+      }
+      String[] filenames = new String[N/2];
+      int[] wordsPerFiles = new int[N/2];
+      for (int i = 0; i < N/2; i++) {
+         filenames[i] = args[2*i];
+         wordsPerFiles[i] = Integer.parseInt(args[2*i+1]);
+      }
+      Scanner stdin = new Scanner(System.in);
+      for (int i = 0; i < N/2; i++) {
+         PrintWriter toFile;
+         try {
+            toFile = new PrintWriter(filenames[i]);
+         }
+         catch (Exception e) {
+            continue;
+         }
+         for (int j = 0; j < wordsPerFiles[i]; j++) {
+            toFile.printf(\"%s \", stdin.next());
+         }
+         toFile.println();
+         toFile.close();
+      }
+      stdin.close();
+      Arrays.sort(filenames);
+      for (int i = 0; i < N/2; i++) {
+         printFileToStdOut(filenames[i]);
+      }
+   }
+}"%}

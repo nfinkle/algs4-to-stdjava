@@ -19,8 +19,12 @@
 		API</a>). Note that <code>StdOut</code> is a special case of <code>Out</code>, where <code>Out</code> is
 	initialized
 	to the <code>System.out</code> stream.</p>
-<p>The only
-	difference between <code>Out</code> and <code>PrintWriter</code> is that
+<p>The most significant difference between <code>Out</code> and <code>PrintWriter</code> is that when one must <a
+		href="https://docs.oracle.com/javase/tutorial/essential/exceptions/handling.html">handle the possible
+		exceptions</a>
+	when initializing a <code>PrintWriter</code>, whereas an <code>Out</code> object may be initialized without any
+	explicit handling. A second
+	difference is that
 	<code>Out</code>
 	flushes all output
 	immediately, while <code>PrintWriter</code> buffers the output until a newline

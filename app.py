@@ -149,7 +149,6 @@ def run_code():
 def run_code_example():
     text = 'import edu.princeton.cs.algs4.StdOut; import edu.princeton.cs.algs4.Out; public class new_test { public static void main(String[] args) { StdOut.println("hey!"); Out stderr = new Out(System.err); stderr.println("I am in stderr"); } }'
     return jsonify(_execute_code(text, True, "", ""))
-    # return jsonify("Standard Output:\n" + output, "Standard Error:\n" + error)
 
 
 def stripErrLineNum(err):
@@ -347,9 +346,19 @@ def show_hashmap_test():
     return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
 
 
+@app.route('/modules/printwriter/test.html')
+def show_printwriter_test():
+    return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class)
+
+
 @app.route('/modules/system-out/test.html')
 def show_system_out_test():
     return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class)
+
+
+@app.route('/modules/hashset/test.html')
+def show_hashset_test():
+    return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/scanner/test.html')

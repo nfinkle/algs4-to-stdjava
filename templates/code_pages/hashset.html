@@ -1,0 +1,83 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "HashSet" %}
+{% set api_url = url_for('show_hashset') %}
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.Bag;
+import edu.princeton.cs.algs4.StdOut;
+import java.util.Arrays;
+
+public class tester {
+   // Return a string array of sorted (key,value) tuples
+   private static String[] createOrder(Bag<String> bag) {
+      String[] values = new String[bag.size()];
+      int i = 0;
+      for (String s : bag) {
+         values[i++] = s;
+      }
+      Arrays.sort(values);
+      return values;
+   }
+
+   private static boolean bag_contains(Bag<String> bag, String key) {
+      for (String s : bag) {
+         if (s.equals(key)) return true;
+      }
+      return false;
+   }
+
+   public static void main(String[] args) {
+      Bag<String> bag = new Bag<String>();
+      
+      for (int i = 0; i < args.length; i++) {
+         if (!bag_contains(bag, args[i])) {
+            bag.add(args[i]);
+         }
+      }
+      if (bag.isEmpty()) return;
+      String[] sorted = createOrder(bag);
+      StdOut.print(\"Sorting & sifting out duplicates:\");
+      for (int i = 0; i < sorted.length; i++) {
+         StdOut.printf(\" %s\", sorted[i]);
+      }
+   }
+}" %}
+{% set tests = [
+   {"stdin": "", "arg": "1 1 Hi ji be i a o hi lknr lkm hi hi hi k3 5", "out": ["Sorting & sifting out duplicates: 1 5 Hi a be hi i ji k3 lkm lknr o",""]},
+   {"arg": "", "out": ["", ""], "stdin": ""},
+   {"arg": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 22 11", "stdin": "", "out": ["Sorting & sifting out duplicates: 1 11 2 22", ""]},
+   {"stdin": "", "arg": "a b c d e f f f f f f f f g f f g f g ff g f g f g f g 2 1", "out": ["Sorting & sifting out duplicates: 1 2 a b c d e f ff g",""]}
+]%}
+
+{% set default_command_args = "1 1 Hi ji be i a o hi lknr lkm hi hi hi k3 5" %}
+
+{% set answer = 
+"import java.util.HashSet;
+import java.util.Arrays;
+
+public class tester {
+   // Return a string array of sorted (key,value) tuples
+   private static String[] createOrder(HashSet<String> bag) {
+      String[] values = new String[bag.size()];
+      int i = 0;
+      for (String s : bag) {
+         values[i++] = s;
+      }
+      Arrays.sort(values);
+      return values;
+   }
+
+
+   public static void main(String[] args) {
+      HashSet<String> set = new HashSet<String>();
+      for (int i = 0; i < args.length; i++) {
+         set.add(args[i]);
+      }
+      if (set.isEmpty()) return;
+      String[] sorted = createOrder(set);
+      System.out.print(\"Sorting & sifting out duplicates:\");
+      for (int i = 0; i < sorted.length; i++) {
+         System.out.printf(\" %s\", sorted[i]);
+      }
+   }
+}"
+%}
