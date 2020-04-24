@@ -187,7 +187,6 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_ar
 q = rq.Queue(connection=worker.conn)
 @app.route('/run_code')
 def run_code():
-    CASClient().authenticate()
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     command_args = request.args.get("args", "")
@@ -206,7 +205,6 @@ def stripErrLineNum(err):
 
 @app.route('/get_diff')
 def get_diff():
-    CASClient().authenticate()
     algs4_out = request.args["algs4_out"]
     stdjava_out = request.args["stdjava_out"]
     algs4_err = stripErrLineNum(request.args.get("algs4_err", ""))
@@ -240,7 +238,6 @@ def _get_diff_command_line(algs4: str, stdjava: str) -> str:
 
 @app.route('/compile_code')
 def compile_code():
-    CASClient().authenticate()
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     print("is_algs4 =", is_algs4, "\ntext:\n" + text)
