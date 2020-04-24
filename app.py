@@ -5,15 +5,9 @@ import time
 import os
 import re
 from flask_restx import inputs
-# from flask_cas import CAS, login_required
-# from flask_cas import login
-# from flask_cas import logout
 from static.CASClient import CASClient
 
 app = Flask(__name__)
-# cas = CAS(app)
-# app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/login'
-# app.config['CAS_AFTER_LOGIN'] = 'show_index'
 app.secret_key = os.urandom(64)
 
 
@@ -22,18 +16,13 @@ def logout():
     casClient = CASClient()
     casClient.authenticate()
     casClient.logout()
-    show_home()
+    return show_home()
 
 
 @app.route('/health', methods=['GET'])
 def health():
     return "I'm online"
 
-
-# @app.route('/api.html')
-# @app.route('/api')
-# def show_api():
-#     return render_template('api.html')
 
 @app.route('/')
 @app.route('/home')
@@ -342,59 +331,12 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
     return out_contents, err_contents
 
 
-sample_stdjava = """import java.util.LinkedList;
-import java.util.Scanner;
-public class tester {
-   public static void main(String[] args) {
-      LinkedList<Integer> h = new LinkedList<Integer>();
-      h.add(0);
-      Scanner in = new Scanner(System.in);
-      if (in.hasNextInt())
-         h.add(in.nextInt());
-      h.add(Integer.parseInt(args[0]));/*
-      h.add(2);
-      h.add(3);
-      h.add(4);
-      h.add(5);
-      h.add(6);
-      h.add(7);*/
-      for (Integer i : h) {
-         System.out.println(i);
-      }
-      //System.err.println("I can have error outputs too!");
-   }
-}"""
-
 empty_class = """// standard java imports here
 public class tester {
    public static void main(String[] args) {
       throw new UnsupportedOperationException(\"Unimplemented method.\");
    }
 }"""
-
-
-# @app.route('/code_base.html')
-# def show_code_base():
-#     code_text = """import edu.princeton.cs.algs4.Queue;
-# import edu.princeton.cs.algs4.StdOut;
-# import edu.princeton.cs.algs4.StdIn;
-
-# public class tester {
-#     public static void main(String[] args) {
-#         Queue<Integer> h = new Queue<Integer>();
-# 		h.enqueue(0);
-#         if (!StdIn.isEmpty())
-#             h.enqueue(StdIn.readInt());
-#         h.enqueue(Integer.parseInt(args[0]));
-# 		for (Integer i : h) {
-# 		    StdOut.println(i);
-# 		}
-# 	}
-# }"""
-#     default_command_args = "19"
-#     tests = [{"arg": "18", "out": ["0\n18\n", ""]}, {
-#         "arg": "2", "out": ["0\n2\n", ""]}]
-#     return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, test_stdjava=sample_stdjava, default_command_args=default_command_args, default_stdin=9, tests=tests)
 
 
 @app.route('/modules/stack/test.html')

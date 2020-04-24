@@ -20,9 +20,11 @@
 					<div class="inner">
 						<h3 class="masthead-brand">algs4 to StdJava</h3>
 						<nav class="nav nav-masthead">
-							<a class="nav-link {% if not is_about %} active {% endif %}" href="home.html">Home</a>
-							<a class="nav-link {% if is_about %} active {% endif %}" href="about_unauth.html">About</a>
-							<a class="nav-link" href="index.html">Login</a>
+							<a class="nav-link {% if not is_about %} active {% endif %}"
+								href="{{ url_for('show_home') }}">Home</a>
+							<a class="nav-link {% if is_about %} active {% endif %}"
+								href="{{ url_for('show_about_unauth') }}">About</a>
+							<a class="nav-link" href="{{ url_for('show_index') }}">Login</a>
 						</nav>
 					</div>
 				</header>
