@@ -385,7 +385,7 @@ def show_scanner_test():
     return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
 
 
-@app.route('/about_unauth.html')
+@app.route('/about.html')
 def show_about_unauth():
     return render_template('about_unauth.html', is_about=True)
 

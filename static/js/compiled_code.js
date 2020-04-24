@@ -152,6 +152,8 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 	$.ajax({
 		url: "/run_code",
 		async: true,
+		timeout: 5000,
+		moreTries: 3,
 		cache: false,
 		data: {
 			"code": code,
@@ -161,6 +163,16 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 		},
 		success: function (result) {
 			ret_fn(result)
+		},
+		error: function (xhr, textStatus, error) {
+			if (textStatus == 'timeout') {
+				this.moreTries--;
+				if (this.moreTries > 0) {
+					$.ajax(this);
+					return;
+				}
+			}
+			alert('internal problem!');
 		}
 	})
 }
