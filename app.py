@@ -131,15 +131,18 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
-def _initSecurity(dir_path: str) -> (str, str):
+def _initSecurity(dir_path: str, algs4_path="") -> (str, str):
     policy_name = "security_policy_that_I_hope_works.policy"
     if os.path.isfile(policy_name):
         raise ValueError("file exists already")
-    policy = "grant {\n\tpermission java.io.FilePermission \"" + \
-        dir_path + "/-\", \"read, write\";\n};"
-    # policy = "grant codeBase \"file:" + dir_path + \
-    #     "/-\" {\n\tpermission java.io.FilePermission \"*\", \"read\";\n\tpermission java.io.FilePermission \"*\", \"write\";\n};"
-    with open(policy_name, "w") as f:
+    # policy = "grant {\n\tpermission java.io.FilePermission \"" + dir_path + "/-\", \"read, write\";\n\tpermission java.io.FilePermission \"" + \
+    #     algs4_path + "\", \"read,write\";\n};"
+    policy = "grant {\n\tpermission java.io.FilePermission \"./-\", \"read, write\";"
+    if algs4_path:
+        policy += "\n\tpermission java.io.FilePermission \"" + \
+            algs4_path + "\", \"read\";"
+    policy += "\n};"
+    with open(dir_path + "/" + policy_name, "w") as f:
         print(policy)
         f.write(policy)
     return policy_name
@@ -149,7 +152,7 @@ def _addQuotesToPath(full_path: str) -> str:
     dirs = full_path.split("/")
     for i in range(len(dirs)):
         if ' ' in dirs[i]:
-            dirs[i] = "\"" + dirs[i] + "\""
+            dirs[i] = "'" + dirs[i] + "'"
     return '/'.join(dirs)
 
 
@@ -157,25 +160,25 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_ar
     import os
     stdoutPath = dir_path + "/out.txt"
     stderrPath = dir_path + "/err.txt"
-    java_CLASSPATH = dir_path
-    args_string = ""
+    classpathOption = ""
     securityOption = "-Djava.security.manager -Djava.security.policy="
     # securityOption = "-Djava.security.manager -Djava.security.debug=access,failure -Djava.security.policy="
     if is_algs4:
         full_path = _addQuotesToPath(os.getcwd())
-        securityOption += full_path + '/'
-        java_CLASSPATH += ":" + full_path + "/static/algs4/algs4.jar"
+        algs4_path = full_path + "/static/algs4/algs4.jar"
+        classpathOption = " -classpath .:" + algs4_path + " "
+        securityOption += _initSecurity(dir_path, algs4_path) + " "
+    else:
+        securityOption += _initSecurity(dir_path) + " "
     pipingAddition = " < " + stdinPath + " 1> " + stdoutPath + " 2> " + stderrPath
-    securityPolicyName = _initSecurity(dir_path)
-    securityOption += securityPolicyName
-    # securityOption = ""
-    full_command = "cd " + dir_path + "; java " + securityOption + " -cp " + \
-        java_CLASSPATH + " " + class_name + " " + command_args + pipingAddition
+    full_command = "cd " + dir_path + "; java " + securityOption + \
+        classpathOption + class_name + " " + command_args + pipingAddition
+    # full_command = "cd " + dir_path + "; java " + securityOption + " -cp " + \
+    #     java_CLASSPATH + " " + class_name + " " + command_args + pipingAddition
     print(full_command)
     os.system(full_command)
     err = open(stderrPath)
     out = open(stdoutPath)
-    os.system("rm " + securityPolicyName)
     out_contents = _remove_dir_path(out.read(), dir_path)
     err_contents = _cleanup_stderr(err.read(), dir_path)
     return out_contents, err_contents
@@ -194,12 +197,6 @@ def run_code():
     if result is None:
         return jsonify("", "Timeout error. Code took too long to run.")
     return jsonify(result)
-
-
-# @app.route('/run_code_example')
-# def run_code_example():
-#     text = 'import edu.princeton.cs.algs4.StdOut; import edu.princeton.cs.algs4.Out; public class new_test { public static void main(String[] args) { StdOut.println("hey!"); Out stderr = new Out(System.err); stderr.println("I am in stderr"); } }'
-#     return jsonify(_execute_code(text, True, "", ""))
 
 
 def stripErrLineNum(err):
@@ -322,11 +319,6 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
 
     print("Returning out:", out_contents)
     print("Returning err:", err_contents)
-    for fname in os.listdir(dir_path):
-        if '.class' in fname or '.java' in fname:
-            continue
-        with open(dir_path + "/" + fname) as f:
-            print("\"" + fname + "\" =", f.read())
     os.system("rm -r " + dir_path)
     return out_contents, err_contents
 
