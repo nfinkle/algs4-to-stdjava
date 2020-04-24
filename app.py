@@ -5,8 +5,24 @@ import time
 import os
 import re
 from flask_restx import inputs
+# from flask_cas import CAS, login_required
+# from flask_cas import login
+# from flask_cas import logout
+from static.CASClient import CASClient
 
 app = Flask(__name__)
+# cas = CAS(app)
+# app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/login'
+# app.config['CAS_AFTER_LOGIN'] = 'show_index'
+app.secret_key = os.urandom(64)
+
+
+@app.route('/logout')
+def logout():
+    casClient = CASClient()
+    casClient.authenticate()
+    casClient.logout()
+    show_home()
 
 
 @app.route('/health', methods=['GET'])
@@ -28,6 +44,7 @@ def show_home():
 
 @app.route('/index.html')
 def show_index():
+    username = CASClient().authenticate()
     progress = {"print": 50, "scanner": 28, "else": 15}
     progressBars = {}
     for key, val in progress.items():
@@ -39,56 +56,67 @@ def show_index():
 
 @app.route('/modules/module.html')
 def show_module():
+    username = CASClient().authenticate()
     return render_template('modules/module.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/system-out/APIs.html')
 def show_system_out():
+    username = CASClient().authenticate()
     return render_template('modules/system-out.html', is_about=False, constructors=False)
 
 
 @app.route('/modules/scanner/APIs.html')
 def show_scanner():
+    username = CASClient().authenticate()
     return render_template('modules/scanner.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/printwriter/APIs.html')
 def show_printwriter():
+    username = CASClient().authenticate()
     return render_template('modules/printwriter.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/hashmap/APIs.html')
 def show_hashmap():
+    username = CASClient().authenticate()
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/hashset/APIs.html')
 def show_hashset():
+    username = CASClient().authenticate()
     return render_template('modules/hashset.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/treemap/APIs.html')
 def show_treemap():
+    username = CASClient().authenticate()
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/priorityqueue/APIs.html')
 def show_priorityqueue():
+    username = CASClient().authenticate()
     return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/queue/APIs.html')
 def show_queue():
+    username = CASClient().authenticate()
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/stack/APIs.html')
 def show_stack():
+    username = CASClient().authenticate()
     return render_template('modules/stack.html', is_about=False, constructors=True)
 
 
 @app.route('/about_auth.html')
 def show_about_auth():
+    username = CASClient().authenticate()
     return render_template('about_auth.html', is_about=True)
 
 
@@ -167,6 +195,7 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_ar
 q = rq.Queue(connection=worker.conn)
 @app.route('/run_code')
 def run_code():
+    CASClient().authenticate()
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     command_args = request.args.get("args", "")
@@ -178,10 +207,10 @@ def run_code():
     return jsonify(result)
 
 
-@app.route('/run_code_example')
-def run_code_example():
-    text = 'import edu.princeton.cs.algs4.StdOut; import edu.princeton.cs.algs4.Out; public class new_test { public static void main(String[] args) { StdOut.println("hey!"); Out stderr = new Out(System.err); stderr.println("I am in stderr"); } }'
-    return jsonify(_execute_code(text, True, "", ""))
+# @app.route('/run_code_example')
+# def run_code_example():
+#     text = 'import edu.princeton.cs.algs4.StdOut; import edu.princeton.cs.algs4.Out; public class new_test { public static void main(String[] args) { StdOut.println("hey!"); Out stderr = new Out(System.err); stderr.println("I am in stderr"); } }'
+#     return jsonify(_execute_code(text, True, "", ""))
 
 
 def stripErrLineNum(err):
@@ -191,6 +220,7 @@ def stripErrLineNum(err):
 
 @app.route('/get_diff')
 def get_diff():
+    CASClient().authenticate()
     algs4_out = request.args["algs4_out"]
     stdjava_out = request.args["stdjava_out"]
     algs4_err = stripErrLineNum(request.args.get("algs4_err", ""))
@@ -224,6 +254,7 @@ def _get_diff_command_line(algs4: str, stdjava: str) -> str:
 
 @app.route('/compile_code')
 def compile_code():
+    CASClient().authenticate()
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     print("is_algs4 =", is_algs4, "\ntext:\n" + text)
@@ -342,72 +373,81 @@ public class tester {
 }"""
 
 
-@app.route('/code_base.html')
-def show_code_base():
-    code_text = """import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdIn;
+# @app.route('/code_base.html')
+# def show_code_base():
+#     code_text = """import edu.princeton.cs.algs4.Queue;
+# import edu.princeton.cs.algs4.StdOut;
+# import edu.princeton.cs.algs4.StdIn;
 
-public class tester {
-    public static void main(String[] args) {
-        Queue<Integer> h = new Queue<Integer>();
-		h.enqueue(0);
-        if (!StdIn.isEmpty())
-            h.enqueue(StdIn.readInt());
-        h.enqueue(Integer.parseInt(args[0]));
-		for (Integer i : h) {
-		    StdOut.println(i);
-		}
-	}
-}"""
-    default_command_args = "19"
-    tests = [{"arg": "18", "out": ["0\n18\n", ""]}, {
-        "arg": "2", "out": ["0\n2\n", ""]}]
-    return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, test_stdjava=sample_stdjava, default_command_args=default_command_args, default_stdin=9, tests=tests)
+# public class tester {
+#     public static void main(String[] args) {
+#         Queue<Integer> h = new Queue<Integer>();
+# 		h.enqueue(0);
+#         if (!StdIn.isEmpty())
+#             h.enqueue(StdIn.readInt());
+#         h.enqueue(Integer.parseInt(args[0]));
+# 		for (Integer i : h) {
+# 		    StdOut.println(i);
+# 		}
+# 	}
+# }"""
+#     default_command_args = "19"
+#     tests = [{"arg": "18", "out": ["0\n18\n", ""]}, {
+#         "arg": "2", "out": ["0\n2\n", ""]}]
+#     return render_template('code_pages/code_base.html', is_about=False, algs4_content=code_text, test_stdjava=sample_stdjava, default_command_args=default_command_args, default_stdin=9, tests=tests)
 
 
 @app.route('/modules/stack/test.html')
 def show_stack_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class)
 
 
 @app.route('/modules/priorityqueue/test.html')
 def show_priorityqueue_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/queue/test.html')
 def show_queue_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/treemap/test.html')
 def show_treemap_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/hashmap/test.html')
 def show_hashmap_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/printwriter/test.html')
 def show_printwriter_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/system-out/test.html')
 def show_system_out_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/hashset/test.html')
 def show_hashset_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/scanner/test.html')
 def show_scanner_test():
+    username = CASClient().authenticate()
     return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
 
 
