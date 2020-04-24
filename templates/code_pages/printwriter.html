@@ -17,6 +17,7 @@ public class tester {
          in = new Scanner(new File(filename));
       }
       catch (Exception e) {
+         e.printStackTrace();
          return;
       }
       if (!in.hasNext()) return;
@@ -37,6 +38,9 @@ public class tester {
       for (int i = 0; i < N/2; i++) {
          filenames[i] = args[2*i];
          wordsPerFiles[i] = Integer.parseInt(args[2*i+1]);
+         if (wordsPerFiles[i] < 0) {
+            throw new IllegalArgumentException(\"Your integers must be non-negative.\");
+         }
       }
       for (int i = 0; i < N/2; i++) {
          Out toFile = new Out(filenames[i]);
@@ -55,10 +59,10 @@ public class tester {
 
 {% set tests = [
    {"arg": "first 1 second 3 eleventh 3 misc. 1", "out": ["e f g \na \nh \nb c d \n", ""], "stdin": "a b c d e f g h"},
-   {"arg": "", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must provide command line arguments.\n\tat tester.main(tester.java:_)\n'], "stdin": ""},
-   {"arg": "-0 -0 -0 -0", "stdin": "", "out": ["-0 -0 -0 -0 \n", ""]},
-   {"arg": "87463 ndasfj 38u9uhinj98 3h4bj5n naoidhauijnk 89iu3jkn uiafhjkhdfiuay7iujn 3h ibhjka7yb j3nb4yug hiajkbjhdfkanbfhasjkfnbjdhasfjkb", "stdin": "", "out": ["87463 ndasfj 38u9uhinj98 3h4bj5n naoidhauijnk 89iu3jkn uiafhjkhdfiuay7iujn 3h ibhjka7yb j3nb4yug hiajkbjhdfkanbfhasjkfnbjdhasfjkb \n", ""]},
-   {"arg": "jfhdakfhkdaf87 4374 8 84.843hjkfh 98743.482 384uhfjka", "stdin": "", "out": ["jfhdakfhkdaf87 4374 8 84.843hjkfh 98743.482 384uhfjka \n", ""]},
+   {"arg": "a.txt ", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must provide an even number of command line arguments.\n\tat tester.main(tester.java:_)\n'], "stdin": ""},
+   {"arg": "a.txt 2 a.txz 0 z.Txt -1", "stdin": "", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: Your integers must be non-negative.\n\tat tester.main(tester.java:_)\n']},
+   {"arg": "a.txt 2 a.txa 2 z.Txt 0", "stdin": "fa ad 5 a ab ac", "out": ["5 a \nfa ad \n", ""]},
+   {"arg": " ", "stdin": "", "out": ["", ""]},
 ] %}
 {% set default_command_args = "first 1 second 3 eleventh 3 misc. 1" %}
 {% set default_stdin = "a b c d e f g h" %}
@@ -77,6 +81,7 @@ public class tester {
          in = new Scanner(new File(filename));
       }
       catch (Exception e) {
+         e.printStackTrace();
          return;
       }
       if (!in.hasNext()) return;
@@ -97,6 +102,9 @@ public class tester {
       for (int i = 0; i < N/2; i++) {
          filenames[i] = args[2*i];
          wordsPerFiles[i] = Integer.parseInt(args[2*i+1]);
+         if (wordsPerFiles[i] < 0) {
+            throw new IllegalArgumentException(\"Your integers must be non-negative.\");
+         }
       }
       Scanner stdin = new Scanner(System.in);
       for (int i = 0; i < N/2; i++) {
@@ -105,7 +113,8 @@ public class tester {
             toFile = new PrintWriter(filenames[i]);
          }
          catch (Exception e) {
-            continue;
+            e.printStackTrace();
+            return;
          }
          for (int j = 0; j < wordsPerFiles[i]; j++) {
             toFile.printf(\"%s \", stdin.next());

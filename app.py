@@ -42,47 +42,47 @@ def show_module():
     return render_template('modules/module.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/system-out/apis.html')
+@app.route('/modules/system-out/APIs.html')
 def show_system_out():
     return render_template('modules/system-out.html', is_about=False, constructors=False)
 
 
-@app.route('/modules/scanner/apis.html')
+@app.route('/modules/scanner/APIs.html')
 def show_scanner():
     return render_template('modules/scanner.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/printwriter/apis.html')
+@app.route('/modules/printwriter/APIs.html')
 def show_printwriter():
     return render_template('modules/printwriter.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/hashmap/apis.html')
+@app.route('/modules/hashmap/APIs.html')
 def show_hashmap():
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/hashset/apis.html')
+@app.route('/modules/hashset/APIs.html')
 def show_hashset():
     return render_template('modules/hashset.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/treemap/apis.html')
+@app.route('/modules/treemap/APIs.html')
 def show_treemap():
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/priorityqueue/apis.html')
+@app.route('/modules/priorityqueue/APIs.html')
 def show_priorityqueue():
     return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/queue/apis.html')
+@app.route('/modules/queue/APIs.html')
 def show_queue():
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
-@app.route('/modules/stack/apis.html')
+@app.route('/modules/stack/APIs.html')
 def show_stack():
     return render_template('modules/stack.html', is_about=False, constructors=True)
 
@@ -114,15 +114,26 @@ def _remove_dir_path(contents: str, dir_path: str) -> str:
     return contents.replace(dir_path+"/", "")
 
 
-def initSecurity(dir_path: str) -> (str, str):
+def _initSecurity(dir_path: str) -> (str, str):
     policy_name = "security_policy_that_I_hope_works.policy"
     if os.path.isfile(policy_name):
         raise ValueError("file exists already")
-    policy = "grant codeBase \"" + dir_path + \
-        "/-\" {\n\tpermission java.io.FilePermission \"*\", \"read, write\";"
+    policy = "grant {\n\tpermission java.io.FilePermission \"" + \
+        dir_path + "/-\", \"read, write\";\n};"
+    # policy = "grant codeBase \"file:" + dir_path + \
+    #     "/-\" {\n\tpermission java.io.FilePermission \"*\", \"read\";\n\tpermission java.io.FilePermission \"*\", \"write\";\n};"
     with open(policy_name, "w") as f:
+        print(policy)
         f.write(policy)
-    return policy_name, "-Djava.security.manager -Djava.security.policy=" + policy_name
+    return policy_name
+
+
+def _addQuotesToPath(full_path: str) -> str:
+    dirs = full_path.split("/")
+    for i in range(len(dirs)):
+        if ' ' in dirs[i]:
+            dirs[i] = "\"" + dirs[i] + "\""
+    return '/'.join(dirs)
 
 
 def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_args: str, stdinPath: str) -> (str, str):
@@ -131,12 +142,20 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_ar
     stderrPath = dir_path + "/err.txt"
     java_CLASSPATH = dir_path
     args_string = ""
+    securityOption = "-Djava.security.manager -Djava.security.policy="
+    # securityOption = "-Djava.security.manager -Djava.security.debug=access,failure -Djava.security.policy="
     if is_algs4:
-        java_CLASSPATH += ":./static/algs4/algs4.jar"
+        full_path = _addQuotesToPath(os.getcwd())
+        securityOption += full_path + '/'
+        java_CLASSPATH += ":" + full_path + "/static/algs4/algs4.jar"
     pipingAddition = " < " + stdinPath + " 1> " + stdoutPath + " 2> " + stderrPath
-    securityPolicyName, securityOption = initSecurity(dir_path)
-    os.system("java  " + securityOption + " -cp " + java_CLASSPATH + " " +
-              class_name + " " + command_args + pipingAddition)
+    securityPolicyName = _initSecurity(dir_path)
+    securityOption += securityPolicyName
+    # securityOption = ""
+    full_command = "cd " + dir_path + "; java " + securityOption + " -cp " + \
+        java_CLASSPATH + " " + class_name + " " + command_args + pipingAddition
+    print(full_command)
+    os.system(full_command)
     err = open(stderrPath)
     out = open(stdoutPath)
     os.system("rm " + securityPolicyName)
@@ -263,6 +282,7 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
         return "", "A Java program must have a class and a class name."
 
     dir_path = tempfile.mkdtemp()
+    print(dir_path)
     classPath = dir_path + "/" + class_name
     stdinPath = dir_path + "/in.txt"
     print("code = ", code_text)
@@ -282,6 +302,11 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
 
     print("Returning out:", out_contents)
     print("Returning err:", err_contents)
+    for fname in os.listdir(dir_path):
+        if '.class' in fname or '.java' in fname:
+            continue
+        with open(dir_path + "/" + fname) as f:
+            print("\"" + fname + "\" =", f.read())
     os.system("rm -r " + dir_path)
     return out_contents, err_contents
 
@@ -346,13 +371,19 @@ def show_stack_test():
     return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class)
 
 
+@app.route('/modules/priorityqueue/test.html')
+def show_priorityqueue_test():
+    return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class)
+
+
 @app.route('/modules/queue/test.html')
 def show_queue_test():
-    default_command_args = 2
-    default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"
-    tests = [{"arg": "18", "out": ["0\n10\n18\n", ""], "stdin": "10"}, {
-        "arg": "2", "out": ["0\n2\n", "", ""], "stdin": ""}]
     return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class)
+
+
+@app.route('/modules/treemap/test.html')
+def show_treemap_test():
+    return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/hashmap/test.html')

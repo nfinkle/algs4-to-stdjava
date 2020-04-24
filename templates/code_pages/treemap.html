@@ -1,0 +1,111 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "TreeMap" %}
+{% set api_url = url_for('show_treemap') %}
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
+
+public class tester {
+   public static void main(String[] args) {
+      if (args.length % 2 == 1) {
+         throw new IllegalArgumentException(\"You must provide an even number of command line arguments.\");
+      }
+      RedBlackBST<String, Integer> st = new RedBlackBST<String, Integer>();
+      
+      while (!StdIn.isEmpty()) {
+         String key = StdIn.readString();
+         st.put(key, st.rank(key));
+      }
+      if (st.isEmpty()) return;
+      if (st.size() == 1) {
+         String key = st.max();
+         int val = st.get(key);
+         StdOut.printf(\"The only key: (%s,%d)\\n\", key, val);
+         return;
+      }
+      String minKey = st.min();
+      String maxKey = st.max();
+      StdOut.printf(\"Deleting outliers (%s,%d) and (%s,%d)\\n\", minKey, st.get(minKey), maxKey, st.get(maxKey));
+      st.deleteMax();
+      st.deleteMin();
+      if (st.isEmpty()) return;
+      StdOut.printf(\"Remaining %d items in the tree:\", st.size());
+      for (String key : st.keys()) {
+         StdOut.printf(\" (%s,%d)\", key, st.get(key));
+      }
+      StdOut.println();
+
+      for (int i = 0; i < args.length; i += 2) {
+         StdOut.printf(\"The keys between %s and %s (inclusive):\", args[i], args[i+1]);
+         for (String key : st.keys(args[i], args[i+1])) {
+            StdOut.printf(\" (%s,%d)\", key, st.get(key));
+         }
+         StdOut.println();
+      }
+   }
+}" %}
+{% set tests = [
+   {"arg": "a c seven zero sum none", "stdin": "apple banana tree yesterday love bug help coding yummy great", "out": 
+      ["Deleting outliers (apple,0) and (yummy,8)\nRemaining 8 items in the tree: (banana,1) (bug,2) (coding,3) (great,4) (help,3) (love,2) (tree,2) (yesterday,3)\nThe keys between a and c (inclusive): (banana,1) (bug,2)\nThe keys between seven and zero (inclusive): (tree,2) (yesterday,3)\nThe keys between sum and none (inclusive):\n", ""]},
+   {"arg": "a c seven zero sum none", "stdin": "apple orange", "out": 
+      ["Deleting outliers (apple,0) and (orange,1)\n", ""]},
+   {"arg": "jklfdjlka", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: You must provide an even number of command line arguments.\n\tat tester.main(tester.java:_)\n'], "stdin": "94 8 7 7 18"},
+   {"arg": "a 93 8 bh lakdjf ij", "stdin": "apple", "out": ["The only key: (apple,0)\n", ""]},
+   {"stdin": "", "arg": "", "out": ["",""]}
+]%}
+
+{% set default_command_args = "a c seven zero sum none" %}
+{% set default_stdin = "apple banana tree yesterday love bug help coding yummy great" %}
+
+{% set answer = 
+"import java.util.TreeMap;
+import java.util.Scanner;
+
+public class tester {
+   public static void main(String[] args) {
+      if (args.length % 2 == 1) {
+         throw new IllegalArgumentException(\"You must provide an even number of command line arguments.\");
+      }
+      TreeMap<String, Integer> st = new TreeMap<String, Integer>();
+      Scanner stdin = new Scanner(System.in);
+      while (stdin.hasNext()) {
+         String key = stdin.next();
+         st.put(key, st.headMap(key).size());
+      }
+      if (st.isEmpty()) return;
+      if (st.size() == 1) {
+         String key = st.firstKey();
+         int val = st.get(key);
+         System.out.printf(\"The only key: (%s,%d)\\n\", key, val);
+         return;
+      }
+      String minKey = st.firstKey();
+      String maxKey = st.lastKey();
+      System.out.printf(\"Deleting outliers (%s,%d) and (%s,%d)\\n\", minKey, st.get(minKey), maxKey, st.get(maxKey));
+      st.remove(minKey);
+      st.remove(maxKey);
+      if (st.isEmpty()) return;
+      System.out.printf(\"Remaining %d items in the tree:\", st.size());
+      for (String key : st.keySet()) {
+         System.out.printf(\" (%s,%d)\", key, st.get(key));
+      }
+      System.out.println();
+
+      for (int i = 0; i < args.length; i += 2) {
+         String orig_first = args[i];
+         String orig_sec = args[i+1];
+         if (args[i].compareTo(args[i+1]) > 0) {
+            String tmp = args[i+1];
+            args[i+1] = args[i];
+            args[i] = tmp;
+         }
+         System.out.printf(\"The keys between %s and %s (inclusive):\", orig_first, orig_sec);
+         for (String key : st.subMap(args[i], true, args[i+1], true).keySet()) {
+            System.out.printf(\" (%s,%d)\", key, st.get(key));
+         }
+         System.out.println();
+      }
+   }
+}"
+%}

@@ -1,0 +1,99 @@
+{% extends "code_pages/code_base.html" %}
+{% set class_name = "PriorityQueue" %}
+{% set api_url = url_for('show_priorityqueue') %}
+{% set algs4_content = 
+"import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
+import java.util.Comparator;
+
+public class tester {
+   // This class is made and does not rely on algs4
+   private static class Modulo implements Comparator<Integer> {
+      private final int k; // the int to consider all numbers to be modulo
+      public Modulo(Integer k) {
+         this.k = (int) k;
+      }
+
+      public int compare(Integer first, Integer second) {
+         int f = (int) first;
+         int s = (int) second;
+         if (k <= 0) return f - s;
+         int comp = (f % k) - (s % k);
+         return comp == 0 ? f - s : comp;
+      }
+   }
+
+   public static void main(String[] args) {
+      int mod = Integer.parseInt(args[0]);
+      if (mod <= 0) {
+         throw new IllegalArgumentException(\"Modulo must be a positive integer.\");
+      }
+      MinPQ<Integer> pq = new MinPQ<Integer>(new Modulo(mod));
+      while (!StdIn.isEmpty()) {
+         int i = StdIn.readInt();
+         if (i < 0) {
+            throw new IllegalArgumentException(\"Input integers must be non-negative.\");
+         }
+         pq.insert(i);
+      }
+      if (pq.isEmpty()) return;
+      StdOut.printf(\"The %d numbers in standard input sorted mod %d:\", pq.size(), mod);
+      while (!pq.isEmpty()) {
+         StdOut.printf(\" %d\", pq.delMin());
+      }
+   }
+}" %}
+
+{% set tests = [
+   {"arg": "7", "out": ["The 21 numbers in standard input sorted mod 7: 7 14 21 1 8 15 2 9 16 3 10 17 4 11 18 5 12 19 6 13 20", ""], "stdin": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21"},
+   {"arg": "-2", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: Modulo must be a positive integer.\n\tat tester.main(tester.java:_)\n'], "stdin": "94 8 7 7 18"},
+   {"arg": "19", "out": ["", 'Exception in thread &quotmain&quot java.lang.IllegalArgumentException: Input integers must be non-negative.\n\tat tester.main(tester.java:_)\n'], "stdin": "94 8 09876 -987 84 787 227 839 3 7300 7 7 18"},
+   {"arg": "8", "stdin": "765 91 8437267 9 8763 678 847 83 82 09 8432 849372 89573 82 84 624 827 37", "out": ["The 18 numbers in standard input sorted mod 8: 624 8432 9 9 82 82 83 91 827 8763 8437267 84 849372 37 765 89573 678 847", ""]}
+] %}
+{% set default_command_args = 7 %}
+{% set default_stdin = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21" %}
+
+{% set answer = 
+"import java.util.Scanner;
+import java.util.PriorityQueue;
+import java.util.Comparator;
+
+public class tester {
+   private static class Modulo implements Comparator<Integer> {
+      private final int k; // the int to consider all numbers to be modulo
+      public Modulo(Integer k) {
+         this.k = (int) k;
+      }
+
+      public int compare(Integer first, Integer second) {
+         int f = (int) first;
+         int s = (int) second;
+         if (k <= 0) return f - s;
+         int comp = (f % k) - (s % k);
+         return comp == 0 ? f - s : comp;
+      }
+   }
+
+   public static void main(String[] args) {
+      int mod = Integer.parseInt(args[0]);
+      if (mod <= 0) {
+         throw new IllegalArgumentException(\"Modulo must be a positive integer.\");
+      }
+      Scanner stdin = new Scanner(System.in);
+      PriorityQueue<Integer> pq = new PriorityQueue<Integer>(new Modulo(mod));
+      while (stdin.hasNext()) {
+         int i = stdin.nextInt();
+         if (i < 0) {
+            throw new IllegalArgumentException(\"Input integers must be non-negative.\");
+         }
+         pq.add(i);
+      }
+      if (pq.isEmpty()) return;
+      System.out.printf(\"The %d numbers in standard input sorted mod %d:\", pq.size(), mod);
+      while (!pq.isEmpty()) {
+         System.out.printf(\" %d\", pq.remove());
+      }
+   }
+}"
+%}

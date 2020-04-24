@@ -51,36 +51,34 @@
 	specified key."|safe, "args": "</code>Key <code>key"|safe},
 	{"fname": "containsKey", "type": "boolean", "description": "Returns <code>true</code> if this map contains a mapping
 	for the specified key."|safe, "args": "</code>Object <code>key"|safe}],
-	[{"fname": "delete", "type": "boolean", "description": "Removes the specified key and its associated value from this
+	[{"fname": "delete", "type": "void", "description": "Removes the specified key and its associated value from this
 	symbol table (if the key is in this symbol table; does nothing if it is not in this symbol table).", "args": "</code>Key <code>key"|safe},
 	{"fname": "remove", "type": "Value", "description": "Removes and returns the mapping for the specified key from this map if present. Returns <code>null</code> if the key was not in the map."|safe, "args": "</code>Object <code>key"|safe}],
-	[{"fname": "deleteMax", "type": "boolean", "description": "Removes the largest key.", "args": ""}, nonexistantMethod],
-	[{"fname": "deleteMin", "type": "boolean", "description": "Removes the smallest key.", "args": ""}, nonexistantMethod],
+	[{"fname": "deleteMax", "type": "void", "description": "Removes the largest key.", "args": ""}, nonexistantMethod],
+	[{"fname": "deleteMin", "type": "void", "description": "Removes the smallest key.", "args": ""}, nonexistantMethod],
+	[{"fname": "floor", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the largest key in the symbol table less than <code>key</code>."|safe},
+		{"fname": "floorKey", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the largest key in the mapping less than <code>key</code>."|safe}],
 	[{"fname": "get", "type": "Value", "description": "Returns the value associated with the specified key in this symbol
 	table, or <code>null</code> if this symbol table contains no entry for the key."|safe, "args": "</code>Key <code>key"|safe},
 	{"fname": "get", "type": "Value", "description": "Returns the value to which the specified key is mapped, or <code>null</code> if
 	this map contains no mapping for the key."|safe, "args": "</code>Object <code>key"|safe}],
 	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this symbol table is empty."|safe, "args": ""}, {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this mapping is empty."|safe, "args": ""}],
-	[{"fname": "floor", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the largest key in the symbol table less than <code>key</code>."|safe},
-		{"fname": "floorKey", "type":"Key", "args":"</code>Key <code>key"|safe, "description": "Returns the largest key in the mapping less than <code>key</code>."|safe}],
 	[{"fname": "keys", "type": "Iterable<Key>", "description": "Returns an iterable collection of the keys in this symbol table.", "args": ""},
-		{"fname": "keySet", "type": "Set<Key>", "description": "Returns a <code>Set</code> of the keys in this map"|safe, "args": ""}],
-	[{"fname": "keys", "type": "Iterable<Key>", "description": "Returns an iterable collection of the keys in this symbol table in the given range.", "args": "</code>Key <code>lo, </code>Key <code>hi"|safe},
+		{"fname": "keySet", "type": "Set<Key>", "description": "Returns a <code>Set</code> of the keys in this map."|safe, "args": ""}],
+	[{"fname": "keys", "type": "Iterable<Key>", "description": "Returns an iterable collection of the keys in this symbol table in the given range (inclusive of both <code>lo</code> and <code>hi</code>)."|safe, "args": "</code>Key <code>lo, </code>Key <code>hi"|safe},
 		{"fname": "subMap", "type":"NavigableMap <Key,Value>", "args":"</code>Key <code>fromKey, </code>boolean <code>fromInclusive, </code>Key <code>toKey, </code>boolean <code>toInclusive"|safe,
-			"description": "Returns a view of the portion of this map whose keys range from <code>fromKey</code> (inclusive if <code>fromInclusive</code> is <code>true</code>) to <code>toKey</code> (inclusive if <code>toInclusive</code> is <code>true</code>)"|safe}],
-	[{"fname": "max", "type": "boolean", "description": "Returns the largest key.", "args": ""}, {"fname": "lastKey", "type":
-	"boolean", "description": "Returns the largest key.", "args": ""}],
-	[{"fname": "min", "type": "boolean", "description": "Returns the smallest key.", "args": ""}, {"fname": "firstKey", "type":
-	"boolean", "description": "Returns the smallest key.", "args": ""}],
+			"description": "Returns a view of the portion of this map whose keys range from <code>fromKey</code> (inclusive if <code>fromInclusive</code> is <code>true</code>) to <code>toKey</code> (inclusive if <code>toInclusive</code> is <code>true</code>)."|safe}],
+	[{"fname": "max", "type": "Key", "description": "Returns the largest key.", "args": ""}, {"fname": "lastKey", "type": "Key", "description": "Returns the largest key.", "args": ""}],
+	[{"fname": "min", "type": "Key", "description": "Returns the smallest key.", "args": ""}, {"fname": "firstKey", "type": "Key", "description": "Returns the smallest key.", "args": ""}],
 	[{"fname": "put", "type": "void", "description": "Associates the specified value with the specified key in the symbol table,
 	overwriting the old value with the new value if the symbol table already contains the specified key.", "args": "</code>Key <code>key, </code>Value<code> value"|safe},
 	{"fname": "put", "type": "Value", "description": "Associates the specified value with the specified key in the symbol table, overwriting and returning the old value with the new value if the symbol table already contains the specified key, and returning <code>null</code> otherwise."|safe, "args":
 	"</code>Key <code>key, </code>Value<code> value"|safe}],
 	[{"fname": "rank", "args":"</code>Key <code>key"|safe, "type":"int", "description":"Returns the number of keys in the
-		symbol table strictly less than <code>key</code>"|safe},
+		symbol table strictly less than <code>key</code>."|safe},
 		{"fname": "headMap", "args":"</code>Key <code>key"|safe, "type":"SortedMap <Key,Value>", "description":"Returns a
-			view of the portion of this map whose keys are strictly less than <code>key</code>"|safe}],
-	[nonexistantMethod, {"fname": "replace", "type":"Value", "description": "Replaces the entry for the specified key if it is currently mapped to some value, or else <code>null</code> if the key did not exist."}],
+			view of the portion of this map whose keys are strictly less than <code>key</code>."|safe}],
+	[nonexistantMethod, {"fname": "replace", "type":"Value", "description": "Replaces the entry for the specified key if it is currently mapped to some value, or else <code>null</code> if the key did not exist."|safe}],
 	[{"fname":"select", "type":"Key", "args":"</code>int <code>rank"|safe, "description": "Return the key in the symbol table of a given <code>rank</code>."|safe}, nonexistantMethod],
 	[{"fname": "size", "type": "int", "description": "Returns the number of key-value pairs in this symbol table.",
 	"args":""},

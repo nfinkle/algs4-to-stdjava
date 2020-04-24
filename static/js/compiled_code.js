@@ -26,6 +26,9 @@ function compile_with_code(code) {
 			"code": code,
 			"is_algs4": false,
 		},
+		failure: function () {
+			alert("ERROR!")
+		},
 		success: function (result) {
 			add_execute_button = display_compile_error(result)
 			replaceFormWithPre(code, add_execute_button);
@@ -113,15 +116,15 @@ function execute_from_code(code, is_algs4, command_args, stdin) {
 		html = ""
 		const post_html = "</code></pre>";
 		if (result[0] || (!result[0] && !result[1])) {
-			const pre_output_html = "<h4>Output</h4><pre  style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-markdown match-braces\">";
-			html += pre_output_html + result[0];
+			const pre_output_html = "<h4>Output</h4><pre  style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-javastacktrace match-braces\">";
+			html += pre_output_html + result[0] + post_html;
 		}
 		if (result[1]) {
 			const pre_err_html = "<h4>Error</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-javastacktrace match-braces\">";
-			html += pre_err_html + result[1];
+			html += pre_err_html + result[1] + post_html;
 		}
 
-		document.getElementById("algs4_output").innerHTML = html + post_html;
+		document.getElementById("algs4_output").innerHTML = html;
 		Prism.highlightAll();
 	}
 	send_exec_request(code, is_algs4, command_args, stdin, ret_fn)
