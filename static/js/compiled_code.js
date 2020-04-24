@@ -165,6 +165,7 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 			ret_fn(result)
 		},
 		error: function (xhr, textStatus, error) {
+			console.log("trial = " + this.moreTries);
 			if (textStatus == 'timeout') {
 				this.moreTries--;
 				if (this.moreTries > 0) {
@@ -172,7 +173,9 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 					return;
 				}
 			}
-			alert('internal problem!');
+			$('button').prop("disabled", false)
+			document.getElementById("algs4_output").innerHTML = "<h4>Tests</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java\">There was some internal issue. Please contact the creator.</code></pre>";
+			console.log(error);
 		}
 	})
 }

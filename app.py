@@ -378,7 +378,7 @@ def show_hashset_test():
 
 @app.route('/modules/scanner/test.html')
 def show_scanner_test():
-    username = CASClient().authenticate()
+    # username = CASClient().authenticate()
     return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
 
 
