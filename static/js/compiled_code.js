@@ -118,6 +118,7 @@ function replaceFormWithPre(code, add_execute_button) {
 		tests = $('#tests-data').data().other
 		new_html += '<button type="button" class="btn btn-primary" onclick="compare_outputs()">Compare</button>'
 		new_html += '<button type="button" class="btn btn-primary" onclick="run_tests(' + tests + ')">Run Tests</button>'
+		new_html += "<button type=\"button\" class=\"btn btn-primary d-none\" data-toggle=\"modal\" data-target=\"#answer_code\" id=\"show_answer_btn\">Show Answer</button>"
 	}
 	document.getElementById("stdjava_code").innerHTML = new_html;
 }
@@ -143,7 +144,7 @@ function extract_code_from_pre(id) {
 		var four = three + tmp[i + 3];
 		var five = four + tmp[i + 4];
 		var six = five + tmp[i + 5];
-		if (five == "<span" || six == "</span" || four == "<pre" || five == "<code" || five == "</pre" || six == "</code" || three == "<h3" || four == "</h3") {
+		if (five == "<span" || six == "</span" || four == "<pre" || five == "<code" || five == "</pre" || six == "</code" || three == "<h3" || four == "</h3" || four == "<div" || five == "</div") {
 			for (; i < tmp.length && tmp[i] != ">"; i++)
 			;
 			i++;
@@ -245,14 +246,21 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 	})
 }
 
+// function show_answer() {
+// 	var answer = $('#answer').data().other
+// 	document.getElementById("stdjava_code")
+// }
+
 function run_next_test(ith_test, result, code, test_list) {
 	cur_html = document.getElementById("algs4_output").innerHTML.replace(/&gt;/g, ">").replace(/&lt;/g, "<")
 	cur_html = cur_html.split("Running")[0]; // replace Running and pre closes
 	cur_html += "Test " + ith_test + ": ";
 	const desired_output = test_list[ith_test]["out"];
 	result[1] = result[1].replace(/java:[0-9]+/g, "java:_");
+	var nonSuccess = true;
 	if (result[0].valueOf() === desired_output[0].valueOf() && result[1].valueOf() === desired_output[1].valueOf()) {
 		cur_html += "Success!\n"
+		nonSuccess = false;
 	} else if (result[0].valueOf() === desired_output[0].valueOf()) {
 		cur_html += "Correct output, but not error.\n"
 		console.log("Received:\n" + result[1]);
@@ -271,7 +279,14 @@ function run_next_test(ith_test, result, code, test_list) {
 		})
 	} else {
 		$('button').prop("disabled", false);
-		markSuccess(code, getModule)
+		markSuccess(code, getModule);
+		if (nonSuccess) {
+			document.getElementById("trials").innerHTML += "I";
+		}
+		trials = document.getElementById("trials").innerHTML.split("").length;
+		if (trials >= 5) {
+			document.getElementById("show_answer_btn").className = "btn btn-primary"
+		}
 	}
 	cur_html += "</code></pre>"
 	document.getElementById("algs4_output").innerHTML = cur_html;
