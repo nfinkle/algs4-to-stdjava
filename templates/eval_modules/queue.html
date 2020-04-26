@@ -1,0 +1,48 @@
+{% extends "eval_modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}Queue (LinkedList){% endblock %}
+{% block pageDescription %}Learn LinkedList from Queue in algs4{% endblock %}
+{% set extendType = true %}
+
+<!-- body -->
+{% block title %}LinkedList (A Queue Implementation){% endblock %}
+{% block subtitle %}A FIFO Queue; the equivalent to <code>Queue</code> in
+<code>algs4</code>{% endblock %}
+
+{% set className = ["Queue", "LinkedList"] %}
+{% set test_url = url_for('show_queue_test') %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+{% set generics = ["Item", "Item"] %}
+
+{% block description %}
+<p><code>LinkedList</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html">Javadoc
+		API</a>) has all of the same operations as <code>Queue</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/Queue.html">Javadoc
+		API</a>), but does significantly more than <code>Queue</code> in <code>algs4</code>, but can be used as a FIFO
+	queue
+	because it implements the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html">Queue</a>
+	interface. The two classes' runtimes are the same.</p>
+{% endblock %}
+
+{% set constructorCells = [  [{"description": "Initializes an empty queue.", "args": ""},{"description": "Initializes an empty linked list.", "args": ""}]
+] %}
+
+
+{% set cells = [ 
+	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the items from the linked list.", "args":""}],
+	[{"fname": "dequeue", "type": "boolean", "description": "Removes and returns the item on this queue that was least recently added, or throws a <code>NoSuchElementException</code> if this queue is empty."|safe, "args": ""},
+		{"fname": "remove", "type": "boolean", "args": "",
+		"description": "Removes and returns the first element of this linked list, or throws a <code>NoSuchElementException</code> if this queue is empty."|safe}],
+	[{"fname": "enqueue", "type": "void", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to this queue."},
+		{"fname": "add", "type": "boolean", "args":"</code>Item <code>item"|safe, "description": "Adds the specified item to this linked list (at the end of the list) in constant time."}],
+	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this queue is empty."|safe, "args": ""}, {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this linked list is empty."|safe, "args": ""}],
+	[{"fname": "iterator", "type":"Iterator<Item>", "args":"", "description":"Returns an iterator over the items in this
+		queue in FIFO order."},
+		{"fname": "iterator", "type":"Iterator<Item>", "args":"", "description":"Returns an iterator over the items in this linked list in FIFO order."}],
+	[{"fname": "peek", "type": "Item", "description": "Returns (but does not remove) the item on this queue that was least recently added, or throws a <code>NoSuchElementException</code> if this queue is empty."|safe, "args": ""},
+		{"fname": "peek", "type": "Item", "args": "",
+		"description": "Returns (but does not remove) the first element of this linked list or <code>null</code> if this queue is empty."|safe}],
+	[{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this queue."},
+		{"fname":"size", "type":"int", "args":"", "description":"Returns the number of items in this linked list."}]
+]  %}

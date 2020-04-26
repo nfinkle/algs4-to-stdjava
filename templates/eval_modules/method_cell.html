@@ -1,0 +1,21 @@
+{% if extendType %}
+{% set colWidth1 = "col-5" %}
+{% set colWidth2 = "col-7" %}
+{% else %}
+{% set colWidth1 = "col-4" %}
+{% set colWidth2 = "col-8" %}
+{% endif %}
+
+<div class="row">
+	{% if not data["empty"] %}
+	<div class={{colWidth1}}>
+		<p><code>{{ data["type"] }}</code></p>
+	</div>
+	<div class={{colWidth2}}>
+		<code>{% if not constructors %}
+			{{ theClass }}.
+			{%- endif %}{{ data["fname"] }}({{ data["args"] }})</code>
+		<p style="font-size: 12px">{{ data["description"] }}</p>
+	</div>
+	{% endif %}
+</div>

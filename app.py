@@ -86,6 +86,8 @@ def show_scanner():
     user = _getUser(CASClient().authenticate())
     user.scanner_viewed = True
     db.session.commit()
+    if user.is_eval:
+        return render_template("eval_modules/scanner.html", is_about=False, constructors=True)
     return render_template('modules/scanner.html', is_about=False, constructors=True)
 
 
@@ -102,6 +104,8 @@ def show_hashmap():
     user = _getUser(CASClient().authenticate())
     user.hashmap_viewed = True
     db.session.commit()
+    if user.is_eval:
+        return render_template("eval_modules/hashmap.html", is_about=False, constructors=True)
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
@@ -134,6 +138,8 @@ def show_queue():
     user = _getUser(CASClient().authenticate())
     user.queue_viewed = True
     db.session.commit()
+    if user.is_eval and user.is_groupA:
+        return render_template("eval_modules/queue.html", is_about=False, constructors=True)
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
@@ -427,7 +433,6 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
     return out_contents, err_contents
 
 
-
 @app.route('/modules/stack/test.html')
 def show_stack_test():
     user = _getUser(CASClient().authenticate())
@@ -545,6 +550,8 @@ class DB_Entry(db.Model):
     queue_test_viewed = db.Column(db.Boolean)
     queue_test_completed = db.Column(db.Boolean)
     queue_test_code = db.Column(db.String)
+    is_eval = db.Column(db.Boolean)
+    is_groupA = db.Column(db.Boolean)
 
     def __init__(self, username):
         empty_class = """// standard java imports here
@@ -590,6 +597,8 @@ public class tester {
         self.queue_test_viewed = False
         self.queue_test_completed = False
         self.queue_test_code = empty_class
+        self.is_eval = False
+        self.is_groupA = False
 
 
 def _getUser(username: str) -> DB_Entry:
@@ -600,6 +609,24 @@ def _getUser(username: str) -> DB_Entry:
         db.session.commit()
         q = DB_Entry.query.filter(DB_Entry.netid == username).one()
     return q
+
+
+@app.route('/mark_eval_groupA')
+def mark_eval_groupA():
+    user = _getUser(CASClient().authenticate())
+    user.is_eval = True
+    user.is_groupA = True
+    db.session.commit()
+    return show_index()
+
+
+@app.route('/mark_eval_groupB')
+def mark_eval_groupB():
+    user = _getUser(CASClient().authenticate())
+    user.is_eval = True
+    user.is_groupA = False
+    db.session.commit()
+    return show_index()
 
 
 @app.errorhandler(404)

@@ -1,0 +1,7 @@
+<div class="col-12">
+	{% if not "empty" in data %}
+	<code>
+		{{ className[i] }}{% if generics %}&lt{{ generics[i] }}&gt{% endif %}({{ data["args"] }})</code>
+	<p style="font-size: 12px">{{ data["description"] }}</p>
+	{% endif %}
+</div>

@@ -1,15 +1,15 @@
-	<div class="col-sm-12 col-md-6">
-		<div class="row">
-			<div class="col-12">
-				{% if "empty" in data %}
-				{% if not small %}
-				<div class="flex-container text-center">N/A</div>
-				{% endif %}
-				{% else %}
-				<code>
-					{{ className[i] }}{% if generics %}&lt{{ generics[i] }}&gt{% endif %}({{ data["args"] }})</code>
-				<p style="font-size: 12px">{{ data["description"] }}</p>
-				{% endif %}
-			</div>
+<div class="col-sm-12 col-md-6">
+	<div class="row">
+		<div class="col-12">
+			{% if "empty" in data %}
+			{% if not small %}
+			<div class="flex-container text-center">N/A</div>
+			{% endif %}
+			{% else %}
+			<code>
+				{{ className[i] }}{% if generics %}&lt{{ generics[i] }}&gt{% endif %}({{ data["args"] }})</code>
+			<p style="font-size: 12px">{{ data["description"] }}</p>
+			{% endif %}
 		</div>
 	</div>
+</div>

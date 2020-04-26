@@ -1,0 +1,66 @@
+{% extends "eval_modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}HashMap{% endblock %}
+
+{% block pageDescription %}Learn HashMap from SeparateChainingHashST in algs4{% endblock %}
+{% set extendType = true %}
+<!-- body -->
+{% block title %}HashMap{% endblock %}
+{% block subtitle %}An efficient dictionary (symbol table); the equivalent to <code>SeparateChainingHashST</code> in
+<code>algs4</code>{% endblock %}
+{% set test_url = url_for('show_hashmap_test') %}
+
+{% set className = ["SeparateChainingHashST", "HashMap"] %}
+{% set generics = ["Key,Value", "Key,Value"] %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+{% block description %}
+<p><code>HashMap</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html">Javadoc
+		API</a>) works almost
+	identically
+	to <code>SeparateChainingHashST</code> (<a
+		href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/SeparateChainingHashST.html">Javadoc
+		API</a>).</p>
+<p>The main
+	difference between <code>SeparateChainingHashST</code> and <code>HashMap</code> is the difference in the names of
+	the functions. The
+	implementation of <code>HashMap</code> also uses a <code>TreeMap</code> (<a href="{{ url_for('show_treemap') }}">the
+		equivalent of a Left-Leaning Red-Black BSTs</a>) instead of a linked lists for each bucket in
+	the hashtable that get too large to improve lookup time.</p>
+{% endblock %}
+
+
+{% set constructorCells = [  [{"description": "Initializes an empty symbol table with the default initial capacity (4)."|safe, "args": ""},{"description": "Initializes an empty <code>HashMap</code> with the default initial capacity (16)."|safe, "args": ""}],
+[{"description": "Initializes an empty symbol table with the specified capacity."|safe, "args": "</code>int
+<code>capacity"|safe},{"description": "Initializes an empty <code>HashMap</code> with the specified capacity."|safe,
+	"args": "</code>int <code>capacity"|safe}]
+] %}
+
+
+{% set cells = [  
+	[nonexistantMethod,{"fname": "clear", "type":"void", "description": "Removes all of the mappings from this map.",
+	"args":""}],
+	[{"fname": "contains", "type": "boolean", "description": "Returns <code>true</code> if this symbol table contains the
+	specified key."|safe, "args": "</code>Key <code>key"|safe},
+	{"fname": "containsKey", "type": "boolean", "description": "Returns <code>true</code> if this map contains a mapping
+	for the
+	specified key."|safe, "args":
+	"</code>Object <code>key"|safe}],
+	[{"fname": "delete", "type": "boolean", "description": "Removes the specified key and its associated value from this
+	symbol table (if the key is in this symbol table; does nothing if it is not in this symbol table).", "args": "</code>Key <code>key"|safe},
+	{"fname": "remove", "type": "Value", "description": "Removes and returns the mapping for the specified key from this map if present. Returns <code>null</code> if the key was not in the map."|safe, "args": "</code>Object <code>key"|safe}],
+	[{"fname": "get", "type": "Value", "description": "Returns the value associated with the specified key in this symbol
+	table, or <code>null</code> if this symbol table contains no entry for the key."|safe, "args": "</code>Key <code>key"|safe},
+	{"fname": "get", "type": "Value", "description": "Returns the value to which the specified key is mapped, or <code>null</code> if
+	this map contains no mapping for the key."|safe, "args": "</code>Object <code>key"|safe}],
+	[{"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this symbol table is empty."|safe, "args": ""}, {"fname": "isEmpty", "type": "boolean", "description": "Returns <code>true</code> if this mapping is empty."|safe, "args": ""}],
+	[{"fname": "keys", "type": "Iterable<Key>", "description": "Returns an iterable collection of the keys in this symbol table.", "args": ""}, {"fname": "keySet", "type": "Set<Key>", "description": "Returns a <code>Set</code> of the keys in this map."|safe, "args": ""}],
+	[{"fname": "put", "type": "void", "description": "Associates the specified value with the specified key in the symbol table,
+	overwriting the old value with the new value if the symbol table already contains the specified key.", "args": "</code>Key <code>key, </code>Value<code> value"|safe},
+	{"fname": "put", "type": "Value", "description": "Associates the specified value with the specified key in the symbol table, overwriting and returning the old value with the new value if the symbol table already contains the specified key, and returning <code>null</code> otherwise."|safe, "args":
+	"</code>Key <code>key, </code>Value<code> value"|safe}],
+	[nonexistantMethod, {"fname": "replace", "type":"Value", "description": "Replaces the entry for the specified key if it is currently mapped to some value, or else <code>null</code> if the key did not exist."|safe}],
+	[{"fname": "size", "type": "int", "description": "Returns the number of key-value pairs in this symbol table.",
+		"args":""},
+		{"fname": "size", "type": "int", "description": "Returns the number of key-value mappings in this map.", "args": ""}]
+]  %}

@@ -1,0 +1,85 @@
+{% extends "eval_modules/module_base.html" %}
+
+<!-- head -->
+{% block pageTitle %}Scanner{% endblock %}
+
+{% block pageDescription %}Learn Scanner from (Std)In in algs4{% endblock %}
+
+<!-- body -->
+{% block title %}Scanner{% endblock %}
+{% block subtitle %}Reading input; the equivalent to <code>In</code> (similar to <code>StdIn</code>) in
+<code>algs4</code>{% endblock %}
+
+{% block description %}
+<p><code>Scanner</code> (<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html">Javadoc
+		API</a>) works almost
+	identically
+	to <code>In</code> (<a href="https://algs4.cs.princeton.edu/code/javadoc/edu/princeton/cs/algs4/In.html">Javadoc
+		API</a>).
+
+	For those who have not used <code>In</code> before, it is used almost exactly as <code>StdIn</code> is used, except
+	that one must instantiate an <code>In</code> object with <code>System.in</code> as the stream from which the
+	<code>In</code> object will read and then call all methods as instance methods of the <code>In</code> object instead
+	of as static methods of the <code>StdIn</code> class. Unlike <code>StdIn</code>, however, an <code>In</code> object
+	should be closed.</p>
+<p>The
+	differences between <code>Scanner</code> and <code>StdIn</code>/<code>In</code> are only in the available
+	constructors and instance
+	methods. Each set of equivalent methods functions in the same way in both classes.</p>
+{% endblock %}
+
+{% set className = ["In", "Scanner"] %}
+{% set test_url = url_for('show_scanner_test') %}
+{% set nonexistantMethod = {"fname":"", "type": "N/A", "description":"", "empty": True} %}
+
+{% set fileConstructor = {"args": "</code>File <code>source"|safe, "description": "Initializes an input stream from a file."|safe} %}
+{% set constructorCells =  [  [{"description": "Initializes an input stream from <code>stdin</code>."|safe, "args": ""}, {"description": "Initializes an input stream from <code>stdin</code>."|safe, "args": "System.in"}],
+[fileConstructor, fileConstructor],
+[{"args": "</code>String <code>filename"|safe, "description": "Initializes an input stream from a filename."}, {"args":
+	"</code>String <code>source"|safe, "description": "Initializes an input stream from the String source."}]
+] %}
+
+
+{% set closeMethod = {"fname": "close", "type": "void", "description": "Close this input stream.", "args": ""} %}
+{% set cells = [  
+	[closeMethod, closeMethod],
+	[{"fname":"isEmpty", "type":"boolean", "description": "Return <code>true</code> if input stream is empty (except possibly
+	whitespace)."|safe, "args":""}, {"fname": "hasNext", "type":"boolean", "description":"Return <code>false</code> if input stream is empty."|safe}]
+]  %}
+
+<!-- hasNext methods -->
+{% for builtInType in ["boolean", "double", "float", "int", "line", "long", "short"] %}
+{% set hasNext =  
+	[nonexistantMethod, {"fname":"hasNext"+ builtInType[0]|upper + builtInType[1:], "args":"", "type":"boolean",
+	"description": "Returns <code>true</code> if the
+	next token can be interpreted as a "|safe + builtInType + " value using the <code>next"|safe +
+	builtInType[0]|upper + builtInType[1:] + "()</code> method."|safe}] 
+%}
+{% set cells = cells.append(hasNext) %}
+{% endfor %}
+
+<!-- next/read Methods -->
+{% for i in [0] %}
+{% set item = [{"fname": "readAll", "args":"", "description":"Reads and returns the remainder of this input stream, as a string.", "type":"String"}, nonexistantMethod] %}
+{% set cells = cells.append(item) %}
+{% endfor %}
+
+{% for builtInType in ["boolean", "char", "double", "float", "int", "line", "long", "short"] %}
+{% set typeDescription = "Reads the next token, parses it as a " + builtInType + ", and returns the " + builtInType + "." %}
+{% set upped = builtInType[0]|upper + builtInType[1:] %}
+{% set item =  
+	[{"fname":"read" + upped, "type": builtInType, "args": "", "description":typeDescription},
+	{"fname":"next" + upped, "args":"", "type":builtInType, "description": typeDescription}]
+%}
+{% if builtInType == "boolean" %}
+{% set item = [{"fname":"read" + upped, "type": builtInType, "args": "", "description":"Reads the next token from this input stream, parses it as a boolean (interpreting either 'true' or '1' as <code>true</code>, and either 'false' or '0' as <code>false</code>), and returns the boolean.
+"|safe}, {"fname":"next" + upped, "type": builtInType, "args": "", "description":"Reads the next token from this input stream, parses it as a boolean (interpreting 'true' or 'True' as
+<code>true</code> and all else as <code>false</code>), and returns the boolean."|safe}] %}
+{% elif builtInType == "char" %}
+{% set item = [{"fname":"read" + upped, "type": builtInType, "args": "", "description":typeDescription}, nonexistantMethod] %}
+{% elif builtInType == "line" %}
+{% set lineThing = {"fname":"read" + upped, "type": "String", "args": "", "description":"Reads and returns the next line in this input stream."} %}
+{% set item = [lineThing, lineThing] %}
+{% endif %}
+{% set cells = cells.append(item) %}
+{% endfor %}
