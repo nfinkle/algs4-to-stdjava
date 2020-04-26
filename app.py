@@ -75,72 +75,72 @@ def show_index():
 
 @app.route('/modules/system-out/APIs.html')
 def show_system_out():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.system_out_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.system_out_viewed = True
     db.session.commit()
     return render_template('modules/system-out.html', is_about=False, constructors=False)
 
 
 @app.route('/modules/scanner/APIs.html')
 def show_scanner():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.scanner_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.scanner_viewed = True
     db.session.commit()
     return render_template('modules/scanner.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/printwriter/APIs.html')
 def show_printwriter():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.printwriter_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.printwriter_viewed = True
     db.session.commit()
     return render_template('modules/printwriter.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/hashmap/APIs.html')
 def show_hashmap():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.hashmap_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.hashmap_viewed = True
     db.session.commit()
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/hashset/APIs.html')
 def show_hashset():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.hashset_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.hashset_viewed = True
     db.session.commit()
     return render_template('modules/hashset.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/treemap/APIs.html')
 def show_treemap():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.treemap_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.treemap_viewed = True
     db.session.commit()
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/priorityqueue/APIs.html')
 def show_priorityqueue():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.priorityqueue_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.priorityqueue_viewed = True
     db.session.commit()
     return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/queue/APIs.html')
 def show_queue():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.queue_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.queue_viewed = True
     db.session.commit()
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/stack/APIs.html')
 def show_stack():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.stack_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.stack_viewed = True
     db.session.commit()
     return render_template('modules/stack.html', is_about=False, constructors=True)
 
@@ -248,7 +248,6 @@ def mark_success():
     code = request.args["code"]
     username = request.args["username"]
     user = _getUser(username)
-    print("got great stuff")
     print("Marking success for user", user.netid,
           "and module", module, ", and the code:")
     print(code)
@@ -428,84 +427,77 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
     return out_contents, err_contents
 
 
-empty_class = """// standard java imports here
-public class tester {
-   public static void main(String[] args) {
-      throw new UnsupportedOperationException(\"Unimplemented method.\");
-   }
-}"""
-
 
 @app.route('/modules/stack/test.html')
 def show_stack_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.stack_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.stack_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/stack.html", is_about=False, stdjava_code=user.stack_test_code, username=user.netid)
 
 
 @app.route('/modules/priorityqueue/test.html')
 def show_priorityqueue_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.priorityqueue_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.priorityqueue_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/priorityqueue.html", is_about=False, stdjava_code=user.priorityqueue_test_code, username=user.netid)
 
 
 @app.route('/modules/queue/test.html')
 def show_queue_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.queue_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.queue_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/queue.html", is_about=False, stdjava_code=user.queue_test_code, username=user.netid)
 
 
 @app.route('/modules/treemap/test.html')
 def show_treemap_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.treemap_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.treemap_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/treemap.html", is_about=False, stdjava_code=user.treemap_test_code, username=user.netid)
 
 
 @app.route('/modules/hashmap/test.html')
 def show_hashmap_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.hashmap_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.hashmap_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/hashmap.html", is_about=False, stdjava_code=user.hashmap_test_code, username=user.netid)
 
 
 @app.route('/modules/printwriter/test.html')
 def show_printwriter_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.printwriter_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.printwriter_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/printwriter.html", is_about=False, stdjava_code=user.printwriter_test_code, username=user.netid)
 
 
 @app.route('/modules/system-out/test.html')
 def show_system_out_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.system_out_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.system_out_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/system-out.html", is_about=False, stdjava_code=user.system_out_test_code, username=user.netid)
 
 
 @app.route('/modules/hashset/test.html')
 def show_hashset_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.hashset_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.hashset_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/hashset.html", is_about=False, stdjava_code=user.hashset_test_code, username=user.netid)
 
 
 @app.route('/modules/scanner/test.html')
 def show_scanner_test():
-    user_entry = _getUser(CASClient().authenticate())
-    user_entry.scanner_test_viewed = True
+    user = _getUser(CASClient().authenticate())
+    user.scanner_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
+    return render_template("code_pages/scanner.html", is_about=False, stdjava_code=user.scanner_test_code, username=user.netid)
 
 
 @app.route('/about.html')
@@ -555,43 +547,49 @@ class DB_Entry(db.Model):
     queue_test_code = db.Column(db.String)
 
     def __init__(self, username):
+        empty_class = """// standard java imports here
+public class tester {
+   public static void main(String[] args) {
+      throw new UnsupportedOperationException(\"Unimplemented method.\");
+   }
+}"""
         self.netid = username
         self.system_out_viewed = False
         self.system_out_test_viewed = False
         self.system_out_test_completed = False
-        self.system_out_test_code = ""
+        self.system_out_test_code = empty_class
         self.scanner_viewed = False
         self.scanner_test_viewed = False
         self.scanner_test_completed = False
-        self.scanner_test_code = ""
+        self.scanner_test_code = empty_class
         self.printwriter_viewed = False
         self.printwriter_test_viewed = False
         self.printwriter_test_completed = False
-        self.printwriter_test_code = ""
+        self.printwriter_test_code = empty_class
         self.hashmap_viewed = False
         self.hashmap_test_viewed = False
         self.hashmap_test_completed = False
-        self.hashmap_test_code = ""
+        self.hashmap_test_code = empty_class
         self.hashset_viewed = False
         self.hashset_test_viewed = False
         self.hashset_test_completed = False
-        self.hashset_test_code = ""
+        self.hashset_test_code = empty_class
         self.treemap_viewed = False
         self.treemap_test_viewed = False
         self.treemap_test_completed = False
-        self.treemap_test_code = ""
+        self.treemap_test_code = empty_class
         self.priorityqueue_viewed = False
         self.priorityqueue_test_viewed = False
         self.priorityqueue_test_completed = False
-        self.priorityqueue_test_code = ""
+        self.priorityqueue_test_code = empty_class
         self.stack_viewed = False
         self.stack_test_completed = False
-        self.stack_test_code = ""
+        self.stack_test_code = empty_class
         self.stack_test_viewed = False
         self.queue_viewed = False
         self.queue_test_viewed = False
         self.queue_test_completed = False
-        self.queue_test_code = ""
+        self.queue_test_code = empty_class
 
 
 def _getUser(username: str) -> DB_Entry:
