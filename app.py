@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, request, render_template, url_for, jsonify
+from flask import Flask, request, render_template, url_for, jsonify, abort
 import worker
 import rq
 import time
@@ -240,6 +240,83 @@ def run_code():
 def stripErrLineNum(err):
     split = re.split(".java:[0-9]+", err)
     return '.java:_'.join(split)
+
+
+@app.route('/mark_test_success')
+def mark_success():
+    print("trying to mark success")
+    module = request.args["module"]
+    code = request.args["code"]
+    print("got good stuff")
+    user = _getUser(CASClient().authenticate())
+    print("got great stuff")
+    print("Marking success for user", user.netid,
+          "and module", module, ", and the code:")
+    print(code)
+    _save_code(user, code, module)
+    _mark_success_with_user_code(user, code, module)
+    db.session.commit()
+    return "Success!"
+
+
+def _mark_success_with_user_code(user, code, module):
+    if module == 'System.out/err':
+        user.system_out_test_completed = True
+    elif module == 'Scanner':
+        user.scanner_test_completed = True
+    elif module == 'PrintWriter':
+        user.printwriter_test_completed = True
+    elif module == 'HashMap':
+        user.hashmap_test_completed = True
+    elif module == 'HashSet':
+        user.hashset_test_completed = True
+    elif module == 'TreeMap':
+        user.treemap_test_completed = True
+    elif module == 'LinkedList':
+        user.queue_test_completed = True
+    elif module == 'PriorityQueue':
+        user.priorityqueue_test_completed = True
+    elif module == 'Stack':
+        user.stack_test_completed = True
+    else:
+        abort(404)
+
+
+def _save_code(user, code, module):
+    if module == 'System.out/err':
+        user.system_out_test_code = code
+    elif module == 'Scanner':
+        user.scanner_test_code = code
+    elif module == 'PrintWriter':
+        user.printwriter_test_code = code
+    elif module == 'HashMap':
+        user.hashmap_test_code = code
+    elif module == 'HashSet':
+        user.hashset_test_code = code
+    elif module == 'TreeMap':
+        user.treemap_test_code = code
+    elif module == 'LinkedList':
+        user.queue_test_code = code
+    elif module == 'PriorityQueue':
+        user.priorityqueue_test_code = code
+    elif module == 'Stack':
+        user.stack_test_code = code
+    else:
+        abort(404)
+
+
+@app.route('/save_code')
+def save_code():
+    print("IN HERE!")
+    print(request.args)
+    module = request.args["module"]
+    code = request.args["code"]
+    user = _getUser(CASClient().authenticate())
+    print("Saving for user", user.netid, "and module", module, "the code:")
+    print(code)
+    _save_code(user, code, module)
+    db.session.commit()
+    return "Success!"
 
 
 @app.route('/get_diff')
@@ -520,12 +597,9 @@ class DB_Entry(db.Model):
         self.queue_test_code = ""
 
 
-# db.create_all()
-
-
 def _getUser(username: str) -> DB_Entry:
+    print("finding user")
     q = DB_Entry.query.filter(DB_Entry.netid == username).one_or_none()
-    print("entry = ", q)
     if not q:
         print("Creating new user!")
         db.session.add(DB_Entry(username))

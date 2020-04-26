@@ -15,6 +15,54 @@ function display_compile_error(compile_err) {
 	return !compile_err;
 }
 
+function saveCode(code, mod) {
+	$.ajax({
+		url: "/save_code",
+		async: true,
+		cache: false,
+		timeout: 30000,
+		moreTries: 3,
+		data: {
+			"module": mod,
+			"code": code
+		},
+		error: function (xhr, textStatus, error) {
+			console.log("trial = " + this.moreTries);
+			if (textStatus == 'timeout') {
+				this.moreTries--;
+				if (this.moreTries > 0) {
+					$.ajax(this);
+					return;
+				}
+			}
+		}
+	})
+}
+
+function markSuccess(code, mod) {
+	$.ajax({
+		url: "/mark_test_success",
+		async: true,
+		cache: false,
+		timeout: 30000,
+		moreTries: 3,
+		data: {
+			"code": code,
+			"module": mod
+		},
+		error: function (xhr, textStatus, error) {
+			console.log("trial = " + this.moreTries);
+			if (textStatus == 'timeout') {
+				this.moreTries--;
+				if (this.moreTries > 0) {
+					$.ajax(this);
+					return;
+				}
+			}
+		}
+	})
+}
+
 function compile_with_code(code) {
 	$('button').prop("disabled", true)
 	document.getElementById("algs4_output").innerHTML = "";
@@ -22,18 +70,28 @@ function compile_with_code(code) {
 		url: "/compile_code",
 		async: true,
 		cache: false,
+		timeout: 5000,
+		moreTries: 3,
 		data: {
 			"code": code,
 			"is_algs4": false,
 		},
-		failure: function () {
-			alert("ERROR!")
+		error: function (xhr, textStatus, error) {
+			console.log("trial = " + this.moreTries);
+			if (textStatus == 'timeout') {
+				this.moreTries--;
+				if (this.moreTries > 0) {
+					$.ajax(this);
+					return;
+				}
+			}
 		},
 		success: function (result) {
 			add_execute_button = display_compile_error(result)
 			replaceFormWithPre(code, add_execute_button);
 			Prism.highlightAll();
 			$('button').prop("disabled", false)
+			saveCode(code, getModule())
 		}
 	})
 }
@@ -68,6 +126,10 @@ function getString(arr, start, n) {
 		newString += arr[i + start];
 	}
 	return newString;
+}
+
+function getModule() {
+	return $('#module').data().other
 }
 
 function extract_code_from_pre(id) {
@@ -146,6 +208,7 @@ function execute() {
 	var args = document.getElementById("command_args").value;
 	var stdin = document.getElementById("stdin").value;
 	execute_from_code(code, false, args, stdin);
+	saveCode(code, getModule())
 }
 
 function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
@@ -206,6 +269,7 @@ function run_next_test(ith_test, result, code, test_list) {
 		})
 	} else {
 		$('button').prop("disabled", false);
+		markSuccess(code, getModule)
 	}
 	cur_html += "</code></pre>"
 	document.getElementById("algs4_output").innerHTML = cur_html;
@@ -264,7 +328,8 @@ function compare_outputs() {
 	var stdin = document.getElementById("stdin").value;
 	ret_fn = function (algs4_result) {
 		send_exec_request(stdjava, false, args, stdin, function (snd) {
-			show_diff(algs4_result, snd)
+			show_diff(algs4_result, snd);
+			saveCode(stdjava, getModule())
 		})
 	}
 	send_exec_request(algs4, true, args, stdin, ret_fn)
