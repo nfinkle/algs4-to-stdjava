@@ -526,7 +526,6 @@ class DB_Entry(db.Model):
 def _getUser(username: str) -> DB_Entry:
     q = DB_Entry.query.filter(DB_Entry.netid == username).one_or_none()
     print("entry = ", q)
-    print("type of entry = ", type(q))
     if not q:
         print("Creating new user!")
         db.session.add(DB_Entry(username))
