@@ -1,3 +1,7 @@
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, Boolean
+from sqlalchemy.orm import sessionmaker
 from flask import Flask, request, render_template, url_for, jsonify
 import worker
 import rq
@@ -31,10 +35,36 @@ def show_home():
     return render_template('home.html', is_about=False)
 
 
+def _getProgress(user):
+    progress = {}
+
+    def getPercentage(viewed, test_viewed, test_completed):
+        return (viewed + test_viewed + test_completed * 2) * 25
+    progress['system_out'] = getPercentage(
+        user.system_out_viewed, user.system_out_test_viewed, user.system_out_test_completed)
+    progress['scanner'] = getPercentage(
+        user.scanner_viewed, user.scanner_test_viewed,  user.scanner_test_completed)
+    progress['printwriter'] = getPercentage(
+        user.printwriter_viewed, user.printwriter_test_viewed,  user.printwriter_test_completed)
+    progress['hashmap'] = getPercentage(
+        user.hashmap_viewed, user.hashmap_test_viewed,  user.hashmap_test_completed)
+    progress['hashset'] = getPercentage(
+        user.hashset_viewed, user.hashset_test_viewed,  user.hashset_test_completed)
+    progress['treemap'] = getPercentage(
+        user.treemap_viewed, user.treemap_test_viewed,  user.treemap_test_completed)
+    progress['queue'] = getPercentage(
+        user.queue_viewed, user.queue_test_viewed,  user.queue_test_completed)
+    progress['priorityqueue'] = getPercentage(
+        user.priorityqueue_viewed, user.priorityqueue_test_viewed,  user.priorityqueue_test_completed)
+    progress['stack'] = getPercentage(
+        user.stack_viewed, user.stack_test_viewed,  user.stack_test_completed)
+    return progress
+
+
 @app.route('/index.html')
 def show_index():
-    username = CASClient().authenticate()
-    progress = {"print": 50, "scanner": 28, "else": 15}
+    user = _getUser(CASClient().authenticate())
+    progress = _getProgress(user)
     progressBars = {}
     for key, val in progress.items():
         progressBars[key] = "<div class='progress-bar' role='progressbar' style='width: " + \
@@ -43,69 +73,81 @@ def show_index():
     return render_template('index.html', is_about=False, progressBars=progressBars)
 
 
-@app.route('/modules/module.html')
-def show_module():
-    username = CASClient().authenticate()
-    return render_template('modules/module.html', is_about=False, constructors=True)
-
-
 @app.route('/modules/system-out/APIs.html')
 def show_system_out():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.system_out_viewed = True
+    session.commit()
     return render_template('modules/system-out.html', is_about=False, constructors=False)
 
 
 @app.route('/modules/scanner/APIs.html')
 def show_scanner():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.scanner_viewed = True
+    session.commit()
     return render_template('modules/scanner.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/printwriter/APIs.html')
 def show_printwriter():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.printwriter_viewed = True
+    session.commit()
     return render_template('modules/printwriter.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/hashmap/APIs.html')
 def show_hashmap():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.hashmap_viewed = True
+    session.commit()
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/hashset/APIs.html')
 def show_hashset():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.hashset_viewed = True
+    session.commit()
     return render_template('modules/hashset.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/treemap/APIs.html')
 def show_treemap():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.treemap_viewed = True
+    session.commit()
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/priorityqueue/APIs.html')
 def show_priorityqueue():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.priorityqueue_viewed = True
+    session.commit()
     return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/queue/APIs.html')
 def show_queue():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.queue_viewed = True
+    session.commit()
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
 @app.route('/modules/stack/APIs.html')
 def show_stack():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.stack_viewed = True
+    session.commit()
     return render_template('modules/stack.html', is_about=False, constructors=True)
 
 
 @app.route('/about_auth.html')
 def show_about_auth():
-    username = CASClient().authenticate()
+    CASClient().authenticate()
     return render_template('about_auth.html', is_about=True)
 
 
@@ -143,7 +185,6 @@ def _initSecurity(dir_path: str, algs4_path="") -> (str, str):
             algs4_path + "\", \"read\";"
     policy += "\n};"
     with open(dir_path + "/" + policy_name, "w") as f:
-        print(policy)
         f.write(policy)
     return policy_name
 
@@ -175,7 +216,6 @@ def _execute_with_dir(class_name: str, dir_path: str, is_algs4: bool, command_ar
         classpathOption + class_name + " " + command_args + pipingAddition
     # full_command = "cd " + dir_path + "; java " + securityOption + " -cp " + \
     #     java_CLASSPATH + " " + class_name + " " + command_args + pipingAddition
-    print(full_command)
     os.system(full_command)
     err = open(stderrPath)
     out = open(stdoutPath)
@@ -191,7 +231,6 @@ def run_code():
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     command_args = request.args.get("args", "")
     stdin = request.args.get("stdin", "")
-    print(stdin)
     result = _execute_code(text, is_algs4, command_args, stdin)
     if result is None:
         return jsonify("", "Timeout error. Code took too long to run.")
@@ -219,8 +258,6 @@ def get_diff():
 def _get_diff_command_line(algs4: str, stdjava: str) -> str:
     import os
     import tempfile
-    print(algs4)
-    print(stdjava)
     dir_path = tempfile.mkdtemp()
     algs4_path = dir_path + "/algs4.txt"
     stdjava_path = dir_path + "/stdjava.txt"
@@ -232,7 +269,6 @@ def _get_diff_command_line(algs4: str, stdjava: str) -> str:
     with open(out_path) as out:
         out_contents = out.read()
     os.system("rm -r " + dir_path)
-    print(out_contents)
     return out_contents
 
 
@@ -296,7 +332,6 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
         return "", "A Java program must have a class and a class name."
 
     dir_path = tempfile.mkdtemp()
-    print(dir_path)
     classPath = dir_path + "/" + class_name
     stdinPath = dir_path + "/in.txt"
     print("code = ", code_text)
@@ -308,7 +343,6 @@ def _run_code_in_command_line(code_text: str, is_algs4: bool, command_args: str,
     out_contents = ""
     err_contents = _compile_with_dir(classPath, dir_path, is_algs4)
     if not err_contents:
-        print("Compiled successfully.")
         with open(stdinPath, "w") as stdin_file:
             stdin_file.write(stdin)
         out_contents, err_contents = _execute_with_dir(
@@ -330,61 +364,145 @@ public class tester {
 
 @app.route('/modules/stack/test.html')
 def show_stack_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.stack_test_viewed = True
+    session.commit()
     return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class)
 
 
 @app.route('/modules/priorityqueue/test.html')
 def show_priorityqueue_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.priorityqueue_test_viewed = True
+    session.commit()
     return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/queue/test.html')
 def show_queue_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.queue_test_viewed = True
+    session.commit()
     return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/treemap/test.html')
 def show_treemap_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.treemap_test_viewed = True
+    session.commit()
     return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/hashmap/test.html')
 def show_hashmap_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.hashmap_test_viewed = True
+    session.commit()
     return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/printwriter/test.html')
 def show_printwriter_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.printwriter_test_viewed = True
+    session.commit()
     return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/system-out/test.html')
 def show_system_out_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.system_out_test_viewed = True
+    session.commit()
     return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/hashset/test.html')
 def show_hashset_test():
-    username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.hashset_test_viewed = True
+    session.commit()
     return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/modules/scanner/test.html')
 def show_scanner_test():
-    # username = CASClient().authenticate()
+    user_entry = _getUser(CASClient().authenticate())
+    user_entry.scanner_test_viewed = True
+    session.commit()
     return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
 
 
 @app.route('/about.html')
 def show_about_unauth():
     return render_template('about_unauth.html', is_about=True)
+
+
+db_string = "postgres://dhfyndizkunwdb:3e8a0afa903577cb6caaa7d733d53d0822a6436121c3ebd3e387ba819cff8cdc@ec2-34-233-186-251.compute-1.amazonaws.com:5432/d872d2k7b5gfim"
+
+db = create_engine(db_string)
+base = declarative_base()
+
+
+class DB_Entry(base):
+    __tablename__ = 'users'
+
+    netid = Column(String, primary_key=True)
+    system_out_viewed = Column(Boolean)
+    system_out_test_viewed = Column(Boolean)
+    system_out_test_completed = Column(Boolean)
+    system_out_test_code = Column(String)
+    scanner_viewed = Column(Boolean)
+    scanner_test_viewed = Column(Boolean)
+    scanner_test_completed = Column(Boolean)
+    scanner_test_code = Column(String)
+    printwriter_viewed = Column(Boolean)
+    printwriter_test_viewed = Column(Boolean)
+    printwriter_test_completed = Column(Boolean)
+    printwriter_test_code = Column(String)
+    hashmap_viewed = Column(Boolean)
+    hashmap_test_viewed = Column(Boolean)
+    hashmap_test_completed = Column(Boolean)
+    hashmap_test_code = Column(String)
+    hashset_viewed = Column(Boolean)
+    hashset_test_viewed = Column(Boolean)
+    hashset_test_completed = Column(Boolean)
+    hashset_test_code = Column(String)
+    treemap_viewed = Column(Boolean)
+    treemap_test_viewed = Column(Boolean)
+    treemap_test_completed = Column(Boolean)
+    treemap_test_code = Column(String)
+    priorityqueue_viewed = Column(Boolean)
+    priorityqueue_test_viewed = Column(Boolean)
+    priorityqueue_test_completed = Column(Boolean)
+    priorityqueue_test_code = Column(String)
+    stack_viewed = Column(Boolean)
+    stack_test_completed = Column(Boolean)
+    stack_test_code = Column(String)
+    stack_test_viewed = Column(Boolean)
+    queue_viewed = Column(Boolean)
+    queue_test_viewed = Column(Boolean)
+    queue_test_completed = Column(Boolean)
+    queue_test_code = Column(String)
+
+    def __init__(self, username):
+        self.netid = username
+
+
+Session = sessionmaker(db)
+session = Session()
+base.metadata.create_all(db)
+
+
+def _getUser(username: str) -> DB_Entry:
+    q = session.query(DB_Entry.netid == username).one_or_none()
+    print(q)
+    if not q:
+        print("Creating new user!")
+        session.add(DB_Entry(username))
+        session.commit()
+    return session.filter(DB_Entry.netid == username)
 
 
 @app.errorhandler(404)

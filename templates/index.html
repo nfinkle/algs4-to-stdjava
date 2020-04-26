@@ -36,10 +36,10 @@
 	<h1>Modules</h1>
 	<h2>Input/Output</h2><br>
 	{% set io_cells = [
-			{"title": "System.out/err", "subtitle": "StdOut", "description": "Print text to <code>stdout</code> or <code>stderr</code>."|safe, "pbar_name":"print", "show_fname": "show_system_out"},
+			{"title": "System.out/err", "subtitle": "StdOut", "description": "Print text to <code>stdout</code> or <code>stderr</code>."|safe, "pbar_name":"system_out", "show_fname": "show_system_out"},
 			{"title": "Scanner", "subtitle": "StdIn/In", "description": "Read in text from any input stream.", "pbar_name":"scanner", "show_fname": "show_scanner"},
 			{"title": "PrintWriter", "subtitle": "Out", "description": "Write to a file using the same syntax as with printing.",
-			"pbar_name":"else", "show_fname": "show_printwriter"}
+			"pbar_name":"printwriter", "show_fname": "show_printwriter"}
 	] %}
 	<div class="d-block d-sm-none">
 		{% for cell in io_cells %}
@@ -58,16 +58,16 @@
 	<h2>Data Structures</h2><br>
 	{% set ds_rows = [	
 			[ {"title": "HashMap", "subtitle": "Separate-Chaining Hash Symbol Table", "description": "A symbol table based on a
-			hashtable.", "pbar_name":"else", "show_fname": "show_hashmap"},
-			{"title": "HashSet", "subtitle": "Bag", "description": "A bag based on a hashtable.", "pbar_name":"else", "show_fname": "show_hashset"},
+			hashtable.", "pbar_name":"hashmap", "show_fname": "show_hashmap"},
+			{"title": "HashSet", "subtitle": "Bag", "description": "A bag based on a hashtable.", "pbar_name":"hashset", "show_fname": "show_hashset"},
 			{"title": "TreeMap", "subtitle": "Left-Leaning Red-Black Tree Symbol Table", "description": "A symbol table based on
 			a left-leaning red-black tree.",
-			"pbar_name":"else", "show_fname": "show_treemap"} ],
+			"pbar_name":"treemap", "show_fname": "show_treemap"} ],
 			[ {"title": "PriorityQueue", "subtitle": "MinPQ", "description": "A (non-indexed) minimum priority queue.",
-			"pbar_name":"else", "show_fname": "show_priorityqueue"},
+			"pbar_name":"priorityqueue", "show_fname": "show_priorityqueue"},
 			{"title": "Queue", "subtitle": "Queue", "description": "A FIFO queue built on the <code>LinkedList</code> class."|safe,
-			"pbar_name":"else", "show_fname": "show_queue"},
-			{"title": "Stack", "subtitle": "Stack", "description": "A LIFO stack.", "pbar_name":"else", "show_fname": "show_stack"} ],
+			"pbar_name":"queue", "show_fname": "show_queue"},
+			{"title": "Stack", "subtitle": "Stack", "description": "A LIFO stack.", "pbar_name":"stack", "show_fname": "show_stack"} ],
 	] %}
 	<div class="d-block d-sm-none">
 		{% for row in ds_rows %}
