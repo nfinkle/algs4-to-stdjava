@@ -1,7 +1,4 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Boolean
-from sqlalchemy.orm import sessionmaker
+from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, render_template, url_for, jsonify
 import worker
 import rq
@@ -13,6 +10,9 @@ from static.CASClient import CASClient
 
 app = Flask(__name__)
 app.secret_key = os.urandom(64)
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://dhfyndizkunwdb:3e8a0afa903577cb6caaa7d733d53d0822a6436121c3ebd3e387ba819cff8cdc@ec2-34-233-186-251.compute-1.amazonaws.com:5432/d872d2k7b5gfim"
+db = SQLAlchemy(app)
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 @app.route('/logout')
@@ -77,7 +77,7 @@ def show_index():
 def show_system_out():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.system_out_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/system-out.html', is_about=False, constructors=False)
 
 
@@ -85,7 +85,7 @@ def show_system_out():
 def show_scanner():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.scanner_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/scanner.html', is_about=False, constructors=True)
 
 
@@ -93,7 +93,7 @@ def show_scanner():
 def show_printwriter():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.printwriter_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/printwriter.html', is_about=False, constructors=True)
 
 
@@ -101,7 +101,7 @@ def show_printwriter():
 def show_hashmap():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.hashmap_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/hashmap.html', is_about=False, constructors=True)
 
 
@@ -109,7 +109,7 @@ def show_hashmap():
 def show_hashset():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.hashset_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/hashset.html', is_about=False, constructors=True)
 
 
@@ -117,7 +117,7 @@ def show_hashset():
 def show_treemap():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.treemap_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/treemap.html', is_about=False, constructors=True)
 
 
@@ -125,7 +125,7 @@ def show_treemap():
 def show_priorityqueue():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.priorityqueue_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/priorityqueue.html', is_about=False, constructors=True)
 
 
@@ -133,7 +133,7 @@ def show_priorityqueue():
 def show_queue():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.queue_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/queue.html', is_about=False, constructors=True)
 
 
@@ -141,7 +141,7 @@ def show_queue():
 def show_stack():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.stack_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template('modules/stack.html', is_about=False, constructors=True)
 
 
@@ -366,7 +366,7 @@ public class tester {
 def show_stack_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.stack_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class)
 
 
@@ -374,7 +374,7 @@ def show_stack_test():
 def show_priorityqueue_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.priorityqueue_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -382,7 +382,7 @@ def show_priorityqueue_test():
 def show_queue_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.queue_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -390,7 +390,7 @@ def show_queue_test():
 def show_treemap_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.treemap_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -398,7 +398,7 @@ def show_treemap_test():
 def show_hashmap_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.hashmap_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -406,7 +406,7 @@ def show_hashmap_test():
 def show_printwriter_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.printwriter_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -414,7 +414,7 @@ def show_printwriter_test():
 def show_system_out_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.system_out_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -422,7 +422,7 @@ def show_system_out_test():
 def show_hashset_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.hashset_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -430,7 +430,7 @@ def show_hashset_test():
 def show_scanner_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.scanner_test_viewed = True
-    session.commit()
+    db.session.commit()
     return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
 
 
@@ -439,70 +439,100 @@ def show_about_unauth():
     return render_template('about_unauth.html', is_about=True)
 
 
-db_string = "postgres://dhfyndizkunwdb:3e8a0afa903577cb6caaa7d733d53d0822a6436121c3ebd3e387ba819cff8cdc@ec2-34-233-186-251.compute-1.amazonaws.com:5432/d872d2k7b5gfim"
+class DB_Entry(db.Model):
+    # __tablename__ = 'users'
 
-db = create_engine(db_string)
-base = declarative_base()
-
-
-class DB_Entry(base):
-    __tablename__ = 'users'
-
-    netid = Column(String, primary_key=True)
-    system_out_viewed = Column(Boolean)
-    system_out_test_viewed = Column(Boolean)
-    system_out_test_completed = Column(Boolean)
-    system_out_test_code = Column(String)
-    scanner_viewed = Column(Boolean)
-    scanner_test_viewed = Column(Boolean)
-    scanner_test_completed = Column(Boolean)
-    scanner_test_code = Column(String)
-    printwriter_viewed = Column(Boolean)
-    printwriter_test_viewed = Column(Boolean)
-    printwriter_test_completed = Column(Boolean)
-    printwriter_test_code = Column(String)
-    hashmap_viewed = Column(Boolean)
-    hashmap_test_viewed = Column(Boolean)
-    hashmap_test_completed = Column(Boolean)
-    hashmap_test_code = Column(String)
-    hashset_viewed = Column(Boolean)
-    hashset_test_viewed = Column(Boolean)
-    hashset_test_completed = Column(Boolean)
-    hashset_test_code = Column(String)
-    treemap_viewed = Column(Boolean)
-    treemap_test_viewed = Column(Boolean)
-    treemap_test_completed = Column(Boolean)
-    treemap_test_code = Column(String)
-    priorityqueue_viewed = Column(Boolean)
-    priorityqueue_test_viewed = Column(Boolean)
-    priorityqueue_test_completed = Column(Boolean)
-    priorityqueue_test_code = Column(String)
-    stack_viewed = Column(Boolean)
-    stack_test_completed = Column(Boolean)
-    stack_test_code = Column(String)
-    stack_test_viewed = Column(Boolean)
-    queue_viewed = Column(Boolean)
-    queue_test_viewed = Column(Boolean)
-    queue_test_completed = Column(Boolean)
-    queue_test_code = Column(String)
+    netid = db.Column(db.String, primary_key=True)
+    system_out_viewed = db.Column(db.Boolean)
+    system_out_test_viewed = db.Column(db.Boolean)
+    system_out_test_completed = db.Column(db.Boolean)
+    system_out_test_code = db.Column(db.String)
+    scanner_viewed = db.Column(db.Boolean)
+    scanner_test_viewed = db.Column(db.Boolean)
+    scanner_test_completed = db.Column(db.Boolean)
+    scanner_test_code = db.Column(db.String)
+    printwriter_viewed = db.Column(db.Boolean)
+    printwriter_test_viewed = db.Column(db.Boolean)
+    printwriter_test_completed = db.Column(db.Boolean)
+    printwriter_test_code = db.Column(db.String)
+    hashmap_viewed = db.Column(db.Boolean)
+    hashmap_test_viewed = db.Column(db.Boolean)
+    hashmap_test_completed = db.Column(db.Boolean)
+    hashmap_test_code = db.Column(db.String)
+    hashset_viewed = db.Column(db.Boolean)
+    hashset_test_viewed = db.Column(db.Boolean)
+    hashset_test_completed = db.Column(db.Boolean)
+    hashset_test_code = db.Column(db.String)
+    treemap_viewed = db.Column(db.Boolean)
+    treemap_test_viewed = db.Column(db.Boolean)
+    treemap_test_completed = db.Column(db.Boolean)
+    treemap_test_code = db.Column(db.String)
+    priorityqueue_viewed = db.Column(db.Boolean)
+    priorityqueue_test_viewed = db.Column(db.Boolean)
+    priorityqueue_test_completed = db.Column(db.Boolean)
+    priorityqueue_test_code = db.Column(db.String)
+    stack_viewed = db.Column(db.Boolean)
+    stack_test_completed = db.Column(db.Boolean)
+    stack_test_code = db.Column(db.String)
+    stack_test_viewed = db.Column(db.Boolean)
+    queue_viewed = db.Column(db.Boolean)
+    queue_test_viewed = db.Column(db.Boolean)
+    queue_test_completed = db.Column(db.Boolean)
+    queue_test_code = db.Column(db.String)
 
     def __init__(self, username):
         self.netid = username
+        self.system_out_viewed = False
+        self.system_out_test_viewed = False
+        self.system_out_test_completed = False
+        self.system_out_test_code = ""
+        self.scanner_viewed = False
+        self.scanner_test_viewed = False
+        self.scanner_test_completed = False
+        self.scanner_test_code = ""
+        self.printwriter_viewed = False
+        self.printwriter_test_viewed = False
+        self.printwriter_test_completed = False
+        self.printwriter_test_code = ""
+        self.hashmap_viewed = False
+        self.hashmap_test_viewed = False
+        self.hashmap_test_completed = False
+        self.hashmap_test_code = ""
+        self.hashset_viewed = False
+        self.hashset_test_viewed = False
+        self.hashset_test_completed = False
+        self.hashset_test_code = ""
+        self.treemap_viewed = False
+        self.treemap_test_viewed = False
+        self.treemap_test_completed = False
+        self.treemap_test_code = ""
+        self.priorityqueue_viewed = False
+        self.priorityqueue_test_viewed = False
+        self.priorityqueue_test_completed = False
+        self.priorityqueue_test_code = ""
+        self.stack_viewed = False
+        self.stack_test_completed = False
+        self.stack_test_code = ""
+        self.stack_test_viewed = False
+        self.queue_viewed = False
+        self.queue_test_viewed = False
+        self.queue_test_completed = False
+        self.queue_test_code = ""
 
 
-Session = sessionmaker(db)
-session = Session()
-base.metadata.create_all(db)
+# db.create_all()
 
 
 def _getUser(username: str) -> DB_Entry:
-    q = session.query(DB_Entry.netid == username).one_or_none()
-    print(q)
+    q = DB_Entry.query.filter(DB_Entry.netid == username).one_or_none()
+    print("entry = ", q)
+    print("type of entry = ", type(q))
     if not q:
         print("Creating new user!")
-        session.add(DB_Entry(username))
-        session.commit()
-    return session.filter(DB_Entry.netid == username)
+        db.session.add(DB_Entry(username))
+        db.session.commit()
+        q = DB_Entry.query.filter(DB_Entry.netid == username).one()
+    return q
 
 
 @app.errorhandler(404)

@@ -3,5 +3,5 @@ flask
 flask_restx
 rq
 redis
-sqlalchemy
+flask-sqlalchemy
 psycopg2
