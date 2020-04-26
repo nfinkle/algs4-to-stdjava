@@ -40,6 +40,7 @@ function saveCode(code, mod) {
 }
 
 function markSuccess(code, mod) {
+	username = $('#username').data().other
 	$.ajax({
 		url: "/mark_test_success",
 		async: true,
@@ -48,7 +49,8 @@ function markSuccess(code, mod) {
 		moreTries: 3,
 		data: {
 			"code": code,
-			"module": mod
+			"module": mod,
+			"username": username
 		},
 		error: function (xhr, textStatus, error) {
 			console.log("trial = " + this.moreTries);

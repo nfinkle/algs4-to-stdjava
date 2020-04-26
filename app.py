@@ -244,11 +244,10 @@ def stripErrLineNum(err):
 
 @app.route('/mark_test_success')
 def mark_success():
-    print("trying to mark success")
     module = request.args["module"]
     code = request.args["code"]
-    print("got good stuff")
-    user = _getUser(CASClient().authenticate())
+    username = request.args["username"]
+    user = _getUser(username)
     print("got great stuff")
     print("Marking success for user", user.netid,
           "and module", module, ", and the code:")
@@ -307,8 +306,6 @@ def _save_code(user, code, module):
 
 @app.route('/save_code')
 def save_code():
-    print("IN HERE!")
-    print(request.args)
     module = request.args["module"]
     code = request.args["code"]
     user = _getUser(CASClient().authenticate())
@@ -444,7 +441,7 @@ def show_stack_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.stack_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class)
+    return render_template("code_pages/stack.html", is_about=False, test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/priorityqueue/test.html')
@@ -452,7 +449,7 @@ def show_priorityqueue_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.priorityqueue_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/priorityqueue.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/queue/test.html')
@@ -460,7 +457,7 @@ def show_queue_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.queue_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/queue.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/treemap/test.html')
@@ -468,7 +465,7 @@ def show_treemap_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.treemap_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/treemap.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/hashmap/test.html')
@@ -476,7 +473,7 @@ def show_hashmap_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.hashmap_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/hashmap.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/printwriter/test.html')
@@ -484,7 +481,7 @@ def show_printwriter_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.printwriter_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/printwriter.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/system-out/test.html')
@@ -492,7 +489,7 @@ def show_system_out_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.system_out_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/system-out.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/hashset/test.html')
@@ -500,7 +497,7 @@ def show_hashset_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.hashset_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/hashset.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/modules/scanner/test.html')
@@ -508,7 +505,7 @@ def show_scanner_test():
     user_entry = _getUser(CASClient().authenticate())
     user_entry.scanner_test_viewed = True
     db.session.commit()
-    return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class)
+    return render_template("code_pages/scanner.html", is_about=False,  test_stdjava=empty_class, username=user_entry.netid)
 
 
 @app.route('/about.html')
@@ -598,7 +595,6 @@ class DB_Entry(db.Model):
 
 
 def _getUser(username: str) -> DB_Entry:
-    print("finding user")
     q = DB_Entry.query.filter(DB_Entry.netid == username).one_or_none()
     if not q:
         print("Creating new user!")
