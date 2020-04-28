@@ -21,7 +21,7 @@ function saveCode(code, mod) {
 		async: true,
 		cache: false,
 		timeout: 30000,
-		moreTries: 3,
+		moreTries: 5,
 		data: {
 			"module": mod,
 			"code": code
@@ -46,7 +46,7 @@ function markSuccess(code, mod) {
 		async: true,
 		cache: false,
 		timeout: 30000,
-		moreTries: 3,
+		moreTries: 5,
 		data: {
 			"code": code,
 			"module": mod,
@@ -73,7 +73,7 @@ function compile_with_code(code) {
 		async: true,
 		cache: false,
 		timeout: 5000,
-		moreTries: 3,
+		moreTries: 15,
 		data: {
 			"code": code,
 			"is_algs4": false,
@@ -219,7 +219,7 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 		url: "/run_code",
 		async: true,
 		timeout: 5000,
-		moreTries: 3,
+		moreTries: 10,
 		cache: false,
 		data: {
 			"code": code,
