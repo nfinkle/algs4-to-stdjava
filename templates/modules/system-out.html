@@ -20,12 +20,13 @@
 		API</a>). One can
 	print to <code>stderr</code> the exact same way as printing to <code>stdout</code>, except that you use
 	<code>System.err</code> instead of <code>System.out</code>. </p>
-<p>The only
+<p>The main
 	difference between <code>StdOut</code> and <code>System.out</code>/<code>System.err</code> is that
 	<code>StdOut</code>
 	flushes all output
 	immediately, while <code>System.out</code>/<code>System.err</code> buffers the output until a newline
-	character is added.</p>
+	character is added. In addition, <code>System.out</code> does not need to be imported, while <code>StdOut</code>
+	must be.</p>
 {% endblock %}
 
 

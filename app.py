@@ -554,7 +554,7 @@ class DB_Entry(db.Model):
     is_groupA = db.Column(db.Boolean)
 
     def __init__(self, username):
-        empty_class = """// standard java imports here
+        empty_class = """// standard java imports here (e.g. import java.util.ArrayList;)
 public class tester {
    public static void main(String[] args) {
       throw new UnsupportedOperationException(\"Unimplemented method.\");
