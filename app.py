@@ -629,6 +629,16 @@ def mark_eval_groupB():
     return show_index()
 
 
+@app.route('/remove_from_eval')
+def remove_from_eval():
+    username = request.args["username"] + '\n'
+    user = _getUser(username)
+    user.is_eval = False
+    db.session.commit()
+    print("removing", username, "from eval")
+    return show_index()
+
+
 @app.errorhandler(404)
 def handle_bad_request(e):
     print(e.description)
