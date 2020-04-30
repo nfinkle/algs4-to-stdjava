@@ -10,7 +10,7 @@ from static.CASClient import CASClient
 
 app = Flask(__name__)
 app.secret_key = os.urandom(64)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://dhfyndizkunwdb:3e8a0afa903577cb6caaa7d733d53d0822a6436121c3ebd3e387ba819cff8cdc@ec2-34-233-186-251.compute-1.amazonaws.com:5432/d872d2k7b5gfim"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://eqighedetevtqm:9f9d876d4536a1b08149955e1cbcb99728fae9fb87d654926fe778b8e8579012@ec2-34-230-149-169.compute-1.amazonaws.com:5432/ddkjho4mv302pc"
 db = SQLAlchemy(app)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
