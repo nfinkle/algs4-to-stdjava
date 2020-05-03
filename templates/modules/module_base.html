@@ -33,6 +33,21 @@
 							<h3>{{ className[1] }} (Standard Java Library)</h3>
 						</div>
 					</div>
+					<div class="text-center">
+						<h4>Import Statements</h4>
+						<div class="row">
+							<div class="col-6">
+								<p><code>import edu.princeton.cs.algs4.{{ className[0] }};</code></p>
+							</div>
+							<div class="col-6">
+								{% if className[1] == "System.out" %}
+								<p>N/A</p>
+								{% else %}
+								<p><code>import java.util.{{ className[1] }};</code></p>
+								{% endif %}
+							</div>
+						</div>
+					</div>
 					{% if constructors %}
 					<div class="text-center">
 						<h4>Constructors</h4>

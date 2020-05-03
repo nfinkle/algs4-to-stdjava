@@ -24,6 +24,12 @@
 	<div class="text-center">
 		<h3>{{ className[i] }} (<code>algs4</code>)</h3>
 	</div>
+	{% if not no_import %}
+	<div class="text-center">
+		<h4>Import Statement</h4>
+		<code>import edu.princeton.cs.algs4.{{ className[i] }};</code>
+	</div>
+	{% endif %}
 	{% if constructors %}
 	<div class="text-center">
 		<h4>Constructors</h4>
