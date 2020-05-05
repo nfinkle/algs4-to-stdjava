@@ -249,6 +249,7 @@ def _validate_username(username):
     if q is None:
         print("User", username, "not found")
         abort(404)
+    return q
 
 
 def stripErrLineNum(err):
@@ -265,7 +266,6 @@ def mark_success():
     print("Marking success for user", user.netid,
           "and module", module, ", and the code:")
     print(code)
-    _save_code(user, code, module)
     _mark_success_with_user_code(user, code, module)
     db.session.commit()
     return "Success!"
@@ -315,19 +315,7 @@ def _save_code(user, code, module):
         user.stack_test_code = code
     else:
         abort(404)
-
-
-@app.route('/save_code')
-def save_code():
-    module = request.args["module"]
-    code = request.args["code"]
-    username = request.args["username"]
-    _validate_username(username)
-    print("Saving for user", username, "and module", module, "the code:")
-    print(code)
-    _save_code(_getUser(username), code, module)
     db.session.commit()
-    return "Success!"
 
 
 @app.route('/get_diff')
@@ -364,10 +352,11 @@ def _get_diff_command_line(algs4: str, stdjava: str) -> str:
 @app.route('/compile_code')
 def compile_code():
     text = request.args["code"]
+    module = request.args["module"]
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
-    _validate_username(request.args["username"])
+    user = _validate_username(request.args["username"])
     print("is_algs4 =", is_algs4, "\ntext:\n" + text)
-    return jsonify(_compile_code(text, is_algs4))
+    return jsonify(_compile_code(text, is_algs4, user, module))
 
 
 def _get_class_name(text: str) -> str:
@@ -383,13 +372,17 @@ def _is_valid_Java_program(code_text: str) -> bool:
     return code_text.find("class") >= 0 and code_text.find("{") >= 0
 
 
-def _compile_code(code_text: str, is_algs4: bool) -> str:
+def _compile_code(code_text: str, is_algs4: bool, user, module: str) -> str:
     class_name = _get_class_name(code_text)
     if not (class_name and _is_valid_Java_program(code_text)):
         return "A Java program must have a class and a class name."
 
+    def save_code_fn():
+        _save_code(user, code_text, module)
+
     myargs = (code_text, class_name, is_algs4)
-    result = _send_job_to_queue(_compile_code_in_command_line, myargs)
+    result = _send_job_to_queue(
+        _compile_code_in_command_line, myargs, save_code_fn=save_code_fn)
     return "Timeout error. Code took too long to run." if result is None else result
 
 
@@ -406,9 +399,11 @@ def _compile_code_in_command_line(code_text, class_name, is_algs4) -> str:
     return err_output
 
 
-def _send_job_to_queue(fn, myargs):
+def _send_job_to_queue(fn, myargs, save_code_fn=None):
     job = q.enqueue(fn, args=myargs, result_ttl=7)
     start = time.time()
+    if save_code_fn is not None:
+        save_code_fn()
     while job.result is None and time.time() - start < 7:
         continue
     return job.result

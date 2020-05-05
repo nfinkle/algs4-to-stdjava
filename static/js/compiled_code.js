@@ -1,6 +1,6 @@
 function compile() {
 	var code = document.getElementById("code_form").elements[0].value;
-	compile_with_code(code);
+	compile_with_code(code, getModule());
 }
 
 // This function displays the compiler error, but does not render the Prism output
@@ -13,32 +13,6 @@ function display_compile_error(compile_err) {
 	}
 	document.getElementById("algs4_output").innerHTML = err_html;
 	return !compile_err;
-}
-
-function saveCode(code, mod) {
-	username = $('#username').data().other
-	$.ajax({
-		url: "/save_code",
-		async: true,
-		cache: false,
-		timeout: 30000,
-		moreTries: 5,
-		data: {
-			"module": mod,
-			"code": code,
-			"username": username
-		},
-		error: function (xhr, textStatus, error) {
-			console.log("trial = " + this.moreTries);
-			if (textStatus == 'timeout') {
-				this.moreTries--;
-				if (this.moreTries > 0) {
-					$.ajax(this);
-					return;
-				}
-			}
-		}
-	})
 }
 
 function markSuccess(code, mod) {
@@ -67,7 +41,7 @@ function markSuccess(code, mod) {
 	})
 }
 
-function compile_with_code(code) {
+function compile_with_code(code, mod) {
 	$('button').prop("disabled", true)
 	username = $('#username').data().other
 	document.getElementById("algs4_output").innerHTML = "";
@@ -80,7 +54,8 @@ function compile_with_code(code) {
 		data: {
 			"code": code,
 			"is_algs4": false,
-			"username": username
+			"username": username,
+			"module": mod
 		},
 		error: function (xhr, textStatus, error) {
 			console.log("trial = " + this.moreTries);
@@ -97,7 +72,6 @@ function compile_with_code(code) {
 			replaceFormWithPre(code, add_execute_button);
 			Prism.highlightAll();
 			$('button').prop("disabled", false)
-			saveCode(code, getModule())
 		}
 	})
 }
@@ -215,7 +189,6 @@ function execute() {
 	var args = document.getElementById("command_args").value;
 	var stdin = document.getElementById("stdin").value;
 	execute_from_code(code, false, args, stdin);
-	saveCode(code, getModule())
 }
 
 function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
@@ -354,7 +327,6 @@ function compare_outputs() {
 	ret_fn = function (algs4_result) {
 		send_exec_request(stdjava, false, args, stdin, function (snd) {
 			show_diff(algs4_result, snd);
-			saveCode(stdjava, getModule())
 		})
 	}
 	send_exec_request(algs4, true, args, stdin, ret_fn)
