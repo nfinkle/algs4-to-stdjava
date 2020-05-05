@@ -237,10 +237,18 @@ def run_code():
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
     command_args = request.args.get("args", "")
     stdin = request.args.get("stdin", "")
+    _validate_username(request.args["username"])
     result = _execute_code(text, is_algs4, command_args, stdin)
     if result is None:
         return jsonify("", "Timeout error. Code took too long to run.")
     return jsonify(result)
+
+
+def _validate_username(username):
+    q = DB_Entry.query.filter(DB_Entry.netid == username).one_or_none()
+    if q is None:
+        print("User", username, "not found")
+        abort(404)
 
 
 def stripErrLineNum(err):
@@ -313,16 +321,18 @@ def _save_code(user, code, module):
 def save_code():
     module = request.args["module"]
     code = request.args["code"]
-    user = _getUser(CASClient().authenticate())
-    print("Saving for user", user.netid, "and module", module, "the code:")
+    username = request.args["username"]
+    _validate_username(username)
+    print("Saving for user", username, "and module", module, "the code:")
     print(code)
-    _save_code(user, code, module)
+    _save_code(_getUser(username), code, module)
     db.session.commit()
     return "Success!"
 
 
 @app.route('/get_diff')
 def get_diff():
+    _validate_username(request.args["username"])
     algs4_out = request.args["algs4_out"]
     stdjava_out = request.args["stdjava_out"]
     algs4_err = stripErrLineNum(request.args.get("algs4_err", ""))
@@ -355,6 +365,7 @@ def _get_diff_command_line(algs4: str, stdjava: str) -> str:
 def compile_code():
     text = request.args["code"]
     is_algs4 = request.args.get("is_algs4", default=False, type=inputs.boolean)
+    _validate_username(request.args["username"])
     print("is_algs4 =", is_algs4, "\ntext:\n" + text)
     return jsonify(_compile_code(text, is_algs4))
 

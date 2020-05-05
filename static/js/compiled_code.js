@@ -16,6 +16,7 @@ function display_compile_error(compile_err) {
 }
 
 function saveCode(code, mod) {
+	username = $('#username').data().other
 	$.ajax({
 		url: "/save_code",
 		async: true,
@@ -24,7 +25,8 @@ function saveCode(code, mod) {
 		moreTries: 5,
 		data: {
 			"module": mod,
-			"code": code
+			"code": code,
+			"username": username
 		},
 		error: function (xhr, textStatus, error) {
 			console.log("trial = " + this.moreTries);
@@ -67,6 +69,7 @@ function markSuccess(code, mod) {
 
 function compile_with_code(code) {
 	$('button').prop("disabled", true)
+	username = $('#username').data().other
 	document.getElementById("algs4_output").innerHTML = "";
 	$.ajax({
 		url: "/compile_code",
@@ -77,6 +80,7 @@ function compile_with_code(code) {
 		data: {
 			"code": code,
 			"is_algs4": false,
+			"username": username
 		},
 		error: function (xhr, textStatus, error) {
 			console.log("trial = " + this.moreTries);
@@ -215,6 +219,7 @@ function execute() {
 }
 
 function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
+	username = $('#username').data().other
 	$.ajax({
 		url: "/run_code",
 		async: true,
@@ -225,7 +230,8 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 			"code": code,
 			"is_algs4": is_algs4,
 			"args": command_args,
-			"stdin": stdin
+			"stdin": stdin,
+			"username": username
 		},
 		success: function (result) {
 			ret_fn(result)
@@ -307,6 +313,7 @@ function run_tests(test_list) {
 
 
 function show_diff(algs4_result, stdjava_result) {
+	username = $('#username').data().other
 	$.ajax({
 		url: "/get_diff",
 		async: true,
@@ -315,7 +322,8 @@ function show_diff(algs4_result, stdjava_result) {
 			"algs4_out": algs4_result[0],
 			"stdjava_out": stdjava_result[0],
 			"algs4_err": algs4_result[1],
-			"stdjava_err": stdjava_result[1]
+			"stdjava_err": stdjava_result[1],
+			"username": username
 		},
 		success: function (result) {
 			html = ""
