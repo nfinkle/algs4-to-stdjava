@@ -225,10 +225,6 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 	})
 }
 
-// function show_answer() {
-// 	var answer = $('#answer').data().other
-// 	document.getElementById("stdjava_code")
-// }
 
 function run_next_test(ith_test, result, code, test_list) {
 	cur_html = document.getElementById("algs4_output").innerHTML.replace(/&gt;/g, ">").replace(/&lt;/g, "<")
@@ -284,19 +280,37 @@ function run_tests(test_list) {
 }
 
 
-
-function show_diff(algs4_result, stdjava_result) {
+function show_diff(algs4_code, stdjava_code, args, stdin) {
 	username = $('#username').data().other
 	$.ajax({
 		url: "/get_diff",
+		type: "POST",
+		contentType: 'application/json',
+		dataType: 'json',
 		async: true,
 		cache: false,
-		data: {
-			"algs4_out": algs4_result[0],
-			"stdjava_out": stdjava_result[0],
-			"algs4_err": algs4_result[1],
-			"stdjava_err": stdjava_result[1],
-			"username": username
+		data: JSON.stringify({
+			"args": args,
+			"stdin": stdin,
+			"username": username,
+			"algs4_code": algs4_code,
+			"stdjava_code": stdjava_code,
+		}),
+		moreTries: 15,
+		timeout: 25000,
+		error: function (xhr, textStatus, error) {
+			console.log("trial = " + this.moreTries);
+			if (textStatus == 'timeout') {
+				this.moreTries--;
+				if (this.moreTries > 0) {
+					$.ajax(this);
+					return;
+				}
+			}
+			$('button').prop("disabled", false)
+			document.getElementById("algs4_output").innerHTML = "<h4>Compare</h4><pre style=\"white-space:pre-wrap; font-size:11px\"><code class=\"language-java\">There was some internal issue. Please contact the creator.</code></pre>";
+			Prism.highlightAll();
+			console.log(error);
 		},
 		success: function (result) {
 			html = ""
@@ -324,11 +338,5 @@ function compare_outputs() {
 	var algs4 = extract_code_from_pre("algs4_code");
 	var args = document.getElementById("command_args").value;
 	var stdin = document.getElementById("stdin").value;
-	ret_fn = function (algs4_result) {
-		send_exec_request(stdjava, false, args, stdin, function (snd) {
-			show_diff(algs4_result, snd);
-		})
-	}
-	send_exec_request(algs4, true, args, stdin, ret_fn)
-
+	show_diff(algs4, stdjava, args, stdin);
 }

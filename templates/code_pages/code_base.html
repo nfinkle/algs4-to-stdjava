@@ -3,7 +3,7 @@
 {% block thehead %}
 <script src="{{ url_for('static', filename='js/prism.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}" />
-<script src="{{ url_for('static', filename='js/compiled_code.js') }}"></script>
+<script src="{{ url_for('static', filename='js/code_base.js') }}"></script>
 <meta id="tests-data" data-name="tests-data" data-other="{{tests}}">
 <meta id="module" data-name="module" data-other="{{class_name}}">
 <meta id="username" data-name="username" data-other="{{username}}">
@@ -95,5 +95,5 @@ libraries into a program that uses only Standard Java Libraries.
 	</div>
 </div>
 <script src="{{ url_for('static', filename='js/allow_tab.js') }}"></script>
-<script src="{{ url_for('static', filename='js/compiled_code.js') }}"></script>
+<script src="{{ url_for('static', filename='js/code_base.js') }}"></script>
 {% endblock %}
