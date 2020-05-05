@@ -321,10 +321,22 @@ def _save_code(user, code, module):
 @app.route('/get_diff')
 def get_diff():
     _validate_username(request.args["username"])
-    algs4_out = request.args["algs4_out"]
-    stdjava_out = request.args["stdjava_out"]
-    algs4_err = stripErrLineNum(request.args.get("algs4_err", ""))
-    stdjava_err = stripErrLineNum(request.args.get("stdjava_err", ""))
+    algs4_code = request.args["algs4_code"]
+    stdjava_code = request.args["stdjava_code"]
+    command_args = request.args.get("args", "")
+    stdin = request.args.get("stdin", "")
+    algs4_result = _execute_code(algs4_code, True, command_args, stdin)
+    stdjava_result = _execute_code(stdjava_code, False, command_args, stdin)
+    if algs4_result is None:
+        algs4_out = ""
+        algs4_err = "Timeout error. Code took too long to run."
+    else:
+        algs4_out, algs4_err = algs4_result
+    if stdjava_result is None:
+        stdjava_out = ""
+        stdjava_err = "Timeout error. Code took too long to run."
+    else:
+        stdjava_out, stdjava_err = stdjava_result
     myargs = (algs4_out, stdjava_out)
     out_diff = _send_job_to_queue(_get_diff_command_line, myargs)
     myargs = (algs4_err, stdjava_err)
