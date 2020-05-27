@@ -413,11 +413,11 @@ def _compile_code_in_command_line(code_text, class_name, is_algs4) -> str:
 
 
 def _send_job_to_queue(fn, myargs, save_code_fn=None):
-    job = q.enqueue(fn, args=myargs, result_ttl=7)
+    job = q.enqueue(fn, args=myargs, result_ttl=10)
     start = time.time()
     if save_code_fn is not None:
         save_code_fn()
-    while job.result is None and time.time() - start < 7:
+    while job.result is None and time.time() - start < 10:
         continue
     return job.result
 

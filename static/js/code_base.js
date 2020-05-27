@@ -49,7 +49,7 @@ function compile_with_code(code, mod) {
 		url: "/compile_code",
 		async: true,
 		cache: false,
-		timeout: 5000,
+		timeout: 10000,
 		moreTries: 15,
 		data: {
 			"code": code,
@@ -196,7 +196,7 @@ function send_exec_request(code, is_algs4, command_args, stdin, ret_fn) {
 	$.ajax({
 		url: "/run_code",
 		async: true,
-		timeout: 5000,
+		timeout: 10000,
 		moreTries: 10,
 		cache: false,
 		data: {
