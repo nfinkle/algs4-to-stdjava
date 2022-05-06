@@ -66,24 +66,25 @@ class CASClient:
         # authenticated previously.  So return the user's username.
         if 'username' in session:
             return session.get('username')
+        return '____default_user_no_cas'
 
-        # If the request contains a login ticket, then try to
-        # validate it.
-        ticket = request.args.get('ticket')
-        if ticket is not None:
-            username = self.validate(ticket)
-            if username is not None:
-                # The user is authenticated, so store the user's
-                # username in the session.
-                session['username'] = username
-                return username
-
-        # The request does not contain a valid login ticket, so
-        # redirect the browser to the login page to get one.
-        login_url = self.cas_url + 'login' \
-            + '?service=' + quote(self.stripTicket())
-
-        abort(redirect(login_url))
+        # # If the request contains a login ticket, then try to
+        # # validate it.
+        # ticket = request.args.get('ticket')
+        # if ticket is not None:
+        #     username = self.validate(ticket)
+        #     if username is not None:
+        #         # The user is authenticated, so store the user's
+        #         # username in the session.
+        #         session['username'] = username
+        #         return username
+        #
+        # # The request does not contain a valid login ticket, so
+        # # redirect the browser to the login page to get one.
+        # login_url = self.cas_url + 'login' \
+        #     + '?service=' + quote(self.stripTicket())
+        #
+        # abort(redirect(login_url))
 
     # -------------------------------------------------------------------
 
@@ -92,7 +93,8 @@ class CASClient:
     def logout(self):
 
         # Delete the user's username from the session.
-        session.pop('username')
+        # session.pop('username')
+        pass
 
 # -----------------------------------------------------------------------
 
